@@ -10,6 +10,7 @@ export default class AlarmssScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
+        <View></View>
         <BottomNavigation nav={this.props.navigation}/>
       </View>
     );
