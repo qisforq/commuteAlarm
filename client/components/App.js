@@ -1,5 +1,4 @@
 import React from 'react';
-import LoginScreen from './LoginScreen';
 import AlarmsScreen from './AlarmsScreen';
 import AddScreen from './AddScreen';
 import SettingsScreen from './SettingsScreen';
@@ -8,9 +7,6 @@ import { StackNavigator } from 'react-navigation';
 
 const RootStack = StackNavigator(
   {
-    LoginScreen: {
-      screen: LoginScreen,
-    },
     AlarmsScreen: {
       screen: AlarmsScreen,
     },
@@ -22,7 +18,7 @@ const RootStack = StackNavigator(
     }
   },
   {
-    initialRouteName: 'LoginScreen',
+    initialRouteName: 'AlarmsScreen',
   }
 );
 
@@ -31,4 +27,3 @@ export default class App extends React.Component {
     return <RootStack />;
   }
 }
-

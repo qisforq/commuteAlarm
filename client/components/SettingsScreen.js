@@ -11,7 +11,7 @@ export default class SettingsScreen extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View></View>
-        <BottomNavigation nav={this.props.navigation}/>
+        <BottomNavigation cur={2} nav={this.props.navigation}/>
       </View>
     );
   }
