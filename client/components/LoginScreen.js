@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import BottomNavigation from './BottomNavigation';
 import {Button, View, Text, TextInput, AsyncStorage } from 'react-native';
+import store from 'react-native-simple-store';
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
