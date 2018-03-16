@@ -1,13 +1,13 @@
 import 'react-native';
 import React from 'react';
-import App from '../client/components/App';
+import AlarmsScreen from '../client/components/AlarmsScreen';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
   const tree = renderer.create(
-    <App />
+    <AlarmsScreen />
   ).toJSON();
-  expect(App).toMatchSnapshot();
+  expect(AlarmsScreen).toMatchSnapshot();
 });
