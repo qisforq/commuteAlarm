@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, View, Text, StyleSheet } from 'react-native';
 
-export default class AlarmssScreen extends React.Component {
+export default class BottomNavigation extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end', maxHeight: 70 }}>
