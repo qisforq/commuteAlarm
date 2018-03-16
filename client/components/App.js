@@ -8,9 +8,6 @@ import { StackNavigator } from 'react-navigation';
 
 const RootStack = StackNavigator(
   {
-    LoginScreen: {
-      screen: LoginScreen,
-    },
     AlarmsScreen: {
       screen: AlarmsScreen,
     },
@@ -22,7 +19,7 @@ const RootStack = StackNavigator(
     }
   },
   {
-    initialRouteName: 'LoginScreen',
+    initialRouteName: 'AlarmsScreen',
   }
 );
 
