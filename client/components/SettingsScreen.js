@@ -1,19 +1,16 @@
 import React from 'react';
 import BottomNavigation from './BottomNavigation';
-import {Button, View, Text } from 'react-native';
-import { NavigationActions } from 'react-navigation'
-
-
-const backAction = NavigationActions.back({
-  key: null
-}) 
+import {Button, View, Text, TextInput } from 'react-native';
 
 export default class SettingsScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Settings',
+    headerLeft: null,
+  };
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Settings Screen</Text>
-        <BottomNavigation />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
+        <BottomNavigation nav={this.props.navigation}/>
       </View>
     );
   }
