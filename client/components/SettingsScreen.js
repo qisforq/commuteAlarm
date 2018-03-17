@@ -58,6 +58,6 @@ export default class SettingsScreen extends React.Component {
 
 const styles = StyleSheet.create({
   dropdown_1: {
-    
+
   },
 });

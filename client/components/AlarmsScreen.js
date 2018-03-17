@@ -1,6 +1,7 @@
 import React from 'react';
 import BottomNavigation from './BottomNavigation';
 import {Button, View, Text, AsyncStorage } from 'react-native';
+import store from 'react-native-simple-store';
 
 export default class AlarmssScreen extends React.Component {
   constructor(props) {
@@ -10,20 +11,21 @@ export default class AlarmssScreen extends React.Component {
       first: false
     };
   }
-  
+
   static navigationOptions = {
     title: 'Alarms',
     headerLeft: null,
   };
 
   componentDidMount() {
-    AsyncStorage.getItem('userId').then(id => {
-      if(id === null) {
-        AsyncStorage.setItem('userId', '1');
+    store.get('userId').then(id => {
+      if (id === null) {
+        store.save('userId', '1')
         this.setState({
           userId: 1,
           first: true,
         }, () => {
+
           this.props.navigation.navigate('SettingsScreen', {
             userId: this.state.userId,
           });
