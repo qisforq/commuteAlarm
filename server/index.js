@@ -1,6 +1,9 @@
 const express = require('express');
 const parser = require('body-parser');
 
+const firebase = require('./database')
+
+
 const app = express();
 
 app.use(parser.json());
