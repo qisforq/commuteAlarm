@@ -22,4 +22,14 @@ describe('Testing App component with Enzyme', () => {
     );
     expect(toJson(wrapper)).toMatchSnapshot();
   });
-})
+});
+
+describe('Testing RootStack', () => {
+  it('blablabla', () => {
+    const wrapper = shallow(
+      <App />
+    );
+    // expect(wrapper.find('a').simulate('click'));
+
+  });
+});
