@@ -12,6 +12,11 @@ app.get('/test', (req, res) => {
   res.status(200).send('it works');
 })
 
+app.get('/user/new', (req, res) => {
+  console.log('index server');
+  firebase.newUser((key) => res.status(200).send(key));
+})
+
 
 app.listen(8082, () => {
   console.log('listening on port 8082');
