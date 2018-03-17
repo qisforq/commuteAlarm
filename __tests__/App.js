@@ -7,6 +7,10 @@ import App from '../client/components/App';
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
 
+jest.mock('../node_modules/react-native-simple-store',() => ({
+  save: jest.fn(),
+  get: jest.fn(),
+}));
 
 // it('renders correctly', () => {
 //   const tree = renderer.create(
@@ -18,7 +22,7 @@ import renderer from 'react-test-renderer';
 
 describe('Testing App component with Enzyme', () => {
   it('renders correctly', () => {
-    const wrapper = mount(
+    const wrapper = shallow(
       <App />
     );
     expect(toJson(wrapper)).toMatchSnapshot();
