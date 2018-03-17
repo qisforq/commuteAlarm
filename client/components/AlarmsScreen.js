@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import BottomNavigation from './BottomNavigation';
 import {Button, View, Text, AsyncStorage } from 'react-native';
 import store from 'react-native-simple-store';
@@ -20,12 +21,11 @@ export default class AlarmssScreen extends React.Component {
   componentDidMount() {
     store.get('userId').then(id => {
       if (id === null) {
-        store.save('userId', '1')
+        axios.get('http://localhost:8082/user/new').then(data => store.save('userId', data.data));
         this.setState({
           userId: 1,
           first: true,
         }, () => {
-
           this.props.navigation.navigate('SettingsScreen', {
             userId: this.state.userId,
           });

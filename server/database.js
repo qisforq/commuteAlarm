@@ -6,10 +6,13 @@ var usersRef = firebase.database().ref('users/');
 var firebaseMethods = {};
 
 
-firebaseMethods.newUser = function(username) {
-    userRef.push({
-        username: username
-    })
+firebaseMethods.newUser = function(cb) {
+  console.log('herer we are');
+    cb(usersRef.push({
+        defaultPrepTime: 0,
+        defaultPostTime: 0,
+        defaultSnoozes: 0
+    }).key);
 }
 
 firebaseMethods.seed1 =  function() {
