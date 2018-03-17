@@ -1,6 +1,10 @@
 const express = require('express');
 const parser = require('body-parser');
 
+var firebase = require('./config').firebase;
+
+console.log(firebase.database());
+
 const app = express();
 
 app.use(parser.json());
