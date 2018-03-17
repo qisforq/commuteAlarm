@@ -3,7 +3,13 @@ const parser = require('body-parser');
 
 var firebase = require('./config').firebase;
 
-console.log(firebase.database());
+var usersRef = firebase.database().ref('users/');
+
+usersRef.set({
+  quinton: "son",
+  danny: "son",
+  rory: "son"  
+})
 
 const app = express();
 
