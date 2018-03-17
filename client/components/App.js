@@ -1,5 +1,4 @@
 import React from 'react';
-import LoginScreen from './LoginScreen';
 import AlarmsScreen from './AlarmsScreen';
 import AddScreen from './AddScreen';
 import SettingsScreen from './SettingsScreen';
