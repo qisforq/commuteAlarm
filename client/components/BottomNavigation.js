@@ -18,7 +18,9 @@ export default class BottomNavigation extends React.Component {
             <Button
               title="Settings Screen"
               onPress={() => this.props.nav.navigate('SettingsScreen', {
-                userId: this.props.userId
+                userId: this.props.userId,
+                userSettings: this.props.userSettings,
+                updateUserSettings: this.props.updateUserSettings,
               })}
             />:
             ''}
