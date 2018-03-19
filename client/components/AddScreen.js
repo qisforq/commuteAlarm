@@ -95,25 +95,26 @@ export default class AddScreen extends React.Component {
             onSelect={(idx, val) => this.setState({ postTime: idx })}
           />
 
-
-          <GooglePlacesAutocomplete
-            placeholder='Search'
-            minLength={2} // minimum length of text to search
-            onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-              console.log(data, details);
-              this.setState({
-                locationId: data.id,
-              }, () => console.log(this.state));
-            }}
-            
-            query={{
-              // available options: https://developers.google.com/places/web-service/autocomplete
-              key: 'AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw',
-              language: 'en', // language of the results
-              //types: '(cities)' // default: 'geocode'
-            }}
-            debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-          />
+          <View style={{ height: 200 }}>
+            <GooglePlacesAutocomplete
+              placeholder='Search'
+              minLength={2} // minimum length of text to search
+              onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+                console.log(data, details);
+                this.setState({
+                  locationId: data.id,
+                }, () => console.log(this.state));
+              }}
+              
+              query={{
+                // available options: https://developers.google.com/places/web-service/autocomplete
+                key: 'AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw',
+                language: 'en', // language of the results
+                //types: '(cities)' // default: 'geocode'
+              }}
+              debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+            />
+          </View>
           <Text>{this.state.locationId}</Text>
           <Button
             title="Save"
