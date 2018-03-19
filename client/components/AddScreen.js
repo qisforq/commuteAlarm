@@ -105,7 +105,7 @@ export default class AddScreen extends React.Component {
                 locationId: data.id,
               }, () => console.log(this.state));
             }}
-            
+
             query={{
               // available options: https://developers.google.com/places/web-service/autocomplete
               key: 'AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw',

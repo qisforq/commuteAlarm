@@ -9,7 +9,12 @@ export default class AlarmssScreen extends React.Component {
     super(props);
     this.state = {
       userId: null,
-      first: false
+      first: false,
+      userSettings: {
+        defaultPrepTime: 0,
+        defaultPostTime: 0,
+        defaultSnoozes: 0,
+      },
     };
   }
 
@@ -24,6 +29,11 @@ export default class AlarmssScreen extends React.Component {
         axios.get('http://localhost:8082/user/new').then((data) => {
           store.save('userId', data.data)
           store.save('alarms', {})
+          store.save('userSettings', {
+            defaultPrepTime: 0,
+            defaultPostTime: 0,
+            defaultSnoozes: 0,
+          })
           this.setState({
             userId: data.data,
             first: true,
@@ -34,9 +44,12 @@ export default class AlarmssScreen extends React.Component {
           });
         });
       } else {
-        this.setState({
-          userId: id,
-        });
+        store.get('userSettings').then((settings) => {
+          this.setState({
+            userId: id,
+            userSettings: settings,
+          });
+        })
       }
     });
   }
@@ -45,7 +58,21 @@ export default class AlarmssScreen extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View></View>
-        <BottomNavigation userId={this.state.userId} cur={1} nav={this.props.navigation}/>
+        <BottomNavigation
+          userId={this.state.userId}
+          cur={1}
+          nav={this.props.navigation}
+          userSettings={this.state.userSettings}
+          updateUserSettings={(prep, post, snooze) => {
+            this.setState({
+              userSettings: {
+                defaultPrepTime: prep,
+                defaultPostTime: post,
+                defaultSnoozes: snooze,
+              }
+            })
+          }}
+        />
       </View>
     );
   }
