@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons.js';
 import axios from 'axios';
 import store from 'react-native-simple-store';
 
+
 export default class SettingsScreen extends React.Component {
   constructor(props){
     super(props);
