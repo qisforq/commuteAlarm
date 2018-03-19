@@ -44,11 +44,18 @@ describe('Testing AlarmsScreen component with Enzyme', () => {
 });
 
 describe('Testing AlarmScreen state', () => {
-  it('Yo guyz! userId should be null!!! =D', () => {
+  it('userId should be null', () => {
     const wrapper = shallow(
       <AlarmsScreen />
     );
     expect(wrapper.state('userId')).toBe(null);
   });
+
+  // it('', () => {
+  //   const wrapper = shallow(
+  //     <AlarmsScreen />
+  //   );
+  //   expect()
+  // });
 
 });
