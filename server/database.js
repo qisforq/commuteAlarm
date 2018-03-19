@@ -5,7 +5,6 @@ var usersRef = firebase.database().ref('users/');
 
 var firebaseMethods = {};
 
-
 firebaseMethods.newUser = function(cb) {
   console.log('herer we are');
     cb(usersRef.push({
@@ -38,12 +37,20 @@ firebaseMethods.newAlarm = function(data, cb) {
   }).key);
 }
 
+firebaseMethods.saveSettings = function(settings, cb) {
+  cb(firebase.database().ref(`users/${settings.userId}/userSettings`).push({
+    defaultPrepTime: settings.prepTime,
+    defaultPostTime: settings.postTime,
+    defaultSnoozes: settings.snoozes,
+  }).key);
+}
+
 firebaseMethods.seed1 =  function() {
  usersRef.push({
    userSettings: {
      snoozes: 0,
      prepTime: 0,
-     postTime: 0   
+     postTime: 0
    },
   alarms: {
     alarm1: {

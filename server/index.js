@@ -13,12 +13,21 @@ app.get('/test', (req, res) => {
 });
 
 app.get('/user/new', (req, res) => {
+  console.log('index server');
   firebase.newUser((key) => res.status(200).send(key));
 });
 
 app.post('/alarm/save', (req, res) => {
+  console.log(req.body);
   firebase.newAlarm((req.body), (dat) => {
     res.status(200).send(dat);
+  })
+});
+
+// ~~~~~Settings Screen Routes~~~~~~~
+app.post('/settings/save', ({body}, res) => {
+  firebase.saveSettings(body, (key) => {
+    res.status(200).send(key);
   })
 });
 

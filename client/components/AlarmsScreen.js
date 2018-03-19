@@ -7,23 +7,18 @@ import store from 'react-native-simple-store';
 import BackgroundTask from 'react-native-background-task';
 import RNCalendarEvents from 'react-native-calendar-events';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-
 BackgroundTask.define(async () => {
   // Fetch some data over the network which we want the user to have an up-to-
   // date copy of, even if they have no network when using the app
   // const response = await fetch('http://feeds.bbci.co.uk/news/rss.xml')
   // const text = await response.text()
-  
+
   // // Data persisted to AsyncStorage can later be accessed by the foreground app
   // await store.save('bbc', text).then(console.log(store.get('bbc')));
   store.save('stuff', 'works');
   // Remember to call finish()
   BackgroundTask.finish()
 })
-
-
-
-
 export default class AlarmssScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -39,12 +34,10 @@ export default class AlarmssScreen extends React.Component {
     this.renderAdd = this.renderAdd.bind(this);
     this._onRefresh = this._onRefresh.bind(this);
   }
-
   static navigationOptions = {
     title: 'Alarms',
     headerLeft: null,
   };
-
   componentDidMount() {
     console.log('runs');
     BackgroundTask.schedule();
@@ -69,13 +62,11 @@ export default class AlarmssScreen extends React.Component {
               }
             });
           }
-
 renderAdd() {
   this.props.navigation.navigate('SettingsScreen', {
             data: this.state.data
           })
 }
-
 renderItem(data) {
     let { item, index } = data;
     return (
@@ -87,9 +78,8 @@ renderItem(data) {
           <Text style={styles.itemLocation}>{item.location}</Text>
         </View>
       </View>
-    ) 
+    )
   }
-
 renderHeader() {
   return (
     <View style={styles.header}>
@@ -97,11 +87,9 @@ renderHeader() {
     </View>
   )
 }
-
 renderSeparator() {
   return <View style={styles.separator} />
 }
-
 _onRefresh() {
   this.setState({
     refreshing: true
@@ -112,14 +100,13 @@ _onRefresh() {
     })
   }.bind(this),1000)
 }
-
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View>
           <Text>{this.state.stuff}</Text>
         </View>
-      <FlatList 
+      <FlatList
         keyExtractor={this._keyExtractor}
         data={this.state.data}
         renderItem={this.renderItem.bind(this)}
@@ -130,7 +117,7 @@ _onRefresh() {
             refreshing={this.state.refreshing}
             onRefresh={this._onRefresh.bind(this)}
           />
-        }        
+        }
       />
         )}
       />
@@ -139,7 +126,6 @@ _onRefresh() {
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
