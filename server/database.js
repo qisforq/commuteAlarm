@@ -38,7 +38,7 @@ firebaseMethods.newAlarm = function(data, cb) {
 }
 
 firebaseMethods.saveSettings = function(settings, cb) {
-  cb(firebase.database().ref(`users/${settings.userId}/userSettings`).push({
+  cb(firebase.database().ref(`users/${settings.userId}/userSettings`).set({
     defaultPrepTime: settings.prepTime,
     defaultPostTime: settings.postTime,
     defaultSnoozes: settings.snoozes,
