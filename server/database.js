@@ -9,14 +9,33 @@ var firebaseMethods = {};
 firebaseMethods.newUser = function(cb) {
   console.log('herer we are');
     cb(usersRef.push({
+      userSettings: {
         defaultPrepTime: 0,
         defaultPostTime: 0,
-        defaultSnoozes: 0
+        defaultSnoozes: 0,
+      },
+      alarms: {
+        alarm1: {
+          label: "work",
+          time: 1521472080122,
+          preptime: 20,
+          postTime: 15,
+          on: true,
+          location: "ChIJs980r6hZwokRJrYJwpNFwPE"
+        },
+      }
     }).key);
 }
 
 firebaseMethods.newAlarm = function(data, cb) {
-  console.log(firebase.database().ref(`users/${data.userId}/alarms`).push().key);
+  cb(firebase.database().ref(`users/${data.userId}/alarms`).push({
+    label: data.label,
+    time: data.time,
+    prepTime: data.prepTime,
+    postTime: data.postTime,
+    on: false,
+    location: data.locationId,
+  }).key);
 }
 
 firebaseMethods.seed1 =  function() {
