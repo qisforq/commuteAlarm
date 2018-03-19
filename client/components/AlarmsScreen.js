@@ -32,7 +32,8 @@ export default class AlarmssScreen extends React.Component {
         defaultPostTime: 0,
         defaultSnoozes: 0,
       },
-      data: dummyData.alarms
+      data: dummyData.alarms,
+      data: Object.keys(dummyData.alarms).map(k => dummyData.alarms[k]),
     };
     this.renderItem = this.renderItem.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
@@ -48,6 +49,7 @@ export default class AlarmssScreen extends React.Component {
 
   componentDidMount() {
     console.log('runs');
+    console.log(this.state);
     BackgroundTask.schedule();
     store.get('userId').then(id => {
       if (id === null) {
@@ -125,12 +127,9 @@ export default class AlarmssScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
-        <View>
-          <Text>{this.state.stuff}</Text>
-        </View>
-        <View style={{height: '90%'}}>
-          <FlatList
-            keyExtractor={this._keyExtractor}
+        <View style={{ height: '90%' }}>
+          <FlatList 
+            //keyExtractor={this._keyExtractor}
             data={this.state.data}
             renderItem={this.renderItem.bind(this)}
             ItemSeparatorComponent={this.renderSeparator.bind(this)}
@@ -158,6 +157,8 @@ export default class AlarmssScreen extends React.Component {
             })
           }}
         />
+            }        
+          />
       </View>
     );
   }
