@@ -21,13 +21,15 @@ export default class AlarmssScreen extends React.Component {
   componentDidMount() {
     store.get('userId').then(id => {
       if (id === null) {
-        axios.get('http://localhost:8082/user/new').then(data => store.save('userId', data.data));
-        this.setState({
-          userId: 1,
-          first: true,
-        }, () => {
-          this.props.navigation.navigate('SettingsScreen', {
-            userId: this.state.userId,
+        axios.get('http://localhost:8082/user/new').then((data) => {
+          store.save('userId', data.data)
+          this.setState({
+            userId: data.data,
+            first: true,
+          }, () => {
+            this.props.navigation.navigate('SettingsScreen', {
+              userId: this.state.userId,
+            });
           });
         });
       }
