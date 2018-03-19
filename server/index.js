@@ -22,6 +22,11 @@ app.post('/alarm/save', (req, res) => {
   })
 });
 
+// ~~~~~Settings Screen Routes~~~~~~~
+app.post('/settings/save', ({body}, res) => {
+  console.log(body, "<<<")
+});
+
 
 app.listen(8082, () => {
   console.log('listening on port 8082');
