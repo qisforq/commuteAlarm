@@ -17,50 +17,30 @@ firebaseMethods.newUser = function(cb) {
 
 firebaseMethods.seed1 =  function() {
  usersRef.push({
-  username: "Sally",
-  password: "nos",
+   userSettings: {
+     snoozes: 0,
+     prepTime: 0,
+     postTime: 0   
+   },
   alarms: {
     alarm1: {
       label: "work",
-      time: 800,
+      time: 1521472080122,
       preptime: 20,
       on: true,
-      location: null
-    },    
+      location: "ChIJs980r6hZwokRJrYJwpNFwPE"
+    },
     alarm2: {
       label: "bed",
-      time: 2200,
+      time: 1521472080122,
       preptime: 20,
       on: true,
-      location: null
+      location: "ChIJs980r6hZwokRJrYJwpNFwPE"
     }
 
   }
 })
 }
 
-firebaseMethods.seed2 = function () {
-usersRef.push({
-  username: "John",
-  password: "son",
-  alarms: {
-    alarm1: {
-      label: "breakfast",
-      time: 1000,
-      preptime: 10,
-      on: true,
-      location: null
-    },    
-    alarm2: {
-      label: "bed",
-      time: 2300,
-      preptime: 20,
-      on: true,
-      location: null
-    }
-
-  }
-})
-}
 
 module.exports = firebaseMethods;
