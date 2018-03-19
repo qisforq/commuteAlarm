@@ -4,6 +4,7 @@ import {Button, View, Text, TextInput, Picker, StyleSheet } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
+import axios from 'axios';
 
 
 export default class SettingsScreen extends React.Component {
@@ -42,8 +43,16 @@ export default class SettingsScreen extends React.Component {
   }
 
   _saveSettings = (nav) => {
-    console.log("nav:", nav)
-    nav.goBack();
+    let { prepTime, postTime, snoozes } = this.state;
+    axios.post('http://localhost:8082/settings/save', {
+      userId: nav.state.params.userId,
+      prepTime: prepTime,
+      postTime: postTime,
+      snoozes: snoozes,
+    }).then(data => {
+      nav.goBack();
+    });
+
   };
 
   render() {

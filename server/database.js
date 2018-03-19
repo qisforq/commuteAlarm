@@ -43,7 +43,7 @@ firebaseMethods.seed1 =  function() {
    userSettings: {
      snoozes: 0,
      prepTime: 0,
-     postTime: 0   
+     postTime: 0
    },
   alarms: {
     alarm1: {
