@@ -17,8 +17,9 @@ BackgroundTask.define(async () => {
   // await store.save('bbc', text).then(console.log(store.get('bbc')));
   store.save('stuff', 'works');
   // Remember to call finish()
-  BackgroundTask.finish()
+  BackgroundTask.finish();
 })
+
 export default class AlarmssScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +27,11 @@ export default class AlarmssScreen extends React.Component {
       userId: null,
       first: false,
       stuff: 'no',
+      userSettings: {
+        defaultPrepTime: 0,
+        defaultPostTime: 0,
+        defaultSnoozes: 0,
+      },
       data: dummyData.alarms
     };
     this.renderItem = this.renderItem.bind(this);
@@ -34,10 +40,12 @@ export default class AlarmssScreen extends React.Component {
     this.renderAdd = this.renderAdd.bind(this);
     this._onRefresh = this._onRefresh.bind(this);
   }
+
   static navigationOptions = {
     title: 'Alarms',
     headerLeft: null,
   };
+
   componentDidMount() {
     console.log('runs');
     BackgroundTask.schedule();
@@ -46,6 +54,11 @@ export default class AlarmssScreen extends React.Component {
         axios.get('http://localhost:8082/user/new').then((data) => {
           store.save('userId', data.data)
           store.save('alarms', {})
+          store.save('userSettings', {
+            defaultPrepTime: 0,
+            defaultPostTime: 0,
+            defaultSnoozes: 0,
+          })
           this.setState({
             userId: data.data,
             first: true,
@@ -54,20 +67,25 @@ export default class AlarmssScreen extends React.Component {
               userId: this.state.userId,
             });
           });
+        });
+      } else {
+        store.get('userSettings').then((settings) => {
+          this.setState({
+            userId: id,
+            userSettings: settings,
           });
-              } else {
-                this.setState({
-                  userId: id,
-                });
-              }
-            });
-          }
-renderAdd() {
-  this.props.navigation.navigate('SettingsScreen', {
-            data: this.state.data
-          })
-}
-renderItem(data) {
+        })
+      }
+    });
+  }
+
+  renderAdd() {
+    this.props.navigation.navigate('SettingsScreen', {
+      data: this.state.data
+    })
+  }
+
+  renderItem(data) {
     let { item, index } = data;
     return (
       <View style={styles.itemBlock}>
@@ -80,93 +98,112 @@ renderItem(data) {
       </View>
     )
   }
-renderHeader() {
-  return (
-    <View style={styles.header}>
-      <Text style={styles.headerText}>Alarms</Text>
-    </View>
-  )
-}
-renderSeparator() {
-  return <View style={styles.separator} />
-}
-_onRefresh() {
-  this.setState({
-    refreshing: true
-  })
-  setTimeout(function() {
+
+  renderHeader() {
+    return (
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Alarms</Text>
+      </View>
+    )
+  }
+
+  renderSeparator() {
+    return <View style={styles.separator} />
+  }
+
+  _onRefresh() {
     this.setState({
-      refreshing: false
+      refreshing: true
     })
-  }.bind(this),1000)
-}
+    setTimeout(function() {
+      this.setState({
+        refreshing: false
+      })
+    }.bind(this),1000)
+  }
+
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View>
           <Text>{this.state.stuff}</Text>
         </View>
-      <FlatList
-        keyExtractor={this._keyExtractor}
-        data={this.state.data}
-        renderItem={this.renderItem.bind(this)}
-        ItemSeparatorComponent={this.renderSeparator.bind(this)}
-        ListHeaderComponent={this.renderHeader.bind(this)}
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh.bind(this)}
+        <View style={{height: '90%'}}>
+          <FlatList
+            keyExtractor={this._keyExtractor}
+            data={this.state.data}
+            renderItem={this.renderItem.bind(this)}
+            ItemSeparatorComponent={this.renderSeparator.bind(this)}
+            ListHeaderComponent={this.renderHeader.bind(this)}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+            }
           />
-        }
-      />
-        )}
-      />
-        <BottomNavigation userId={this.state.userId} cur={1} nav={this.props.navigation}/>
+        </View>
+        <BottomNavigation
+          userId={this.state.userId}
+          cur={1}
+          nav={this.props.navigation}
+          userSettings={this.state.userSettings}
+          updateUserSettings={(prep, post, snooze) => {
+            this.setState({
+              userSettings: {
+                defaultPrepTime: prep,
+                defaultPostTime: post,
+                defaultSnoozes: snooze,
+              }
+            })
+          }}
+        />
       </View>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 20,
-  },
-  itemBlock: {
-    flexDirection: 'row',
-    paddingBottom: 10,
-  },
-  itemImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 0,
-  },
-  itemMeta: {
-    marginLeft: 10,
-    justifyContent: 'center',
-  },
-  itemName: {
-    fontSize: 20,
-  },
-  itemLocation: {
-    fontSize: 12,
-    color: "#111",
-  },
-  itemTime: {
-    fontSize: 14,
-    color: "#111",
-  },
-  separator: {
-    height: 0.5,
-    width: "200%",
-    alignSelf: 'center',
-    backgroundColor: "#555"
-  },
-  header: {
-    padding: 10,
-    alignSelf: 'center'
-  },
-  headerText: {
-    fontSize: 30,
-    fontWeight: '900'
-  }
-});
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      marginTop: 20,
+    },
+    itemBlock: {
+      flexDirection: 'row',
+      paddingBottom: 10,
+    },
+    itemImage: {
+      width: 50,
+      height: 50,
+      borderRadius: 0,
+    },
+    itemMeta: {
+      marginLeft: 10,
+      justifyContent: 'center',
+    },
+    itemName: {
+      fontSize: 20,
+    },
+    itemLocation: {
+      fontSize: 12,
+      color: "#111",
+    },
+    itemTime: {
+      fontSize: 14,
+      color: "#111",
+    },
+    separator: {
+      height: 0.5,
+      width: "200%",
+      alignSelf: 'center',
+      backgroundColor: "#555"
+    },
+    header: {
+      padding: 10,
+      alignSelf: 'center'
+    },
+    headerText: {
+      fontSize: 30,
+      fontWeight: '900'
+    }
+  });
