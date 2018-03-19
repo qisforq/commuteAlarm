@@ -15,6 +15,10 @@ firebaseMethods.newUser = function(cb) {
     }).key);
 }
 
+firebaseMethods.newAlarm = function(data, cb) {
+  console.log(firebase.database().ref(`users/${data.userId}/alarms`).push().key);
+}
+
 firebaseMethods.seed1 =  function() {
  usersRef.push({
    userSettings: {

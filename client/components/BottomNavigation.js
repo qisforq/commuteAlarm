@@ -9,19 +9,25 @@ export default class BottomNavigation extends React.Component {
           {this.props.cur !== 1 ?
             <Button
               title="Alarms Screen"
-              onPress={() => this.props.nav.navigate('AlarmsScreen')}
+              onPress={() => this.props.nav.navigate('AlarmsScreen', {
+                userId: this.props.userId
+              })}
             />:
             ''}
           {this.props.cur !== 2 ?
             <Button
               title="Settings Screen"
-              onPress={() => this.props.nav.navigate('SettingsScreen')}
+              onPress={() => this.props.nav.navigate('SettingsScreen', {
+                userId: this.props.userId
+              })}
             />:
             ''}
           {this.props.cur !== 3 ?
             <Button
               title="Edit/Add Screen"
-              onPress={() => this.props.nav.navigate('AddScreen')}
+              onPress={() => this.props.nav.navigate('AddScreen', {
+                userId: this.props.userId
+              })}
             />:
             ''}
         </View>

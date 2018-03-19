@@ -22,14 +22,12 @@ export default class SettingsScreen extends React.Component {
         <View></View>
         <View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', maxHeight: 40, width: 300 }}>
-            <View>
-              <ModalDropdown
-                defaultIndex={this.state.snoozes}
-                defaultValue="Number of Snoozes"
-                style={styles.dropdown_1}
-                options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1?'':'s'}              `)}
-              />
-            </View>
+            <ModalDropdown
+              defaultIndex={this.state.snoozes}
+              defaultValue="Number of Snoozes"
+              style={styles.dropdown_1}
+              options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1?'':'s'}              `)}
+            />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', maxHeight: 40, width: 300 }}>
             <Text>Prep Time: {this.state.prepTime}  </Text>
@@ -41,13 +39,11 @@ export default class SettingsScreen extends React.Component {
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', maxHeight: 40, width: 300 }}>
-            <View>
-              <ModalDropdown
-                defaultIndex={this.state.postTime}
-                defaultValue="Default Post-Travel Prep Time"
-                options={[...Array(12)].map((x,i) => (i)*5 + ' minutes               ')}
-              />
-            </View>
+            <ModalDropdown
+              defaultIndex={this.state.postTime}
+              defaultValue="Default Post-Travel Prep Time"
+              options={[...Array(12)].map((x,i) => (i)*5 + ' minutes               ')}
+            />
           </View>
         </View>
         <BottomNavigation cur={2} nav={this.props.navigation}/>
