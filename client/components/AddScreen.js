@@ -4,6 +4,7 @@ import {Button, View, Text, TextInput, Image, TouchableOpacity } from 'react-nat
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import store from 'react-native-simple-store';
 import axios from 'axios';
 
 export default class AddScreen extends React.Component {
@@ -34,6 +35,8 @@ export default class AddScreen extends React.Component {
 
   saveAlarm() {
     let { label, time, prepTime, postTime, locationId } = this.state;
+    console.warn(this.props.navigation.state.params.userId);
+
     axios.post('http://localhost:8082/alarm/save', {
       userId: this.props.navigation.state.params.userId,
       label,
@@ -43,6 +46,17 @@ export default class AddScreen extends React.Component {
       locationId,
     }).then(data => {
       console.log(data.data);
+      store.get('alarms').then(alarms => {
+        alarms[data.data] = {
+          label,
+          time,
+          prepTime,
+          postTime,
+          onOff: false,
+          locationId,
+        };
+        store.save('alarms', alarms).then(console.log(store.get('alarms')));
+      })
     });
   }
 

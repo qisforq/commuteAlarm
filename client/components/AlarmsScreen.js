@@ -23,6 +23,7 @@ export default class AlarmssScreen extends React.Component {
       if (id === null) {
         axios.get('http://localhost:8082/user/new').then((data) => {
           store.save('userId', data.data)
+          store.save('alarms', {})
           this.setState({
             userId: data.data,
             first: true,
