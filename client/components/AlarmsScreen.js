@@ -32,6 +32,10 @@ export default class AlarmssScreen extends React.Component {
             });
           });
         });
+      } else {
+        this.setState({
+          userId: id,
+        });
       }
     });
   }
@@ -40,7 +44,7 @@ export default class AlarmssScreen extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View></View>
-        <BottomNavigation cur={1} nav={this.props.navigation}/>
+        <BottomNavigation userId={this.state.userId} cur={1} nav={this.props.navigation}/>
       </View>
     );
   }
