@@ -148,7 +148,10 @@ export default class AlarmssScreen extends React.Component {
   }
 
   _toAddScreen() {
-    this.props.navigation.navigate('AddScreen')
+    this.props.navigation.navigate('AddScreen', {
+      m: 'l',
+      userId: this.state.userId,
+    })
   }
 
   editScreen(item) {
