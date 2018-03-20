@@ -47,8 +47,16 @@ export default class AlarmssScreen extends React.Component {
   };
 
   componentDidMount() {
-    console.log('runs');
-    console.log(this.state);
+    // RNCalendarEvents.authorizeEventStore().then(() => {
+      RNCalendarEvents.saveEvent('test', {
+        startDate: '2018-03-20T15:33:00.000Z',
+        endDate: '2018-03-20T17:26:00.000Z',
+        alarms: [{
+          date: 0 // or absolute date - iOS Only
+        }]
+      });
+    // });
+
     BackgroundTask.schedule();
     store.get('userId').then(id => {
       if (id === null) {
@@ -80,7 +88,10 @@ export default class AlarmssScreen extends React.Component {
           store.get('alarms').then(alarms => {
             console.log(alarms);
             this.setState({
-              alarms: Object.keys(alarms).map(k => alarms[k]),
+              alarms: Object.keys(alarms).map(k => {
+                alarms[k].id = k;
+                return alarms[k];
+              }),
             });
           });
         })
@@ -91,6 +102,7 @@ export default class AlarmssScreen extends React.Component {
   toAddScreen(item) {
     this.props.navigation.navigate('AddScreen', {
       data: item,
+      userId: this.state.userId,
     })
   }
 

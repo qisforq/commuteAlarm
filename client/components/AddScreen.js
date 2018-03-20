@@ -49,29 +49,51 @@ export default class AddScreen extends React.Component {
 
   saveAlarm() {
     let { label, time, prepTime, postTime, locationId } = this.state;
-    console.warn(this.props.navigation.state.params.userId);
-
-    axios.post('http://localhost:8082/alarm/save', {
-      userId: this.props.navigation.state.params.userId,
-      label,
-      time,
-      prepTime,
-      postTime,
-      locationId,
-    }).then(data => {
-      console.log(data.data);
-      store.get('alarms').then(alarms => {
-        alarms[data.data] = {
-          label,
-          time,
-          prepTime,
-          postTime,
-          onOff: false,
-          locationId,
-        };
-        store.save('alarms', alarms).then(console.log(store.get('alarms')));
-      })
-    });
+    if(this.state.edit) {
+      axios.post('http://localhost:8082/alarm/edit', {
+        userId: this.props.navigation.state.params.userId,
+        alarmId: this.props.navigation.state.params.data.id,
+        label,
+        time,
+        prepTime,
+        postTime,
+        locationId,
+      }).then(data => {
+        store.get('alarms').then(alarms => {
+          alarms[this.props.navigation.state.params.data.id] = {
+            label,
+            time,
+            prepTime,
+            postTime,
+            onOff: false,
+            locationId,
+          };
+          store.save('alarms', alarms).then(console.log(store.get('alarms')));
+        })
+      });
+    } else {
+      axios.post('http://localhost:8082/alarm/save', {
+        userId: this.props.navigation.state.params.userId,
+        label,
+        time,
+        prepTime,
+        postTime,
+        locationId,
+      }).then(data => {
+        console.log(data.data);
+        store.get('alarms').then(alarms => {
+          alarms[data.data] = {
+            label,
+            time,
+            prepTime,
+            postTime,
+            onOff: false,
+            locationId,
+          };
+          store.save('alarms', alarms).then(console.log(store.get('alarms')));
+        })
+      });
+    }
   }
 
   render() {

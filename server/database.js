@@ -37,6 +37,17 @@ firebaseMethods.newAlarm = function(data, cb) {
   }).key);
 }
 
+firebaseMethods.editAlarm = function(data, cb) {
+  cb(firebase.database().ref(`users/${data.userId}/alarms/${data.alarmId}`).update({
+    label: data.label,
+    time: data.time,
+    prepTime: data.prepTime,
+    postTime: data.postTime,
+    on: false,
+    location: data.locationId,
+  }).key);
+}
+
 firebaseMethods.saveSettings = function(settings, cb) {
   cb(firebase.database().ref(`users/${settings.userId}/userSettings`).set({
     defaultPrepTime: settings.prepTime,
