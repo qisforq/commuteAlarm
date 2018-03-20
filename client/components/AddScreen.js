@@ -11,7 +11,7 @@ export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      label: 'Alarm',
+      label: this.props.navigation.state.params.data.label || 'Alarm',
       showTime: false,
       time: 'none',
       prepTime: 0,
