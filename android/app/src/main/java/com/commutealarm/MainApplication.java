@@ -3,6 +3,7 @@ package com.commutealarm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.calendarevents.CalendarEventsPackage;
 import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
 import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativePushNotificationPackage(),
             new CalendarEventsPackage(),
             new RNBackgroundFetchPackage(),
             new BackgroundTaskPackage(),

@@ -1,14 +1,17 @@
 import React from 'react';
 import axios from 'axios';
 import BottomNavigation from './BottomNavigation';
-import { Alert, Button, View, Text, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl } from 'react-native';
+import { Alert, Button, View, Text, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
 import dummyData from '../../server/dummyData';
 import store from 'react-native-simple-store';
 import BackgroundTask from 'react-native-background-task';
 import RNCalendarEvents from 'react-native-calendar-events';
+import PushNotification from 'react-native-push-notification';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
+
+//var PushNotification = require('react-native-push-notification');
 
 BackgroundTask.define(async () => {
   // Fetch some data over the network which we want the user to have an up-to-
@@ -22,6 +25,46 @@ BackgroundTask.define(async () => {
   // Remember to call finish()
   BackgroundTask.finish();
 })
+
+PushNotification.configure({
+
+  // (optional) Called when Token is generated (iOS and Android)
+  onRegister: function(token) {
+      console.log( 'TOKEN:', token );
+  },
+
+  // (required) Called when a remote or local notification is opened or received
+  onNotification: function(notification) {
+      console.warn( 'NOTIFICATION:', notification );
+
+      // process the notification
+      
+      // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
+      notification.finish(PushNotificationIOS.FetchResult.NoData);
+  },
+
+  // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
+  //senderID: "YOUR GCM SENDER ID",
+
+  // IOS ONLY (optional): default: all - Permissions to register.
+  permissions: {
+      alert: true,
+      badge: true,
+      sound: true
+  },
+
+  // Should the initial notification be popped automatically
+  // default: true
+  popInitialNotification: true,
+
+  /**
+    * (optional) default: true
+    * - Specified if permissions (ios) and token (android and ios) will requested or not,
+    * - if not, you must call PushNotificationsHandler.requestPermissions() later
+    */
+  requestPermissions: true,
+});
+
 
 export default class AlarmssScreen extends React.Component {
   constructor(props) {
@@ -95,14 +138,41 @@ export default class AlarmssScreen extends React.Component {
   }
 
   componentDidMount() {
+
+    // PushNotification.localNotification({
+
+    //   /* iOS and Android properties */
+    //   title: "My Notification Title", // (optional)
+    //   message: "My Notification Message", // (required)
+    //   soundName: 'sound.wav', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+    // });
+
+    PushNotification.localNotificationSchedule({
+      message: "My Notification Message", // (required)
+      date: new Date(Date.now() + (10 * 1000)), // in 60 secs
+      soundName: 'annoying.mp3',
+    });
+
+
+    // RNCalendarEvents.authorizationStatus().then(status => {
+    //   console.warn('status, ', status);
+    //   if(status === 'undetermined') {
+    //     RNCalendarEvents.authorizeEventStore()
+    //     .then((out) => {
+    //       if(out == 'authorized') {
+    //         console.warn('out, ', out);
+    //       }
+    //     })
+    //   }
+    // })
     // RNCalendarEvents.authorizeEventStore().then(() => {
-      RNCalendarEvents.saveEvent('test', {
-        startDate: '2018-03-20T15:33:00.000Z',
-        endDate: '2018-03-20T17:26:00.000Z',
-        alarms: [{
-          date: 0 // or absolute date - iOS Only
-        }]
-      });
+      // RNCalendarEvents.saveEvent('test', {
+      //   startDate: '2018-03-20T19:55:00.000Z',
+      //   endDate: '2018-03-20T20:26:00.000Z',
+      //   alarms: [{
+      //     date: 0 // or absolute date - iOS Only
+      //   }]
+      // }).then(s => console.warn('warn, ',s));
     // });
 
     BackgroundTask.schedule();
