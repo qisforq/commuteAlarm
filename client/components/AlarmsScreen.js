@@ -7,6 +7,9 @@ import store from 'react-native-simple-store';
 import BackgroundTask from 'react-native-background-task';
 import RNCalendarEvents from 'react-native-calendar-events';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
+import HeaderButton from 'react-navigation-header-buttons'
+import Icon from 'react-native-vector-icons/Ionicons.js';
+
 BackgroundTask.define(async () => {
   // Fetch some data over the network which we want the user to have an up-to-
   // date copy of, even if they have no network when using the app
@@ -37,14 +40,59 @@ export default class AlarmssScreen extends React.Component {
     this.renderItem = this.renderItem.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderSeparator = this.renderSeparator.bind(this);
-    this.toAddScreen = this.toAddScreen.bind(this);
+    this._toAddScreen = this._toAddScreen.bind(this);
+    this.editScreen = this.editScreen.bind(this);
     this._onRefresh = this._onRefresh.bind(this);
+    this._updateUserSettings = this._updateUserSettings.bind(this);
   }
 
-  static navigationOptions = {
-    title: 'Alarms',
-    headerLeft: null,
-  };
+
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {};
+
+    return {
+      title: 'Alarms',
+      headerLeft: (
+        <HeaderButton
+          IconComponent={Icon}
+          iconSize={23}
+          color="black"
+          >
+          <HeaderButton.Item
+            iconName={"md-settings"}
+            title="Settings"
+            onPress={params.goToSettings}
+          />
+        </HeaderButton>
+      ),
+      headerRight: (
+        <HeaderButton
+          IconComponent={Icon}
+          iconSize={23}
+          color="black"
+          >
+          <HeaderButton.Item
+            iconName={"md-add"}
+            title="Add Alarm"
+            onPress={params.toAddScreen}
+          />
+        </HeaderButton>
+      ),
+    }
+  }
+
+  componentWillMount() {
+
+    this.props.navigation.setParams({
+      toAddScreen: this._toAddScreen,
+      goToSettings: () => this.props.navigation.navigate('SettingsScreen', {
+        userId: this.state.userId,
+        userSettings: this.state.userSettings,
+        updateUserSettings: this._updateUserSettings,
+      })
+    })
+
+  }
 
   componentDidMount() {
     console.log('runs');
@@ -88,7 +136,11 @@ export default class AlarmssScreen extends React.Component {
     });
   }
 
-  toAddScreen(item) {
+  _toAddScreen() {
+    this.props.navigation.navigate('AddScreen')
+  }
+
+  editScreen(item) {
     this.props.navigation.navigate('AddScreen', {
       data: item,
     })
@@ -100,7 +152,7 @@ export default class AlarmssScreen extends React.Component {
       <View style={styles.itemBlock}>
         <FontAwesome style={styles.itemImage}>{Icons.clockO}</FontAwesome>
         <View style={styles.itemMeta}>
-          <Text onPress = {() => this.toAddScreen(item)} style={styles.itemName}>{item.label}</Text>
+          <Text onPress = {() => this.editScreen(item)} style={styles.itemName}>{item.label}</Text>
           <Text style={styles.itemTime}>{item.time}</Text>
           <Text style={styles.itemLocation}>{item.location}</Text>
         </View>
@@ -131,11 +183,20 @@ export default class AlarmssScreen extends React.Component {
     }.bind(this),1000)
   }
 
+  _updateUserSettings(prep, post, snooze) {
+    this.setState({
+      userSettings: {
+        defaultPrepTime: prep,
+        defaultPostTime: post,
+        defaultSnoozes: snooze,
+      }
+    })
+  }
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View style={{ height: '90%' }}>
-          <FlatList 
+          <FlatList
             //keyExtractor={this._keyExtractor}
             data={this.state.alarms}
             renderItem={this.renderItem.bind(this)}
@@ -154,15 +215,7 @@ export default class AlarmssScreen extends React.Component {
           cur={1}
           nav={this.props.navigation}
           userSettings={this.state.userSettings}
-          updateUserSettings={(prep, post, snooze) => {
-            this.setState({
-              userSettings: {
-                defaultPrepTime: prep,
-                defaultPostTime: post,
-                defaultSnoozes: snooze,
-              }
-            })
-          }}
+          updateUserSettings={this._updateUserSettings}
         />
       </View>
     );
