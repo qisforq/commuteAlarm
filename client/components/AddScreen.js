@@ -10,14 +10,28 @@ import axios from 'axios';
 export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      label: this.props.navigation.state.params.data.label || 'Alarm',
-      showTime: false,
-      time: 'none',
-      prepTime: 0,
-      postTime: 0,
-      locationId: null,
-    };
+    if(this.props.navigation.state.params.data) {
+      this.state = {
+        showTime: false,
+        label: this.props.navigation.state.params.data.label,
+        time: this.props.navigation.state.params.data.time,
+        prepTime: this.props.navigation.state.params.data.prepTime,
+        postTime: this.props.navigation.state.params.data.postTime,
+        locationId: this.props.navigation.state.params.data.locationId,
+        edit: true
+      };
+    } else {
+      this.state = {
+        showTime: false,
+        label: 'Alarm',
+        time: 'none',
+        prepTime: 0,
+        postTime: 0,
+        locationId: null,
+        edit: false,
+      };
+    }
+    
     this.saveAlarm = this.saveAlarm.bind(this);
   }
 
