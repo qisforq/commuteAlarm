@@ -32,13 +32,12 @@ export default class AlarmssScreen extends React.Component {
         defaultPostTime: 0,
         defaultSnoozes: 0,
       },
-      data: dummyData.alarms,
-      data: Object.keys(dummyData.alarms).map(k => dummyData.alarms[k]),
+      alarms: [],
     };
     this.renderItem = this.renderItem.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderSeparator = this.renderSeparator.bind(this);
-    this.renderAdd = this.renderAdd.bind(this);
+    this.toAddScreen = this.toAddScreen.bind(this);
     this._onRefresh = this._onRefresh.bind(this);
   }
 
@@ -72,18 +71,26 @@ export default class AlarmssScreen extends React.Component {
         });
       } else {
         store.get('userSettings').then((settings) => {
+          console.log(settings);
           this.setState({
             userId: id,
-            userSettings: settings,
+            userSettings: settings
+          })
+        }).then(() => {
+          store.get('alarms').then(alarms => {
+            console.log(alarms);
+            this.setState({
+              alarms: Object.keys(alarms).map(k => alarms[k]),
+            });
           });
         })
       }
     });
   }
 
-  renderAdd() {
-    this.props.navigation.navigate('SettingsScreen', {
-      data: this.state.data
+  toAddScreen(item) {
+    this.props.navigation.navigate('AddScreen', {
+      data: item,
     })
   }
 
@@ -93,7 +100,7 @@ export default class AlarmssScreen extends React.Component {
       <View style={styles.itemBlock}>
         <FontAwesome style={styles.itemImage}>{Icons.clockO}</FontAwesome>
         <View style={styles.itemMeta}>
-          <Text onPress = {this.renderAdd.bind(this)} style={styles.itemName}>{item.label}</Text>
+          <Text onPress = {() => this.toAddScreen(item)} style={styles.itemName}>{item.label}</Text>
           <Text style={styles.itemTime}>{item.time}</Text>
           <Text style={styles.itemLocation}>{item.location}</Text>
         </View>
@@ -130,7 +137,7 @@ export default class AlarmssScreen extends React.Component {
         <View style={{ height: '90%' }}>
           <FlatList 
             //keyExtractor={this._keyExtractor}
-            data={this.state.data}
+            data={this.state.alarms}
             renderItem={this.renderItem.bind(this)}
             ItemSeparatorComponent={this.renderSeparator.bind(this)}
             ListHeaderComponent={this.renderHeader.bind(this)}
@@ -157,8 +164,6 @@ export default class AlarmssScreen extends React.Component {
             })
           }}
         />
-            }        
-          />
       </View>
     );
   }
