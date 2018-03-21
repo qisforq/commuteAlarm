@@ -2,6 +2,7 @@
 var firebase = require('./config').firebase;
 
 var usersRef = firebase.database().ref('users/');
+const getCommuteTime = require('./apiHelpers').getCommuteTime;
 
 var firebaseMethods = {};
 
@@ -40,6 +41,24 @@ firebaseMethods.editAlarm = function(data, cb) {
 
 firebaseMethods.deleteAlarm = function(data, cb) {
   firebase.database().ref(`users/${data.userId}/alarms/${data.alarmId}`).remove();
+}
+
+firebaseMethods.getAlarms = function({userId}, cb) {
+  firebase.database().ref(`users/${userId}/alarms`).on('value', (snapshot) => {
+    let snapshots = []
+
+    snapshot.forEach((child) => {
+      let alarmObj = Object.assign({}, {alarmId: child.key}, child.val())
+      snapshots.push(alarmObj)
+    })
+
+    Promise.all(snapshots.map(snap => getCommuteTime(snap)))
+    .then((alarmCommuteData) => {
+      cb(alarmCommuteData)
+    }).catch((err) => {
+      console.log('Error inside the Promise.all function within editAlarm (server/database.js line 64)');
+    })
+  })
 }
 
 firebaseMethods.saveSettings = function(settings, cb) {

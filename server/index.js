@@ -1,7 +1,8 @@
 const express = require('express');
 const parser = require('body-parser');
 
-const firebase = require('./database')
+const firebase = require('./database');
+const getCommuteTime = require('./apiHelpers').getCommuteTime;
 
 
 const app = express();
@@ -45,8 +46,10 @@ app.post('/settings/save', ({body}, res) => {
 });
 
 // ~~~~~Web Worker Routes~~~~~~~
-app.get('/commutetime', (req, res) => {
-  console.log("req:", req);
+app.get('/commutetime', ({query}, res) => {
+  firebase.getAlarms(query, (result) => {
+    res.send(result)
+  })
 });
 
 
