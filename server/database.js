@@ -1,10 +1,10 @@
 
-var firebase = require('./config').firebase;
+const firebase = require('./config').firebase;
 
-var usersRef = firebase.database().ref('users/');
+const usersRef = firebase.database().ref('users/');
 const getCommuteTime = require('./apiHelpers').getCommuteTime;
 
-var firebaseMethods = {};
+let firebaseMethods = {};
 
 firebaseMethods.newUser = function(cb) {
   console.log('herer we are');
