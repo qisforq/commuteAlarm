@@ -31,6 +31,12 @@ app.post('/alarm/edit', (req, res) => {
   })
 });
 
+app.post('/alarm/delete', (req, res) => {
+  console.log(req.body);
+  firebase.deleteAlarm((req.body));
+  res.status(200).send('done');
+});
+
 // ~~~~~Settings Screen Routes~~~~~~~
 app.post('/settings/save', ({body}, res) => {
   firebase.saveSettings(body, (key) => {

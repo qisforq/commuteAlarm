@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import BottomNavigation from './BottomNavigation';
-import { Alert, Button, View, Text, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
+import { Alert, Button, View, Text, TouchableHighlight, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
 import dummyData from '../../server/dummyData';
 import store from 'react-native-simple-store';
 import BackgroundTask from 'react-native-background-task';
@@ -10,6 +10,7 @@ import PushNotification from 'react-native-push-notification';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
+import Swipeout from 'react-native-swipeout';
 
 //var PushNotification = require('react-native-push-notification');
 
@@ -41,7 +42,7 @@ PushNotification.configure({
 
   // (required) Called when a remote or local notification is opened or received
   onNotification: function(notification) {
-      console.warn( 'NOTIFICATION:', notification );
+      console.log( 'NOTIFICATION:', notification );
 
       // process the notification
 
@@ -87,12 +88,11 @@ export default class AlarmssScreen extends React.Component {
       alarms: [],
     };
     this.renderItem = this.renderItem.bind(this);
-    this.renderHeader = this.renderHeader.bind(this);
-    this.renderSeparator = this.renderSeparator.bind(this);
     this._toAddScreen = this._toAddScreen.bind(this);
     this.editScreen = this.editScreen.bind(this);
-    this._onRefresh = this._onRefresh.bind(this);
+    // this._onRefresh = this._onRefresh.bind(this);
     this._updateUserSettings = this._updateUserSettings.bind(this);
+    this.deleteAlarm = this.deleteAlarm.bind(this);
   }
 
 
@@ -160,6 +160,7 @@ export default class AlarmssScreen extends React.Component {
     PushNotification.localNotificationSchedule({
       message: "My Notification Message", // (required)
       date: new Date(Date.now() + (10 * 1000)), // in 60 secs
+      playSound: false,
       soundName: 'annoying.mp3',
     });
 
@@ -233,6 +234,7 @@ export default class AlarmssScreen extends React.Component {
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
+      settings: this.state.userSettings,
     })
   }
 
@@ -243,42 +245,62 @@ export default class AlarmssScreen extends React.Component {
     })
   }
 
-  renderItem(data) {
-    let { item, index } = data;
-    return (
-      <View style={styles.itemBlock}>
-        <FontAwesome style={styles.itemImage}>{Icons.clockO}</FontAwesome>
-        <View style={styles.itemMeta}>
-          <Text onPress = {() => this.editScreen(item)} style={styles.itemName}>{item.label}</Text>
-          <Text style={styles.itemTime}>{item.time}</Text>
-          <Text style={styles.itemLocation}>{item.location}</Text>
-        </View>
-      </View>
-    )
-  }
-
-  renderHeader() {
-    return (
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Alarms</Text>
-      </View>
-    )
-  }
-
-  renderSeparator() {
-    return <View style={styles.separator} />
-  }
-
-  _onRefresh() {
-    this.setState({
-      refreshing: true
-    })
-    setTimeout(function() {
+  deleteAlarm(item) {
+    store.get('alarms').then(alarms => {
+      delete alarms[item.id];
       this.setState({
-        refreshing: false
-      })
-    }.bind(this),1000)
+        alarms: Object.keys(alarms).map(k => {
+          alarms[k].id = k;
+          return alarms[k];
+        }),
+      });
+      store.save('alarms',alarms);
+    });
+    axios.post('http://localhost:8082/alarm/delete', {
+      alarmId: item.id,
+      userId: this.state.userId,
+    });
   }
+
+  renderItem({ item, index }) {
+    let swipeBtns = [{
+      text: 'Delete',
+      backgroundColor: 'red',
+      //underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+      onPress: () => { this.deleteAlarm(item) }
+    }];
+
+    return (
+      <Swipeout right={swipeBtns}
+        autoClose={true}
+        backgroundColor="transparent"
+      >
+        <View style={{ height: 50 }}>
+          <TouchableHighlight underlayColor="lightblue" onPress = {() => this.editScreen(item)}>
+            <View>
+              <FontAwesome style={styles.itemImage}>{Icons.clockO}</FontAwesome>
+              <View style={styles.itemMeta}>
+                <Text style={styles.itemName}>{item.label}</Text>
+                <Text style={styles.itemTime}>{item.time}</Text>
+                <Text style={styles.itemLocation}>{item.location}</Text>
+              </View>
+            </View>
+          </TouchableHighlight>
+        </View>
+      </Swipeout>
+    )
+  }
+
+  // _onRefresh() {
+  //   this.setState({
+  //     refreshing: true
+  //   })
+  //   setTimeout(function() {
+  //     this.setState({
+  //       refreshing: false
+  //     })
+  //   }.bind(this),1000)
+  // }
 
   _updateUserSettings(prep, post, snooze) {
     this.setState({
@@ -291,29 +313,16 @@ export default class AlarmssScreen extends React.Component {
   }
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
-        <View style={{ height: '90%' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+        <View style={{ height: '100%', width: '90%' }}>
           <FlatList
-            //keyExtractor={this._keyExtractor}
             data={this.state.alarms}
-            renderItem={this.renderItem.bind(this)}
-            ItemSeparatorComponent={this.renderSeparator.bind(this)}
-            ListHeaderComponent={this.renderHeader.bind(this)}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this._onRefresh.bind(this)}
-              />
-            }
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            //ListHeaderComponent={() => <Text style={styles.headerText}>Alarms</Text>}
           />
         </View>
-        <BottomNavigation
-          userId={this.state.userId}
-          cur={1}
-          nav={this.props.navigation}
-          userSettings={this.state.userSettings}
-          updateUserSettings={this._updateUserSettings}
-        />
       </View>
     );
   }
@@ -329,12 +338,14 @@ export default class AlarmssScreen extends React.Component {
       paddingBottom: 10,
     },
     itemImage: {
-      width: 50,
-      height: 50,
+      width: 15,
+      height: 15,
+      marginTop: 10,
       borderRadius: 0,
     },
     itemMeta: {
-      marginLeft: 10,
+      marginLeft: 20,
+      marginTop: -20,
       justifyContent: 'center',
     },
     itemName: {

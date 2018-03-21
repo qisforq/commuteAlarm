@@ -25,8 +25,8 @@ export default class AddScreen extends React.Component {
         showTime: false,
         label: 'Alarm',
         time: 'none',
-        prepTime: 0,
-        postTime: 0,
+        prepTime: this.props.navigation.state.params.settings.defaultPrepTime,
+        postTime: this.props.navigation.state.params.settings.defaultPostTime,
         locationId: null,
         edit: false,
       };
@@ -35,9 +35,11 @@ export default class AddScreen extends React.Component {
     this.saveAlarm = this.saveAlarm.bind(this);
   }
 
-  static navigationOptions = {
-    title: 'Add Alarm',
-    headerLeft: null,
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {};
+    return {
+      title: navigation.state.params.data ? 'Edit Alarm' : 'Add Alarm',
+    }
   };
 
   handleTimePicked = (time) => {
@@ -68,7 +70,9 @@ export default class AddScreen extends React.Component {
             onOff: false,
             locationId,
           };
-          store.save('alarms', alarms).then(console.log(store.get('alarms')));
+          store.save('alarms', alarms).then(() => {
+            this.props.navigation.navigate('AlarmsScreen');
+          });
         })
       });
     } else {
@@ -90,14 +94,15 @@ export default class AddScreen extends React.Component {
             onOff: false,
             locationId,
           };
-          store.save('alarms', alarms).then(console.log(store.get('alarms')));
+          store.save('alarms', alarms).then(() => {
+            this.props.navigation.navigate('AlarmsScreen');
+          });
         })
       });
     }
   }
 
   render() {
-    console.log(this.state.time);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View>
@@ -117,7 +122,7 @@ export default class AddScreen extends React.Component {
             onCancel={() => this.setState({ showTime: false })}
           />
           <ModalDropdown
-            defaultIndex={this.state.prepTime}
+            defaultIndex={this.state.prepTime/5}
             defaultValue="Prep Time"
             options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
             onSelect={(idx, val) => this.setState({ prepTime: idx })}
@@ -125,7 +130,7 @@ export default class AddScreen extends React.Component {
           <Text>{this.state.prepTime}</Text>
 
           <ModalDropdown
-            defaultIndex={this.state.postTime}
+            defaultIndex={this.state.postTime/5}
             defaultValue="Post Time"
             options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
             onSelect={(idx, val) => this.setState({ postTime: idx })}
@@ -157,7 +162,6 @@ export default class AddScreen extends React.Component {
             onPress={this.saveAlarm}
           />
         </View>
-        <BottomNavigation cur={3} nav={this.props.navigation}/>
       </View>
     );
   }
