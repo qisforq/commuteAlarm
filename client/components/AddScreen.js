@@ -10,7 +10,8 @@ import axios from 'axios';
 export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
-    if(this.props.navigation.state.params.data) {
+    console.log(this.props);
+    if(this.props.navigation.state.params) {
       this.state = {
         showTime: false,
         label: this.props.navigation.state.params.data.label,
@@ -18,6 +19,7 @@ export default class AddScreen extends React.Component {
         prepTime: this.props.navigation.state.params.data.prepTime,
         postTime: this.props.navigation.state.params.data.postTime,
         locationId: this.props.navigation.state.params.data.locationId,
+        address: this.props.navigation.state.parmas.data.address,
         edit: true
       };
     } else {
@@ -28,6 +30,7 @@ export default class AddScreen extends React.Component {
         prepTime: this.props.navigation.state.params.settings.defaultPrepTime,
         postTime: this.props.navigation.state.params.settings.defaultPostTime,
         locationId: null,
+        address: 'Search',
         edit: false,
       };
     }
@@ -50,7 +53,7 @@ export default class AddScreen extends React.Component {
   }
 
   saveAlarm() {
-    let { label, time, prepTime, postTime, locationId } = this.state;
+    let { label, time, prepTime, postTime, locationId, address, onOff } = this.state;
     if(this.state.edit) {
       axios.post('http://localhost:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,
@@ -60,6 +63,8 @@ export default class AddScreen extends React.Component {
         prepTime,
         postTime,
         locationId,
+        onOff,
+        address,
       }).then(data => {
         store.get('alarms').then(alarms => {
           alarms[this.props.navigation.state.params.data.id] = {
@@ -69,6 +74,7 @@ export default class AddScreen extends React.Component {
             postTime,
             onOff: false,
             locationId,
+            address
           };
           store.save('alarms', alarms).then(() => {
             this.props.navigation.navigate('AlarmsScreen');
@@ -83,6 +89,7 @@ export default class AddScreen extends React.Component {
         prepTime,
         postTime,
         locationId,
+        address,
       }).then(data => {
         console.log(data.data);
         store.get('alarms').then(alarms => {
@@ -93,6 +100,7 @@ export default class AddScreen extends React.Component {
             postTime,
             onOff: false,
             locationId,
+            address
           };
           store.save('alarms', alarms).then(() => {
             this.props.navigation.navigate('AlarmsScreen');
@@ -138,11 +146,12 @@ export default class AddScreen extends React.Component {
 
           <View style={{ height: 200 }}>
             <GooglePlacesAutocomplete
-              placeholder='Search'
+              placeholder={this.state.address}
               minLength={2} // minimum length of text to search
               onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
                 this.setState({
                   locationId: data.place_id,
+                  address: data.description,
                 }, () => console.log(this.state));
               }}
 

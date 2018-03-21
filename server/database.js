@@ -7,7 +7,6 @@ const getCommuteTime = require('./apiHelpers').getCommuteTime;
 var firebaseMethods = {};
 
 firebaseMethods.newUser = function(cb) {
-  console.log('herer we are');
     cb(usersRef.push({
       userSettings: {
         defaultPrepTime: 0,
@@ -25,17 +24,20 @@ firebaseMethods.newAlarm = function(data, cb) {
     postTime: data.postTime,
     on: false,
     location: data.locationId,
+    address: data.address,
   }).key);
 }
 
 firebaseMethods.editAlarm = function(data, cb) {
+  console.log("daaaatatatatattaaa, ",data);
   cb(firebase.database().ref(`users/${data.userId}/alarms/${data.alarmId}`).update({
     label: data.label,
     time: data.time,
     prepTime: data.prepTime,
     postTime: data.postTime,
-    on: false,
+    on: data.onOff,
     location: data.locationId,
+    address: data.address,
   }).key);
 }
 

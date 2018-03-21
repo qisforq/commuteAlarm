@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import BottomNavigation from './BottomNavigation';
-import { Alert, Button, View, Text, TouchableHighlight, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
+import { Alert, Button, Switch, View, Text, TouchableHighlight, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
 import dummyData from '../../server/dummyData';
 import store from 'react-native-simple-store';
 import BackgroundTask from 'react-native-background-task';
@@ -246,6 +246,7 @@ export default class AlarmssScreen extends React.Component {
   }
 
   editScreen(item) {
+    console.log(item);
     this.props.navigation.navigate('AddScreen', {
       data: item,
       userId: this.state.userId,
@@ -282,15 +283,48 @@ export default class AlarmssScreen extends React.Component {
         autoClose={true}
         backgroundColor="transparent"
       >
-        <View style={{ height: 50 }}>
+        <View style={{ height: 60, borderWidth: 0.3, borderColor: 'black' }}>
           <TouchableHighlight underlayColor="lightblue" onPress = {() => this.editScreen(item)}>
-            <View>
-              <FontAwesome style={styles.itemImage}>{Icons.clockO}</FontAwesome>
-              <View style={styles.itemMeta}>
-                <Text style={styles.itemName}>{item.label}</Text>
-                <Text style={styles.itemTime}>{item.time}</Text>
-                <Text style={styles.itemLocation}>{item.location}</Text>
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={{ flex: 0.5 }}></View>
+              <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35 }}>{Icons.clockO}</FontAwesome>
+              <View style={{ flex: 10, flexWrap: 'wrap' }}>
+                <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}<Text style={{ fontWeight: '300', fontSize: 10,  }}>-{item.address.slice(0,25)}</Text></Text>
+                <Text style={{}}>{new Date(item.time).toDateString()}</Text>
+                <Text style={{}}>{new Date(item.time).toLocaleTimeString()}</Text>
+                <Text style={{}}>{item.location}</Text>
               </View>
+              <Switch
+                style={{ flex: 2, marginTop: 10 }}
+                tintColor="lightgrey"
+                value={item.onOff}
+                onValueChange={() => {
+                  store.get('alarms').then(alarms => {
+                    alarms[item.id].onOff = !alarms[item.id].onOff
+                    store.save('alarms', alarms);
+                  });
+                  item.onOff = !item.onOff;
+                  let { label, time, prepTime, postTime, locationId, address, onOff } = item;
+                  console.log(onOff);
+                  axios.post('http://localhost:8082/alarm/edit', {
+                    userId: this.state.userId,
+                    alarmId: item.id,
+                    label,
+                    time,
+                    prepTime,
+                    postTime,
+                    locationId,
+                    address,
+                    onOff,
+                  });
+                  let alrm = this.state.alarms.slice();
+                  alrm[index].onOff = item.onOff;
+                  this.setState({
+                    alarms: alrm,
+                  });
+                }}
+              />
+              <View style={{ flex: 0.5 }}></View>
             </View>
           </TouchableHighlight>
         </View>
@@ -321,12 +355,12 @@ export default class AlarmssScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
-        <View style={{ height: '100%', width: '90%' }}>
+        <View style={{ height: '100%', width: '100%' }}>
           <FlatList
             data={this.state.alarms}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            //ItemSeparatorComponent={() => <View style={styles.separator} />}
             //ListHeaderComponent={() => <Text style={styles.headerText}>Alarms</Text>}
           />
         </View>
@@ -368,7 +402,7 @@ export default class AlarmssScreen extends React.Component {
     },
     separator: {
       height: 0.5,
-      width: "200%",
+      width: "95%",
       alignSelf: 'center',
       backgroundColor: "#555"
     },
