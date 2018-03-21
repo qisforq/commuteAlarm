@@ -1,5 +1,6 @@
-var firebase = require('firebase'); 
-  var config = {
+const firebase = require('firebase');
+
+const firebaseConfig = {
     apiKey: "AIzaSyCxTgiAadnOZE1imxmNr6QX-eyQYYWcmrs",
     authDomain: "real-e8ea9.firebaseapp.com",
     databaseURL: "https://real-e8ea9.firebaseio.com",
@@ -7,6 +8,10 @@ var firebase = require('firebase');
     storageBucket: "",
     messagingSenderId: "459834120805"
   };
-firebase.initializeApp(config);
 
-module.exports.firebase = firebase;
+firebase.initializeApp(firebaseConfig);
+
+module.exports = {
+  firebase: firebase,
+  googleMapsAPI: 'AIzaSyCl-2Uv85jzATOsolRsSavBM7filgsFqkg',
+};
