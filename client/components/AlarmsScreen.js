@@ -160,6 +160,7 @@ export default class AlarmssScreen extends React.Component {
     PushNotification.localNotificationSchedule({
       message: "My Notification Message", // (required)
       date: new Date(Date.now() + (10 * 1000)), // in 60 secs
+      playSound: false,
       soundName: 'annoying.mp3',
     });
 

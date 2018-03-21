@@ -21,15 +21,18 @@ export default class AddScreen extends React.Component {
         edit: true
       };
     } else {
-      this.state = {
-        showTime: false,
-        label: 'Alarm',
-        time: 'none',
-        prepTime: 0,
-        postTime: 0,
-        locationId: null,
-        edit: false,
-      };
+      store.get('userSettings').then(settings => {
+        console.log(settings);
+        this.state = {
+          showTime: false,
+          label: 'Alarm',
+          time: 'none',
+          prepTime: settings.defaultPrepTime,
+          postTime: settings.defaultPostTime,
+          locationId: null,
+          edit: false,
+        };
+      });
     }
     
     this.saveAlarm = this.saveAlarm.bind(this);
@@ -97,7 +100,7 @@ export default class AddScreen extends React.Component {
   }
 
   render() {
-    console.log(this.state.time);
+    console.log(this.state);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View>
