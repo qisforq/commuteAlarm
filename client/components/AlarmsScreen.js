@@ -16,9 +16,8 @@ import Swipeout from 'react-native-swipeout';
 
 BackgroundTask.define(async () => {
   axios.get('http://localhost:8082/commutetime', {
-    blabla: 'honey',
     params: {
-      userId: 12345
+      userId: this.state.userId
     }
   })
   // Fetch some data over the network which we want the user to have an up-to-
@@ -144,11 +143,7 @@ export default class AlarmssScreen extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8082/commutetime', {
-      params: {
-        userId: 12345
-      }
-    })
+
     // PushNotification.localNotification({
 
     //   /* iOS and Android properties */
@@ -231,6 +226,18 @@ export default class AlarmssScreen extends React.Component {
   }
 
   _toAddScreen() {
+    axios.get('http://localhost:8082/commutetime', {
+      params: {
+        userId: this.state.userId
+      }
+    })
+    .then((alarmCommuteData) => {
+      this.setState({
+        alarmCommuteData: alarmCommuteData
+      });
+    }).catch((err) => {
+      console.log('?????????',err);
+    })
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,

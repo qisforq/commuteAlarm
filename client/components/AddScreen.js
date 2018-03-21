@@ -31,7 +31,7 @@ export default class AddScreen extends React.Component {
         edit: false,
       };
     }
-    
+
     this.saveAlarm = this.saveAlarm.bind(this);
   }
 
@@ -141,9 +141,8 @@ export default class AddScreen extends React.Component {
               placeholder='Search'
               minLength={2} // minimum length of text to search
               onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-                console.log(data, details);
                 this.setState({
-                  locationId: data.id,
+                  locationId: data.place_id,
                 }, () => console.log(this.state));
               }}
 
