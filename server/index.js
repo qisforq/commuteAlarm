@@ -38,6 +38,11 @@ app.post('/settings/save', ({body}, res) => {
   })
 });
 
+// ~~~~~Web Worker Routes~~~~~~~
+app.get('/commutetime', (req, res) => {
+  console.log("req:", req);
+});
+
 
 app.listen(8082, () => {
   console.log('listening on port 8082');

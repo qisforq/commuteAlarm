@@ -14,6 +14,12 @@ import Icon from 'react-native-vector-icons/Ionicons.js';
 //var PushNotification = require('react-native-push-notification');
 
 BackgroundTask.define(async () => {
+  axios.get('http://localhost:8082/commutetime', {
+    blabla: 'honey',
+    params: {
+      userId: 12345
+    }
+  })
   // Fetch some data over the network which we want the user to have an up-to-
   // date copy of, even if they have no network when using the app
   // const response = await fetch('http://feeds.bbci.co.uk/news/rss.xml')
@@ -38,7 +44,7 @@ PushNotification.configure({
       console.warn( 'NOTIFICATION:', notification );
 
       // process the notification
-      
+
       // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
       notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
@@ -138,7 +144,11 @@ export default class AlarmssScreen extends React.Component {
   }
 
   componentDidMount() {
-
+    axios.get('http://localhost:8082/commutetime', {
+      params: {
+        userId: 12345
+      }
+    })
     // PushNotification.localNotification({
 
     //   /* iOS and Android properties */
@@ -192,6 +202,8 @@ export default class AlarmssScreen extends React.Component {
           }, () => {
             this.props.navigation.navigate('SettingsScreen', {
               userId: this.state.userId,
+              userSettings: this.state.userSettings,
+              updateUserSettings: this._updateUserSettings,
             });
           });
         });
