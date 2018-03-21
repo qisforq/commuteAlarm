@@ -111,7 +111,7 @@ export default class SettingsScreen extends React.Component {
             </View>
           </View>
         </View>
-        <BottomNavigation cur={2} nav={this.props.navigation}/>
+        <View></View>
       </View>
     );
   }

@@ -13,16 +13,6 @@ firebaseMethods.newUser = function(cb) {
         defaultPostTime: 0,
         defaultSnoozes: 0,
       },
-      alarms: {
-        alarm1: {
-          label: "work",
-          time: 1521472080122,
-          preptime: 20,
-          postTime: 15,
-          on: true,
-          location: "ChIJs980r6hZwokRJrYJwpNFwPE"
-        },
-      }
     }).key);
 }
 
@@ -46,6 +36,10 @@ firebaseMethods.editAlarm = function(data, cb) {
     on: false,
     location: data.locationId,
   }).key);
+}
+
+firebaseMethods.deleteAlarm = function(data, cb) {
+  firebase.database().ref(`users/${data.userId}/alarms/${data.alarmId}`).remove();
 }
 
 firebaseMethods.saveSettings = function(settings, cb) {
