@@ -1,9 +1,7 @@
 const express = require('express');
 const parser = require('body-parser');
-
 const firebase = require('./database');
-const getCommuteTime = require('./apiHelpers').getCommuteTime;
-
+const { getCommuteTime } = require('./apiHelpers');
 
 const app = express();
 
@@ -14,20 +12,22 @@ app.get('/test', (req, res) => {
 });
 
 app.get('/user/new', (req, res) => {
-  firebase.newUser((key) => res.status(200).send(key));
+  firebase.newUser((key) => {
+    res.status(200).send(key);
+  });
 });
 
 app.post('/alarm/save', (req, res) => {
   firebase.newAlarm((req.body), (dat) => {
     res.status(200).send(dat);
-  })
+  });
 });
 
 app.post('/alarm/edit', (req, res) => {
   console.log('here');
   firebase.editAlarm((req.body), (dat) => {
     res.status(200).send(dat);
-  })
+  });
 });
 
 app.post('/alarm/delete', (req, res) => {
@@ -36,17 +36,17 @@ app.post('/alarm/delete', (req, res) => {
 });
 
 // ~~~~~Settings Screen Routes~~~~~~~
-app.post('/settings/save', ({body}, res) => {
+app.post('/settings/save', ({ body }, res) => {
   firebase.saveSettings(body, (key) => {
     res.status(200).send(key);
-  })
+  });
 });
 
 // ~~~~~Web Worker Routes~~~~~~~
-app.get('/commutetime', ({query}, res) => {
+app.get('/commutetime', ({ query }, res) => {
   firebase.getAlarms(query, (result) => {
-    res.send(result)
-  })
+    res.send(result);
+  });
 });
 
 
