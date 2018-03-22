@@ -136,13 +136,12 @@ export default class AlarmssScreen extends React.Component {
 
     // Background Geolocation event-listeners:
     // This handler fires whenever bgGeo receives a location update.
-    BackgroundGeolocation.on('location', this.onLocation, this.onError);
-    // This handler fires when movement states changes (stationary->moving; moving->stationary)
-    BackgroundGeolocation.on('motionchange', this.onMotionChange);
-    // This event fires when a change in motion activity is detected
-    BackgroundGeolocation.on('activitychange', this.onActivityChange);
-    // This event fires when the user toggles location-services authorization
-    BackgroundGeolocation.on('providerchange', this.onProviderChange);
+    BackgroundGeolocation.on('location', (location) =>{
+    console.log('- [event] location: ', location);
+  }, (error) => {
+      console.warn('- [event] location error ', error);
+    });
+
     BackgroundGeolocation.ready({
         // Geolocation Config
         desiredAccuracy: 0,
@@ -371,22 +370,7 @@ export default class AlarmssScreen extends React.Component {
   componentWillUnmount() {
     BackgroundGeolocation.removeListeners();
   }
-  onLocation(location) {
-     console.log('- [event] location: ', location);
-   }
-   onError(error) {
-     console.warn('- [event] location error ', error);
-   }
-   onActivityChange(activity) {
-     console.log('- [event] activitychange: ', activity);  // eg: 'on_foot', 'still', 'in_vehicle'
-   }
-   onProviderChange(provider) {
-     console.log('- [event] providerchange: ', provider);
-   }
-   onMotionChange(location) {
-     console.log('- [event] motionchange: ', location.isMoving, location);
-   }
-   
+
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
