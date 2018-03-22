@@ -11,7 +11,7 @@ export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
     console.log(this.props);
-    if(this.props.navigation.state.params) {
+    if(this.props.navigation.state.params.data) {
       this.state = {
         showTime: false,
         label: this.props.navigation.state.params.data.label,
@@ -19,7 +19,7 @@ export default class AddScreen extends React.Component {
         prepTime: this.props.navigation.state.params.data.prepTime,
         postTime: this.props.navigation.state.params.data.postTime,
         locationId: this.props.navigation.state.params.data.locationId,
-        address: this.props.navigation.state.parmas.data.address,
+        address: this.props.navigation.state.params.data.address,
         edit: true
       };
     } else {
