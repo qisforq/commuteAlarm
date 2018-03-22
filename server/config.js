@@ -13,5 +13,5 @@ firebase.initializeApp(firebaseConfig);
 
 module.exports = {
   firebase: firebase,
-  googleMapsAPI: 'AIzaSyCl-2Uv85jzATOsolRsSavBM7filgsFqkg',
+  googleMapsAPI: 'AIzaSyCi2AZw6HSAusaYJmUGsYResgAb3kd5eUk',
 };
