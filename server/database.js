@@ -43,7 +43,7 @@ firebaseMethods.deleteAlarm = function (data) {
 };
 
 firebaseMethods.getAlarms = function ({ userId }, cb) {
-  firebase.database().ref(`users/${userId}/alarms`).on('value', (snapshot) => {
+  firebase.database().ref(`users/${userId}/alarms/`).on('value', (snapshot) => {
     let snapshots = [];
     //  change to const
 
@@ -57,6 +57,13 @@ firebaseMethods.getAlarms = function ({ userId }, cb) {
         cb(alarmCommuteData);
       }).catch((err) => {
       });
+  });
+};
+
+firebaseMethods.getAlarm = function ({ userId, alarmId }, cb) {
+  firebase.database().ref(`users/${userId}/alarms/${alarmId}`).once('value').then((snapshot) => {
+    console.log('snnapshot value :', snapshot.val());
+    getCommuteTime(snapshot.val()).then(result => cb(result));
   });
 };
 

@@ -24,7 +24,6 @@ app.post('/alarm/save', (req, res) => {
 });
 
 app.post('/alarm/edit', (req, res) => {
-  console.log('here', req.body);
   firebase.editAlarm((req.body), (dat) => {
     res.status(200).send(dat);
   });
@@ -49,8 +48,9 @@ app.get('/commutetime', ({ query }, res) => {
   });
 });
 
-app.get('/commutetime/single', ({ query }, res) => {
-  firebase.getAlarms(query, (result) => {
+app.post('/commutetime/single', (req, res) => {
+  firebase.getAlarm(req.body, (result) => {
+    console.log('RESULT: ', result);
     res.send(result);
   });
 });
