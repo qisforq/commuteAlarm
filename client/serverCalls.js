@@ -1,13 +1,16 @@
 import axios from 'axios';
 import BackgroundGeolocation from "react-native-background-geolocation";
+import PushNotification from 'react-native-push-notification';
+
 
 module.exports = {
   getCommuteData: (userId, that) => {
     BackgroundGeolocation.getCurrentPosition((location) => {
       console.log('- Current position received!!!!');
       let {latitude, longitude} = location.coords;
-      console.log('latitude:', typeof latitude);
+      console.log('latitude:', latitude);
       console.log('longitude', longitude);
+      console.log('is this accurate?', commuteData.routes[0].legs[0])
 
       axios.get('http://localhost:8082/commutetime', {
         params: {
@@ -17,9 +20,23 @@ module.exports = {
         }
       })
       .then((alarmCommuteData) => {
-        that.setState({
-          alarmCommuteData: alarmCommuteData
-        }, ()=>{console.log('alarmCommuteData-->>',that.state.alarmCommuteData)});
+        alarmCommuteData.data.forEach(alarm => {
+          console.log("commute alarma", alarm);
+          PushNotification.cancelLocalNotifications({ id: alarm.alarmId });
+
+          for (let i = 0; i < 5; i += 1) {
+            PushNotification.localNotificationSchedule({
+              message: alarm.label,
+              date: new Date(alarm.time - alarm.commuteData.routes[0].legs[0].duration.value*1000 + 1000*10*i),
+              userInfo: {
+                id: alarm.alarmId,
+              }
+            });
+          }
+        });
+          
+
+       
       }).catch((err) => {
         console.log('Error in axios.get(/commutetime)',err);
       })

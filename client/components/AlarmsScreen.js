@@ -151,12 +151,11 @@ export default class AlarmssScreen extends React.Component {
 
     // Background Geolocation event-listeners:
     // This handler fires whenever bgGeo receives a location update.
-    // BackgroundGeolocation.on('location', (location) =>{
-    //   console.log('- [event] location: ', location);
-    //   // serverCalls.getCommuteData(this.state.userId, this)
-    // }, (error) => {
-    //   console.warn('- [event] location error ', error);
-    // });
+  //   BackgroundGeolocation.on('location', (location) =>{
+  //   console.log('- [event] location: ', location);
+  // }, (error) => {
+  //     console.warn('- [event] location error ', error);
+  //   });
 
     BackgroundGeolocation.ready({
         // Geolocation Config
@@ -169,27 +168,14 @@ export default class AlarmssScreen extends React.Component {
         logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
         stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when user closes the app.
         startOnBoot: true,        // <-- Auto start tracking when device is powered-up.
-        // HTTP / SQLite config
-        // url: 'http://localhost:8082/user/locations',
-        // batchSync: false,       // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
-        // autoSync: true,         // <-- [Default: true] Set true to sync each location to server as it arrives.
-        // headers: {              // <-- Optional HTTP headers
-        //   "X-FOO": "bar"
-        // },
-        // params: {               // <-- Optional HTTP params
-        //   "auth_token": "maybe_your_server_authenticates_via_token_YES?"
-        // }
       }, (state) => {
         console.log("- BackgroundGeolocation is configured and ready: ", state.enabled);
 
         if (!state.enabled) {
           // Start tracking!
-          BackgroundGeolocation.start(state => {
-            console.log("- Start success", state);
+          BackgroundGeolocation.start(function() {
             serverCalls.getCommuteData(this.state.userId, this)
-
-          }, err => {
-            console.warn("GEO-ERROR!");
+            console.log("- Start success");
           });
         }
       });
@@ -252,7 +238,7 @@ export default class AlarmssScreen extends React.Component {
 
   _toAddScreen() {
     serverCalls.getCommuteData(this.state.userId, this)
-
+    
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
@@ -337,6 +323,9 @@ export default class AlarmssScreen extends React.Component {
                       userId: this.state.userId,
                       alarmId: item.id,
                     }).then(res => {
+                      console.log("rory alarma", res.data);
+                      console.warn("START ADDRESS:", res.data.commuteData.routes[0].legs[0].start_address)
+                      
                       console.log(new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000));
                       for (let i = 0; i < 5; i += 1) {
                         PushNotification.localNotificationSchedule({
