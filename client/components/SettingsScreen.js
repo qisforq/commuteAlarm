@@ -51,13 +51,13 @@ export default class SettingsScreen extends React.Component {
     let { prepTime, postTime, snoozes } = this.state;
     axios.post('http://localhost:8082/settings/save', {
       userId: userId,
-      prepTime: prepTime,
-      postTime: postTime,
+      prepTime: prepTime/5,
+      postTime: postTime/5,
       snoozes: snoozes,
     }).then(data => {
       store.update('userSettings', {
-        defaultPostTime: prepTime,
-        defaultPrepTime: postTime,
+        defaultPostTime: prepTime/5,
+        defaultPrepTime: postTime/5,
         defaultSnoozes: snoozes,
       })
     }).then(() => {
@@ -87,7 +87,7 @@ export default class SettingsScreen extends React.Component {
             <Text>Prep Time: </Text>
             <ModalDropdown
               defaultIndex={this.state.prepTime}
-              defaultValue={(this.state.prepTime) + " minutes" || "Please select..."}
+              defaultValue={(this.state.prepTime*5) + " minutes" || "Please select..."}
               style={styles.dropdown_1}
               options={[...Array(13)].map((x,i) => (i) * 5 + ' minutes               ')}
               onSelect={(idx, val) => {
@@ -102,7 +102,7 @@ export default class SettingsScreen extends React.Component {
             <View>
               <ModalDropdown
                 defaultIndex={this.state.postTime}
-                defaultValue={(this.state.postTime) + " minutes" || "Please select..."}
+                defaultValue={(this.state.postTime*5) + " minutes" || "Please select..."}
                 options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
                 onSelect={(idx, val) => {
                   this.setState({ postTime: parseInt(val) })

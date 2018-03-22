@@ -49,6 +49,12 @@ app.get('/commutetime', ({ query }, res) => {
   });
 });
 
+app.get('/commutetime/single', ({ query }, res) => {
+  firebase.getAlarms(query, (result) => {
+    res.send(result);
+  });
+});
+
 
 app.listen(8082, () => {
   console.log('listening on port 8082');
