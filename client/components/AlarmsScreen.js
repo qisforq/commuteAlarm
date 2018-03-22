@@ -252,7 +252,7 @@ export default class AlarmssScreen extends React.Component {
 
   _toAddScreen() {
     serverCalls.getCommuteData(this.state.userId, this)
-    
+
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
