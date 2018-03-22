@@ -3,7 +3,7 @@ const config = require('./config.js');
 
 exports.getCommuteTime = (alarm) => {
   let {
-    alarmId, label, location, on, postTime, prepTime, time,
+    alarmId, label, location, onOff, postTime, prepTime, time,
   } = alarm;
   const rootURL = 'https://maps.googleapis.com/maps/api/directions/json?';
 
@@ -22,6 +22,6 @@ exports.getCommuteTime = (alarm) => {
 
   return axios.get(commuteURL).then((data) => {
     // return data.data.routes
-    return { alarmId: alarmId, commuteData: data.data }
+    return { alarmId: alarmId, label: label, commuteData: data.data }
   }).catch(err => console.log('error in getCommuteTime (server/apiHelpers.js) with this alarm:', alarm));
 };
