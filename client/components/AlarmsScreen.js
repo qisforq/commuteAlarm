@@ -6,15 +6,12 @@ import dummyData from '../../server/dummyData';
 import serverCalls from '../serverCalls';
 import store from 'react-native-simple-store';
 import BackgroundTask from 'react-native-background-task';
-import RNCalendarEvents from 'react-native-calendar-events';
 import PushNotification from 'react-native-push-notification';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import Swipeout from 'react-native-swipeout';
 import BackgroundGeolocation from "react-native-background-geolocation";
-
-//var PushNotification = require('react-native-push-notification');
 
 BackgroundTask.define(async () => {
   serverCalls.getCommuteData(this.state.userId, this)
@@ -196,28 +193,6 @@ export default class AlarmssScreen extends React.Component {
       soundName: 'annoying.mp3',
     });
 
-
-    // RNCalendarEvents.authorizationStatus().then(status => {
-    //   console.warn('status, ', status);
-    //   if(status === 'undetermined') {
-    //     RNCalendarEvents.authorizeEventStore()
-    //     .then((out) => {
-    //       if(out == 'authorized') {
-    //         console.warn('out, ', out);
-    //       }
-    //     })
-    //   }
-    // })
-    // RNCalendarEvents.authorizeEventStore().then(() => {
-      // RNCalendarEvents.saveEvent('test', {
-      //   startDate: '2018-03-20T19:55:00.000Z',
-      //   endDate: '2018-03-20T20:26:00.000Z',
-      //   alarms: [{
-      //     date: 0 // or absolute date - iOS Only
-      //   }]
-      // }).then(s => console.warn('warn, ',s));
-    // });
-
     BackgroundTask.schedule();
     store.get('userId').then(id => {
       if (id === null) {
@@ -345,6 +320,18 @@ export default class AlarmssScreen extends React.Component {
                     address,
                     onOff,
                   });
+                  if (onOff) {
+                    console.log(PushNotification.localNotificationSchedule({
+                      message: item.label,
+                      date: new Date(item.time),
+                      userInfo: {
+                       id: item.id
+                      }
+                    }));
+                  } else {
+                    console.log('cancel');
+                    PushNotification.cancelLocalNotifications({ id: item.id });
+                  }
                   let alrm = this.state.alarms.slice();
                   alrm[index].onOff = item.onOff;
                   this.setState({

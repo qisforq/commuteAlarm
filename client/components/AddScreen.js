@@ -74,7 +74,7 @@ export default class AddScreen extends React.Component {
             time,
             prepTime,
             postTime,
-            onOff: false,
+            onOff,
             locationId,
             address
           };
@@ -113,6 +113,10 @@ export default class AddScreen extends React.Component {
   }
 
   render() {
+    let timeString = new Date(this.state.time).toLocaleTimeString()
+    timeString = timeString.split('')
+    timeString.splice(timeString.indexOf(':', 3), 3);
+    timeString = timeString.join('');
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
         <View style={{ flex: 0, position: 'absolute', width: '100%', top: '20%', backgroundColor: 'white', zIndex: 100 }}>
@@ -163,7 +167,7 @@ export default class AddScreen extends React.Component {
           <TouchableOpacity
             onPress={() => this.setState({ showTime: true })}
           >
-            <Text>{this.state.time ? new Date(this.state.time).toLocaleTimeString() + ' ' + new Date(this.state.time).toDateString(): 'Select Date and Time'}</Text>
+            <Text>{this.state.time ? timeString + ' ' + new Date(this.state.time).toDateString(): 'Select Date and Time'}</Text>
           </TouchableOpacity>
         </View>
         <DateTimePicker
@@ -175,8 +179,8 @@ export default class AddScreen extends React.Component {
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontWeight: '800' }}>Prep Time Needed: </Text>
           <ModalDropdown
-            defaultIndex={this.state.prepTime/5}
-            defaultValue="Select Prep Time"
+            defaultIndex={this.state.prepTime}
+            defaultValue={this.state.prepTime*5 + ' minutes'}
             options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
             onSelect={(idx, val) => this.setState({ prepTime: idx })}
           />
@@ -184,8 +188,8 @@ export default class AddScreen extends React.Component {
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontWeight: '800' }}>Post Time Needed: </Text>
           <ModalDropdown
-            defaultIndex={this.state.postTime/5}
-            defaultValue="Select Post Time"
+            defaultIndex={this.state.postTime}
+            defaultValue={this.state.postTime*5 + ' minutes'}
             options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
             onSelect={(idx, val) => this.setState({ postTime: idx })}
           />
