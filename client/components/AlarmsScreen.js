@@ -3,6 +3,7 @@ import axios from 'axios';
 import BottomNavigation from './BottomNavigation';
 import { Alert, Button, Switch, View, Text, TouchableHighlight, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
 import dummyData from '../../server/dummyData';
+import serverCalls from '../serverCalls';
 import store from 'react-native-simple-store';
 import BackgroundTask from 'react-native-background-task';
 import RNCalendarEvents from 'react-native-calendar-events';
@@ -11,15 +12,12 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import Swipeout from 'react-native-swipeout';
+import BackgroundGeolocation from "react-native-background-geolocation";
 
 //var PushNotification = require('react-native-push-notification');
 
 BackgroundTask.define(async () => {
-  axios.get('http://localhost:8082/commutetime', {
-    params: {
-      userId: this.state.userId
-    }
-  })
+  serverCalls.getCommuteData(this.state.userId, this)
   // Fetch some data over the network which we want the user to have an up-to-
   // date copy of, even if they have no network when using the app
   // const response = await fetch('http://feeds.bbci.co.uk/news/rss.xml')
@@ -130,7 +128,6 @@ export default class AlarmssScreen extends React.Component {
   }
 
   componentWillMount() {
-
     this.props.navigation.setParams({
       toAddScreen: this._toAddScreen,
       goToSettings: () => this.props.navigation.navigate('SettingsScreen', {
@@ -140,6 +137,46 @@ export default class AlarmssScreen extends React.Component {
       })
     })
 
+    // Background Geolocation event-listeners:
+    // This handler fires whenever bgGeo receives a location update.
+    BackgroundGeolocation.on('location', this.onLocation, this.onError);
+    // This handler fires when movement states changes (stationary->moving; moving->stationary)
+    BackgroundGeolocation.on('motionchange', this.onMotionChange);
+    // This event fires when a change in motion activity is detected
+    BackgroundGeolocation.on('activitychange', this.onActivityChange);
+    // This event fires when the user toggles location-services authorization
+    BackgroundGeolocation.on('providerchange', this.onProviderChange);
+    BackgroundGeolocation.ready({
+        // Geolocation Config
+        desiredAccuracy: 0,
+        distanceFilter: 15,
+        // Activity Recognition
+        stopTimeout: 2,
+        // Application config
+        debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+        logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+        stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when user closes the app.
+        startOnBoot: true,        // <-- Auto start tracking when device is powered-up.
+        // HTTP / SQLite config
+        // url: 'http://localhost:8082/user/locations',
+        // batchSync: false,       // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
+        // autoSync: true,         // <-- [Default: true] Set true to sync each location to server as it arrives.
+        // headers: {              // <-- Optional HTTP headers
+        //   "X-FOO": "bar"
+        // },
+        // params: {               // <-- Optional HTTP params
+        //   "auth_token": "maybe_your_server_authenticates_via_token_YES?"
+        // }
+      }, (state) => {
+        console.log("- BackgroundGeolocation is configured and ready: ", state.enabled);
+
+        if (!state.enabled) {
+          // Start tracking!
+          BackgroundGeolocation.start(function() {
+            console.log("- Start success");
+          });
+        }
+      });
   }
 
   componentDidMount() {
@@ -226,18 +263,9 @@ export default class AlarmssScreen extends React.Component {
   }
 
   _toAddScreen() {
-    axios.get('http://localhost:8082/commutetime', {
-      params: {
-        userId: this.state.userId
-      }
-    })
-    .then((alarmCommuteData) => {
-      this.setState({
-        alarmCommuteData: alarmCommuteData
-      });
-    }).catch((err) => {
-      console.log('?????????',err);
-    })
+
+    serverCalls.getCommuteData(this.state.userId, this)
+
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
@@ -352,6 +380,26 @@ export default class AlarmssScreen extends React.Component {
       }
     })
   }
+
+  componentWillUnmount() {
+    BackgroundGeolocation.removeListeners();
+  }
+  onLocation(location) {
+     console.log('- [event] location: ', location);
+   }
+   onError(error) {
+     console.warn('- [event] location error ', error);
+   }
+   onActivityChange(activity) {
+     console.log('- [event] activitychange: ', activity);  // eg: 'on_foot', 'still', 'in_vehicle'
+   }
+   onProviderChange(provider) {
+     console.log('- [event] providerchange: ', provider);
+   }
+   onMotionChange(location) {
+     console.log('- [event] motionchange: ', location.isMoving, location);
+   }
+   
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
