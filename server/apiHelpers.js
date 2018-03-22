@@ -1,9 +1,9 @@
 const axios = require('axios');
 const config = require('./config.js');
 
-exports.getCommuteTime = (alarm) => {
+exports.getCommuteTime = (alarm, GPSLat, GPSLong) => {
   let {
-    alarmId, label, location, on, postTime, prepTime, time,
+    alarmId, label, location, onOff, postTime, prepTime, time,
   } = alarm;
   const rootURL = 'https://maps.googleapis.com/maps/api/directions/json?';
 
@@ -13,15 +13,15 @@ exports.getCommuteTime = (alarm) => {
   //  TODO: Access phone's current location for this!
   const commuteURL = [
     rootURL,
-    `origin=place_id:${testOrigin}`,
+    `origin=${GPSLat},${GPSLong}`,
     `&destination=place_id:${location}`,
     `&key=${config.googleMapsAPI}`,
     `&arrival_time=${unixEpochTime}`,
     '&mode="transit"',
   ].join('');
-
+  console.log('commuteURL', commuteURL);
   return axios.get(commuteURL).then((data) => {
     // return data.data.routes
-    return { alarmId: alarmId, commuteData: data.data }
+    return { alarmId: alarmId, label: label, commuteData: data.data }
   }).catch(err => console.log('error in getCommuteTime (server/apiHelpers.js) with this alarm:', alarm));
 };

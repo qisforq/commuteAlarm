@@ -42,17 +42,22 @@ firebaseMethods.deleteAlarm = function (data) {
   firebase.database().ref(`users/${data.userId}/alarms/${data.alarmId}`).remove();
 };
 
-firebaseMethods.getAlarms = function ({ userId }, cb) {
+firebaseMethods.getAlarms = function ({ userId, GPSLat, GPSLong }, cb) {
   firebase.database().ref(`users/${userId}/alarms/`).on('value', (snapshot) => {
-    let snapshots = [];
-    //  change to const
+    const snapshots = [];
 
     snapshot.forEach((child) => {
       let alarmObj = Object.assign({}, { alarmId: child.key }, child.val())
-      snapshots.push(alarmObj);
+      if (alarmObj.onOff) {
+        snapshots.push(alarmObj);
+        console.log(alarmObj.label, 'alarm is turned on');
+      } else {
+        console.log(alarmObj.label, 'alarm is turned off');
+      }
+
     });
 
-    Promise.all(snapshots.map(snap => getCommuteTime(snap)))
+    Promise.all(snapshots.map(snap => getCommuteTime(snap, GPSLat, GPSLong)))
       .then((alarmCommuteData) => {
         cb(alarmCommuteData);
       }).catch((err) => {

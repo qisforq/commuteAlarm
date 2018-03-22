@@ -151,11 +151,12 @@ export default class AlarmssScreen extends React.Component {
 
     // Background Geolocation event-listeners:
     // This handler fires whenever bgGeo receives a location update.
-    BackgroundGeolocation.on('location', (location) =>{
-    console.log('- [event] location: ', location);
-  }, (error) => {
-      console.warn('- [event] location error ', error);
-    });
+    // BackgroundGeolocation.on('location', (location) =>{
+    //   console.log('- [event] location: ', location);
+    //   // serverCalls.getCommuteData(this.state.userId, this)
+    // }, (error) => {
+    //   console.warn('- [event] location error ', error);
+    // });
 
     BackgroundGeolocation.ready({
         // Geolocation Config
@@ -183,8 +184,12 @@ export default class AlarmssScreen extends React.Component {
 
         if (!state.enabled) {
           // Start tracking!
-          BackgroundGeolocation.start(function() {
-            console.log("- Start success");
+          BackgroundGeolocation.start(state => {
+            console.log("- Start success", state);
+            serverCalls.getCommuteData(this.state.userId, this)
+
+          }, err => {
+            console.warn("GEO-ERROR!");
           });
         }
       });
@@ -246,6 +251,8 @@ export default class AlarmssScreen extends React.Component {
   }
 
   _toAddScreen() {
+    serverCalls.getCommuteData(this.state.userId, this)
+
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
