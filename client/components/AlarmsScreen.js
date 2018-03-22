@@ -38,6 +38,20 @@ PushNotification.configure({
   onNotification: function(notification) {
       console.log( 'NOTIFICATION:', notification );
 
+      if(notification.userInteraction) {
+        PushNotification.cancelLocalNotifications({ id: notification.data.id });
+      }
+
+      //if (notification.foreground !== true) {
+        // PushNotification.localNotificationSchedule({
+        //   message: notification.message,
+        //   date: new Date(Date.now() + 10*1000),
+        //   userInfo: {
+        //     id: notification.data.id
+        //   }
+        // });
+      //}
+
       // process the notification
 
       // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
@@ -87,8 +101,9 @@ export default class AlarmssScreen extends React.Component {
     // this._onRefresh = this._onRefresh.bind(this);
     this._updateUserSettings = this._updateUserSettings.bind(this);
     this.deleteAlarm = this.deleteAlarm.bind(this);
-  }
 
+
+  }
 
   static navigationOptions = ({ navigation }) => {
     const params = navigation.state.params || {};
@@ -185,12 +200,6 @@ export default class AlarmssScreen extends React.Component {
     //   soundName: 'sound.wav', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
     // });
 
-    PushNotification.localNotificationSchedule({
-      message: "My Notification Message", // (required)
-      date: new Date(Date.now() + (10 * 1000)), // in 60 secs
-      playSound: false,
-      soundName: 'annoying.mp3',
-    });
 
     BackgroundTask.schedule();
     store.get('userId').then(id => {
@@ -237,9 +246,6 @@ export default class AlarmssScreen extends React.Component {
   }
 
   _toAddScreen() {
-
-    serverCalls.getCommuteData(this.state.userId, this)
-
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
@@ -320,13 +326,21 @@ export default class AlarmssScreen extends React.Component {
                     onOff,
                   });
                   if (onOff) {
-                    console.log(PushNotification.localNotificationSchedule({
-                      message: item.label,
-                      date: new Date(item.time),
-                      userInfo: {
-                       id: item.id
+                    axios.post('http://localhost:8082/commutetime/single', {
+                      userId: this.state.userId,
+                      alarmId: item.id,
+                    }).then(res => {
+                      console.log(new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000));
+                      for (let i = 0; i < 5; i += 1) {
+                        PushNotification.localNotificationSchedule({
+                          message: item.label,
+                          date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 + 1000*10*i),
+                          userInfo: {
+                           id: item.id
+                          }
+                        });
                       }
-                    }));
+                    });
                   } else {
                     console.log('cancel');
                     PushNotification.cancelLocalNotifications({ id: item.id });
