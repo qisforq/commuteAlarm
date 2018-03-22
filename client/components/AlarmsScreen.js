@@ -288,10 +288,10 @@ export default class AlarmssScreen extends React.Component {
             <View style={{ display: 'flex', flexDirection: 'row' }}>
               <View style={{ flex: 0.5 }}></View>
               <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35 }}>{Icons.clockO}</FontAwesome>
-              <View style={{ flex: 10, flexWrap: 'wrap' }}>
-                <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}<Text style={{ fontWeight: '300', fontSize: 10,  }}>-{item.address.slice(0,25)}</Text></Text>
+              <View style={{ flex: 10, }}>
+                <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}</Text>
                 <Text style={{}}>{new Date(item.time).toDateString()}</Text>
-                <Text style={{}}>{new Date(item.time).toLocaleTimeString()}</Text>
+                <Text style={{}}>{new Date(item.time).toLocaleTimeString()}<Text style={{ fontWeight: '300', fontSize: 10 }}>-{item.address.slice(0,32)}</Text></Text>
                 <Text style={{}}>{item.location}</Text>
               </View>
               <Switch
