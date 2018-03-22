@@ -20,17 +20,22 @@ export default class AddScreen extends React.Component {
         postTime: this.props.navigation.state.params.data.postTime,
         locationId: this.props.navigation.state.params.data.locationId,
         address: this.props.navigation.state.params.data.address,
+<<<<<<< HEAD
+=======
+        onOff: this.props.navigation.state.params.data.onOff,
+>>>>>>> Layout changes to Add screen.
         edit: true
       };
     } else {
       this.state = {
         showTime: false,
         label: 'Alarm',
-        time: 'none',
+        time: '',
         prepTime: this.props.navigation.state.params.settings.defaultPrepTime,
         postTime: this.props.navigation.state.params.settings.defaultPostTime,
         locationId: null,
         address: 'Search',
+        onOff: false,
         edit: false,
       };
     }
@@ -112,64 +117,89 @@ export default class AddScreen extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
-        <View>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+        <View style={{ flex: 0, position: 'absolute', width: '100%', top: '20%', backgroundColor: 'white', zIndex: 100 }}>
+          <GooglePlacesAutocomplete
+            listUnderlayColor="white"
+            styles={{
+              textInputContainer: {
+                backgroundColor: 'rgba(0,0,0,0)',
+                borderWidth: 1,
+                borderRightWidth: 0.3,
+                borderLeftWidth: 0.3,
+                borderColor: "black",
+                borderRightColor: "grey",
+                borderLeftColor: "grey",
+                width: '100%',
+              },
+              textInput: {
+                textAlign: 'center',
+              },
+            }}
+            placeholder={this.state.address}
+            minLength={2} // minimum length of text to search
+            onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+              this.setState({
+                locationId: data.place_id,
+                address: data.description,
+              }, () => console.log(this.state));
+            }}
+            query={{
+              key: 'AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw',
+              language: 'en', // language of the results
+            }}
+            debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+          />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontWeight: '800' }}>Alarm Label: </Text>
           <TextInput
             onChangeText={(text) => this.setState({ label: text })}
             value={this.state.label}
           />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+          <Text style={{ fontWeight: '800' }}>Address: </Text>
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontWeight: '800' }}>DateTime: </Text>
           <TouchableOpacity
             onPress={() => this.setState({ showTime: true })}
           >
-            <Text>Select Date and Time</Text>
+            <Text>{this.state.time ? new Date(this.state.time).toLocaleTimeString() + ' ' + new Date(this.state.time).toDateString(): 'Select Date and Time'}</Text>
           </TouchableOpacity>
-          <DateTimePicker
-            isVisible={this.state.showTime}
-            mode={'datetime'}
-            onConfirm={this.handleTimePicked}
-            onCancel={() => this.setState({ showTime: false })}
-          />
+        </View>
+        <DateTimePicker
+          isVisible={this.state.showTime}
+          mode={'datetime'}
+          onConfirm={this.handleTimePicked}
+          onCancel={() => this.setState({ showTime: false })}
+        />
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontWeight: '800' }}>Prep Time Needed: </Text>
           <ModalDropdown
             defaultIndex={this.state.prepTime/5}
-            defaultValue="Prep Time"
+            defaultValue="Select Prep Time"
             options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
             onSelect={(idx, val) => this.setState({ prepTime: idx })}
           />
-          <Text>{this.state.prepTime}</Text>
-
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontWeight: '800' }}>Post Time Needed: </Text>
           <ModalDropdown
             defaultIndex={this.state.postTime/5}
-            defaultValue="Post Time"
+            defaultValue="Select Post Time"
             options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
             onSelect={(idx, val) => this.setState({ postTime: idx })}
           />
-
-          <View style={{ height: 200 }}>
-            <GooglePlacesAutocomplete
-              placeholder={this.state.address}
-              minLength={2} // minimum length of text to search
-              onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-                this.setState({
-                  locationId: data.place_id,
-                  address: data.description,
-                }, () => console.log(this.state));
-              }}
-
-              query={{
-                // available options: https://developers.google.com/places/web-service/autocomplete
-                key: 'AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw',
-                language: 'en', // language of the results
-                //types: '(cities)' // default: 'geocode'
-              }}
-              debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-            />
-          </View>
-          <Text>{this.state.locationId}</Text>
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           <Button
             title="Save"
             onPress={this.saveAlarm}
           />
         </View>
+        <View style={{ flex: 1 }}></View>
       </View>
     );
   }

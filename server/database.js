@@ -22,7 +22,7 @@ firebaseMethods.newAlarm = function (data, cb) {
     time: data.time,
     prepTime: data.prepTime,
     postTime: data.postTime,
-    on: false,
+    onOff: false,
     location: data.locationId,
   }).key);
 };
@@ -33,7 +33,7 @@ firebaseMethods.editAlarm = function (data, cb) {
     time: data.time,
     prepTime: data.prepTime,
     postTime: data.postTime,
-    on: false,
+    onOff: data.onOff,
     location: data.locationId,
   }).key);
 };
@@ -68,31 +68,32 @@ firebaseMethods.saveSettings = function (settings, cb) {
   }).key);
 };
 
-firebaseMethods.seed1 = function () {
-  usersRef.push({
-    userSettings: {
-      snoozes: 0,
-      prepTime: 0,
-      postTime: 0,
+firebaseMethods.seed1 =  function() {
+ usersRef.push({
+   userSettings: {
+     snoozes: 0,
+     prepTime: 0,
+     postTime: 0
+   },
+  alarms: {
+    alarm1: {
+      label: "work",
+      time: 1521472080122,
+      preptime: 20,
+      onOff: true,
+      location: "ChIJs980r6hZwokRJrYJwpNFwPE"
     },
-    alarms: {
-      alarm1: {
-        label: 'work',
-        time: 1521472080122,
-        preptime: 20,
-        on: true,
-        location: 'ChIJs980r6hZwokRJrYJwpNFwPE',
-      },
-      alarm2: {
-        label: 'bed',
-        time: 1521472080122,
-        preptime: 20,
-        on: true,
-        location: 'ChIJs980r6hZwokRJrYJwpNFwPE',
-      },
-    },
-  });
-};
+    alarm2: {
+      label: "bed",
+      time: 1521472080122,
+      preptime: 20,
+      onOff: true,
+      location: "ChIJs980r6hZwokRJrYJwpNFwPE"
+    }
+
+  }
+})
+}
 
 
 module.exports = firebaseMethods;
