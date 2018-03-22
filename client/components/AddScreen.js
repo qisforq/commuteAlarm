@@ -20,10 +20,7 @@ export default class AddScreen extends React.Component {
         postTime: this.props.navigation.state.params.data.postTime,
         locationId: this.props.navigation.state.params.data.locationId,
         address: this.props.navigation.state.params.data.address,
-<<<<<<< HEAD
-=======
         onOff: this.props.navigation.state.params.data.onOff,
->>>>>>> Layout changes to Add screen.
         edit: true
       };
     } else {
