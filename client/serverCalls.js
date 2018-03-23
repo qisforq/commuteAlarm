@@ -16,24 +16,25 @@ module.exports = {
           GPSLong: longitude,
         }
       })
-      .then((alarmCommuteData) => {
-        alarmCommuteData.data.forEach(alarm => {
-          console.log("commute alarma", alarm);
-          PushNotification.cancelLocalNotifications({ id: alarm.alarmId });
-
-          for (let i = 0; i < 5; i += 1) {
-            PushNotification.localNotificationSchedule({
-              message: alarm.label,
-              date: new Date(alarm.time - alarm.commuteData.routes[0].legs[0].duration.value*1000 + 1000*10*i),
-              userInfo: {
-                id: alarm.alarmId,
-              }
+        .then((alarmCommuteData) => {
+          alarmCommuteData.data.forEach((alarm) => {
+            console.log("commute alarma", alarm);
+            PushNotification.cancelLocalNotifications({ id: alarm.alarmId });
+            console.log(that.state);
+            [...Array(that.state.userSettings.defaultSnoozes+1)].forEach((x, i) => {
+              PushNotification.localNotificationSchedule({
+                message: alarm.label,
+                date: new Date(alarm.time - alarm.commuteData.routes[0].legs[0].duration.value*1000 - alarm.prepTime*5*60*1000 - alarm.postTime*5*60*1000 + 1000*60*that.state.userSettings.defaultSnoozeTime*i),
+                userInfo: {
+                  id: alarm.alarmId,
+                },
+                soundName: 'annoying.mp3',
+              });
             });
-          }
+          });
+        }).catch((err) => {
+          console.log('Error in axios.get(/commutetime)',err);
         });
-      }).catch((err) => {
-        console.log('Error in axios.get(/commutetime)',err);
-      })
     }, (errorCode) => {
       switch (errorCode) {
         case 0:
@@ -47,6 +48,8 @@ module.exports = {
           break;
         case 408:
           alert('Location timeout');
+          break;
+        default:
           break;
       }
     }, {
