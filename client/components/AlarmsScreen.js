@@ -332,6 +332,7 @@ export default class AlarmssScreen extends React.Component {
                             userInfo: {
                              id: item.id,
                             },
+                            soundName: 'annoying.mp3',
                           });
                         });
                       });

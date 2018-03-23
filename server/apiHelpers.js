@@ -25,6 +25,8 @@ exports.getCommuteTime = (alarm, GPSLat, GPSLong) => {
       alarmId,
       time,
       label,
+      postTime,
+      prepTime,
       commuteData: data.data,
     })).catch(err => console.log('error in getCommuteTime (server/apiHelpers.js) with this alarm:', alarm));
 };
