@@ -253,7 +253,7 @@ export default class AlarmssScreen extends React.Component {
         right={swipeBtns}
         backgroundColor="transparent"
       >
-        <View style={{ height: 60, borderWidth: 0.3, borderColor: 'black' }}>
+        <View style={{ height: 80, borderWidth: 0.3, borderColor: 'black' }}>
           <TouchableHighlight underlayColor="lightblue" onPress={() => this.editScreen(item)}>
             <View style={{ display: 'flex', flexDirection: 'row' }}>
               <View style={{ flex: 0.5 }} />
@@ -261,7 +261,9 @@ export default class AlarmssScreen extends React.Component {
               <View style={{ flex: 10 }}>
                 <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}</Text>
                 <Text style={{}}>{new Date(item.time).toDateString()}</Text>
-                <Text style={{}}>{new Date(item.time).toLocaleTimeString()}<Text style={{ fontWeight: '300', fontSize: 10 }}>-{item.address.slice(0, 32)}</Text></Text>
+                <Text style={{}}>Arrival Time: {new Date(item.time).toLocaleTimeString()}</Text>
+                <Text style={{}}>Alarm Time: {new Date(item.goOffTime).toLocaleTimeString()}</Text>
+                <Text style={{ fontWeight: '300', fontSize: 10 }}>-{item.address.slice(0, 32)}</Text>
                 <Text style={{}}>{item.location}</Text>
               </View>
               <Switch
@@ -270,6 +272,7 @@ export default class AlarmssScreen extends React.Component {
                 value={item.onOff}
                 onValueChange={() => {
                   store.get('alarms').then((alarms) => {
+                    console.log(alarms);
                     alarms[item.id].onOff = !alarms[item.id].onOff;
                     store.save('alarms', alarms);
                   });
@@ -290,23 +293,48 @@ export default class AlarmssScreen extends React.Component {
                     onOff,
                   });
                   if (onOff) {
-                    axios.post('http://localhost:8082/commutetime/single', {
-                      userId: this.state.userId,
-                      alarmId: item.id,
-                    }).then((res) => {
-                      console.log("rory alarma", res.data);
-                      console.warn("START ADDRESS:", res.data.commuteData.routes[0].legs[0].start_address)
-                      console.log(new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000));
-                      for (let i = 0; i < 5; i += 1) {
-                        PushNotification.localNotificationSchedule({
-                          message: item.label,
-                          date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 + 1000*10*i),
-                          userInfo: {
-                           id: item.id,
-                          },
+                    BackgroundGeolocation.getCurrentPosition((location)=>{
+                      console.log('- Current position received!!!!');
+                      let {latitude, longitude} = location.coords;
+
+                      axios.post('http://localhost:8082/commutetime/single', {
+                        userId: this.state.userId,
+                        alarmId: item.id,
+                        GPSLat: latitude,
+                        GPSLong: longitude,
+                      }).then((res) => {
+                        console.log("rory alarma", res.data);
+                        console.warn("START ADDRESS:", res.data.commuteData.routes[0].legs[0].start_address)
+                        console.log("PUT THIS ON THE SCREEN:", new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000));
+                        store.get('alarms').then((alarms) => {
+                          console.log(alarms)
+                          const newAlarms = Object.keys(alarms).map((k) => {
+                            if (k === item.id) {
+                              alarms[k].goOffTime = item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000;
+                            }
+                            return alarms[k];
+                          });
+
+                          this.setState({
+                            alarms: newAlarms,
+                          });
+                          alarms[item.id].goOffTime = item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000;
+                          store.save('alarms', alarms);
                         });
-                      }
-                    });
+
+                        for (let i = 0; i < 5; i += 1) {
+                          PushNotification.localNotificationSchedule({
+                            message: item.label,
+                            date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 + 1000*10*i),
+                            userInfo: {
+                             id: item.id,
+                            },
+                          });
+                        }
+                      });
+
+                    })
+            
                   } else {
                     console.log('cancel');
                     PushNotification.cancelLocalNotifications({ id: item.id });
