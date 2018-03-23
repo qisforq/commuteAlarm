@@ -9,6 +9,7 @@ module.exports = {
       "radix": 0,
       "space-infix-ops": 0,
       "no-unused-vars": [0, {"vars": "local", "args": "none"}],
-      "no-console": 0
+      "no-console": 0,
+      "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }]
     }
   }

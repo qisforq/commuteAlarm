@@ -1,17 +1,18 @@
 import React from 'react';
 import axios from 'axios';
-import BottomNavigation from './BottomNavigation';
-import { Alert, Button, Switch, View, Text, TouchableHighlight, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
-import dummyData from '../../server/dummyData';
-import serverCalls from '../serverCalls';
 import store from 'react-native-simple-store';
 import BackgroundTask from 'react-native-background-task';
 import PushNotification from 'react-native-push-notification';
-import FontAwesome, { Icons } from 'react-native-fontawesome';
-import HeaderButton from 'react-navigation-header-buttons'
+import HeaderButton from 'react-navigation-header-buttons';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import Swipeout from 'react-native-swipeout';
 import BackgroundGeolocation from "react-native-background-geolocation";
+import FontAwesome, { Icons } from 'react-native-fontawesome';
+import { Alert, Button, Switch, View, Text, TouchableHighlight, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
+import BottomNavigation from './BottomNavigation';
+import dummyData from '../../server/dummyData';
+import serverCalls from '../serverCalls';
+
 
 BackgroundTask.define(async () => {
   serverCalls.getCommuteData(this.state.userId, this)
@@ -29,83 +30,30 @@ BackgroundTask.define(async () => {
 
 PushNotification.configure({
 
-  // (optional) Called when Token is generated (iOS and Android)
-  onRegister: function(token) {
-      console.log( 'TOKEN:', token );
+  onNotification(notification) {
+    console.log( 'NOTIFICATION:', notification);
+
+    if (notification.userInteraction) {
+      PushNotification.cancelLocalNotifications({ id: notification.data.id });
+    }
+    notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 
-  // (required) Called when a remote or local notification is opened or received
-  onNotification: function(notification) {
-      console.log( 'NOTIFICATION:', notification );
-
-      if(notification.userInteraction) {
-        PushNotification.cancelLocalNotifications({ id: notification.data.id });
-      }
-
-      //if (notification.foreground !== true) {
-        // PushNotification.localNotificationSchedule({
-        //   message: notification.message,
-        //   date: new Date(Date.now() + 10*1000),
-        //   userInfo: {
-        //     id: notification.data.id
-        //   }
-        // });
-      //}
-
-      // process the notification
-
-      // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
-      notification.finish(PushNotificationIOS.FetchResult.NoData);
-  },
-
-  // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
-  //senderID: "YOUR GCM SENDER ID",
-
-  // IOS ONLY (optional): default: all - Permissions to register.
   permissions: {
-      alert: true,
-      badge: true,
-      sound: true
+    alert: true,
+    badge: true,
+    sound: true,
   },
 
-  // Should the initial notification be popped automatically
-  // default: true
   popInitialNotification: true,
 
-  /**
-    * (optional) default: true
-    * - Specified if permissions (ios) and token (android and ios) will requested or not,
-    * - if not, you must call PushNotificationsHandler.requestPermissions() later
-    */
   requestPermissions: true,
 });
 
 
 export default class AlarmssScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userId: null,
-      first: false,
-      stuff: 'no',
-      userSettings: {
-        defaultPrepTime: 0,
-        defaultPostTime: 0,
-        defaultSnoozes: 0,
-      },
-      alarms: [],
-    };
-    this.renderItem = this.renderItem.bind(this);
-    this._toAddScreen = this._toAddScreen.bind(this);
-    this.editScreen = this.editScreen.bind(this);
-    // this._onRefresh = this._onRefresh.bind(this);
-    this._updateUserSettings = this._updateUserSettings.bind(this);
-    this.deleteAlarm = this.deleteAlarm.bind(this);
 
-
-  }
-
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions({ navigation }) {
     const params = navigation.state.params || {};
 
     return {
@@ -115,7 +63,7 @@ export default class AlarmssScreen extends React.Component {
           IconComponent={Icon}
           iconSize={23}
           color="black"
-          >
+        >
           <HeaderButton.Item
             iconName={"md-settings"}
             title="Settings"
@@ -139,6 +87,24 @@ export default class AlarmssScreen extends React.Component {
     }
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      userId: null,
+      userSettings: {
+        defaultPrepTime: 0,
+        defaultPostTime: 0,
+        defaultSnoozes: 0,
+      },
+      alarms: [],
+    };
+    this.renderItem = this.renderItem.bind(this);
+    this._toAddScreen = this._toAddScreen.bind(this);
+    this.editScreen = this.editScreen.bind(this);
+    this._updateUserSettings = this._updateUserSettings.bind(this);
+    this.deleteAlarm = this.deleteAlarm.bind(this);
+  }
+
   componentWillMount() {
     this.props.navigation.setParams({
       toAddScreen: this._toAddScreen,
@@ -146,39 +112,31 @@ export default class AlarmssScreen extends React.Component {
         userId: this.state.userId,
         userSettings: this.state.userSettings,
         updateUserSettings: this._updateUserSettings,
-      })
-    })
-
-    // Background Geolocation event-listeners:
-    // This handler fires whenever bgGeo receives a location update.
-  //   BackgroundGeolocation.on('location', (location) =>{
-  //   console.log('- [event] location: ', location);
-  // }, (error) => {
-  //     console.warn('- [event] location error ', error);
-  //   });
+      }),
+    });
 
     BackgroundGeolocation.ready({
-        // Geolocation Config
-        desiredAccuracy: 0,
-        distanceFilter: 15,
-        // Activity Recognition
-        stopTimeout: 2,
-        // Application config
-        debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
-        logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-        stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when user closes the app.
-        startOnBoot: true,        // <-- Auto start tracking when device is powered-up.
-      }, (state) => {
-        console.log("- BackgroundGeolocation is configured and ready: ", state.enabled);
+      // Geolocation Config
+      desiredAccuracy: 0,
+      distanceFilter: 15,
+      // Activity Recognition
+      stopTimeout: 2,
+      // Application config
+      debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+      stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
+      startOnBoot: true, // <-- Auto start tracking when device is powered-up.
+    }, (state) => {
+      console.log('- BackgroundGeolocation is configured and ready: ', state.enabled);
 
-        if (!state.enabled) {
-          // Start tracking!
-          BackgroundGeolocation.start(function() {
-            serverCalls.getCommuteData(this.state.userId, this)
-            console.log("- Start success");
-          });
-        }
-      });
+      if (!state.enabled) {
+        // Start tracking!
+        BackgroundGeolocation.start(() => {
+          serverCalls.getCommuteData(this.state.userId, this);
+          console.log('- Start success');
+        });
+      }
+    });
   }
 
   componentDidMount() {
@@ -193,19 +151,18 @@ export default class AlarmssScreen extends React.Component {
 
 
     BackgroundTask.schedule();
-    store.get('userId').then(id => {
+    store.get('userId').then((id) => {
       if (id === null) {
         axios.get('http://localhost:8082/user/new').then((data) => {
-          store.save('userId', data.data)
-          store.save('alarms', {})
+          store.save('userId', data.data);
+          store.save('alarms', {});
           store.save('userSettings', {
             defaultPrepTime: 0,
             defaultPostTime: 0,
             defaultSnoozes: 0,
-          })
+          });
           this.setState({
             userId: data.data,
-            first: true,
           }, () => {
             this.props.navigation.navigate('SettingsScreen', {
               userId: this.state.userId,
@@ -219,13 +176,13 @@ export default class AlarmssScreen extends React.Component {
           console.log(settings);
           this.setState({
             userId: id,
-            userSettings: settings
-          })
+            userSettings: settings,
+          });
         }).then(() => {
-          store.get('alarms').then(alarms => {
+          store.get('alarms').then((alarms) => {
             console.log(alarms);
             this.setState({
-              alarms: Object.keys(alarms).map(k => {
+              alarms: Object.keys(alarms).map((k) => {
                 alarms[k].id = k;
                 return alarms[k];
               }),
@@ -236,13 +193,26 @@ export default class AlarmssScreen extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    BackgroundGeolocation.removeListeners();
+  }
+
   _toAddScreen() {
-    serverCalls.getCommuteData(this.state.userId, this)
-    
+    serverCalls.getCommuteData(this.state.userId, this); 
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
       settings: this.state.userSettings,
+    })
+  }
+
+  _updateUserSettings(prep, post, snooze) {
+    this.setState({
+      userSettings: {
+        defaultPrepTime: prep,
+        defaultPostTime: post,
+        defaultSnoozes: snooze,
+      }
     })
   }
 
@@ -251,19 +221,19 @@ export default class AlarmssScreen extends React.Component {
     this.props.navigation.navigate('AddScreen', {
       data: item,
       userId: this.state.userId,
-    })
+    });
   }
 
   deleteAlarm(item) {
-    store.get('alarms').then(alarms => {
+    store.get('alarms').then((alarms) => {
       delete alarms[item.id];
       this.setState({
-        alarms: Object.keys(alarms).map(k => {
+        alarms: Object.keys(alarms).map((k) => {
           alarms[k].id = k;
           return alarms[k];
         }),
       });
-      store.save('alarms',alarms);
+      store.save('alarms', alarms);
     });
     axios.post('http://localhost:8082/alarm/delete', {
       alarmId: item.id,
@@ -275,24 +245,23 @@ export default class AlarmssScreen extends React.Component {
     let swipeBtns = [{
       text: 'Delete',
       backgroundColor: 'red',
-      //underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
-      onPress: () => { this.deleteAlarm(item) }
+      onPress: () => { this.deleteAlarm(item); },
     }];
 
     return (
-      <Swipeout right={swipeBtns}
-        autoClose={true}
+      <Swipeout
+        right={swipeBtns}
         backgroundColor="transparent"
       >
         <View style={{ height: 60, borderWidth: 0.3, borderColor: 'black' }}>
-          <TouchableHighlight underlayColor="lightblue" onPress = {() => this.editScreen(item)}>
+          <TouchableHighlight underlayColor="lightblue" onPress={() => this.editScreen(item)}>
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <View style={{ flex: 0.5 }}></View>
+              <View style={{ flex: 0.5 }} />
               <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35 }}>{Icons.clockO}</FontAwesome>
-              <View style={{ flex: 10, }}>
+              <View style={{ flex: 10 }}>
                 <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}</Text>
                 <Text style={{}}>{new Date(item.time).toDateString()}</Text>
-                <Text style={{}}>{new Date(item.time).toLocaleTimeString()}<Text style={{ fontWeight: '300', fontSize: 10 }}>-{item.address.slice(0,32)}</Text></Text>
+                <Text style={{}}>{new Date(item.time).toLocaleTimeString()}<Text style={{ fontWeight: '300', fontSize: 10 }}>-{item.address.slice(0, 32)}</Text></Text>
                 <Text style={{}}>{item.location}</Text>
               </View>
               <Switch
@@ -300,12 +269,14 @@ export default class AlarmssScreen extends React.Component {
                 tintColor="lightgrey"
                 value={item.onOff}
                 onValueChange={() => {
-                  store.get('alarms').then(alarms => {
-                    alarms[item.id].onOff = !alarms[item.id].onOff
+                  store.get('alarms').then((alarms) => {
+                    alarms[item.id].onOff = !alarms[item.id].onOff;
                     store.save('alarms', alarms);
                   });
                   item.onOff = !item.onOff;
-                  let { label, time, prepTime, postTime, locationId, address, onOff } = item;
+                  let {
+                    label, time, prepTime, postTime, locationId, address, onOff
+                  } = item;
                   console.log(onOff);
                   axios.post('http://localhost:8082/alarm/edit', {
                     userId: this.state.userId,
@@ -322,18 +293,17 @@ export default class AlarmssScreen extends React.Component {
                     axios.post('http://localhost:8082/commutetime/single', {
                       userId: this.state.userId,
                       alarmId: item.id,
-                    }).then(res => {
+                    }).then((res) => {
                       console.log("rory alarma", res.data);
                       console.warn("START ADDRESS:", res.data.commuteData.routes[0].legs[0].start_address)
-                      
                       console.log(new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000));
                       for (let i = 0; i < 5; i += 1) {
                         PushNotification.localNotificationSchedule({
                           message: item.label,
                           date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 + 1000*10*i),
                           userInfo: {
-                           id: item.id
-                          }
+                           id: item.id,
+                          },
                         });
                       }
                     });
@@ -354,31 +324,6 @@ export default class AlarmssScreen extends React.Component {
         </View>
       </Swipeout>
     )
-  }
-
-  // _onRefresh() {
-  //   this.setState({
-  //     refreshing: true
-  //   })
-  //   setTimeout(function() {
-  //     this.setState({
-  //       refreshing: false
-  //     })
-  //   }.bind(this),1000)
-  // }
-
-  _updateUserSettings(prep, post, snooze) {
-    this.setState({
-      userSettings: {
-        defaultPrepTime: prep,
-        defaultPostTime: post,
-        defaultSnoozes: snooze,
-      }
-    })
-  }
-
-  componentWillUnmount() {
-    BackgroundGeolocation.removeListeners();
   }
 
   render() {
