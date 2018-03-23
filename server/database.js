@@ -64,10 +64,10 @@ firebaseMethods.getAlarms = function ({ userId, GPSLat, GPSLong }, cb) {
   });
 };
 
-firebaseMethods.getAlarm = function ({ userId, alarmId }, cb) {
+firebaseMethods.getAlarm = function ({ userId, alarmId, GPSLat, GPSLong }, cb) {
   firebase.database().ref(`users/${userId}/alarms/${alarmId}`).once('value').then((snapshot) => {
     console.log('snnapshot value :', snapshot.val());
-    getCommuteTime(snapshot.val()).then(result => cb(result));
+    getCommuteTime(snapshot.val(), GPSLat, GPSLong).then(result => cb(result));
   });
 };
 

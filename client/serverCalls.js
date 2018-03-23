@@ -8,9 +8,6 @@ module.exports = {
     BackgroundGeolocation.getCurrentPosition((location) => {
       console.log('- Current position received!!!!');
       let {latitude, longitude} = location.coords;
-      console.log('latitude:', latitude);
-      console.log('longitude', longitude);
-      console.log('is this accurate?', commuteData.routes[0].legs[0])
 
       axios.get('http://localhost:8082/commutetime', {
         params: {
@@ -34,9 +31,6 @@ module.exports = {
             });
           }
         });
-          
-
-       
       }).catch((err) => {
         console.log('Error in axios.get(/commutetime)',err);
       })
