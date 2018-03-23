@@ -322,16 +322,18 @@ export default class AlarmssScreen extends React.Component {
                           store.save('alarms', alarms);
                         });
 
-                         console.log(item);
-                        for (let i = 0; i <= this.state.defaultSnoozes; i += 1) {
+                        console.log(this.state);
+                        console.log(this.state.userSettings.defaultSnoozeTime);
+                        console.log(new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 - item.prepTime*5*60*1000 - item.postTime*5*60*1000 + 1000*60*this.state.userSettings.defaultSnoozeTime*0));
+                        [...Array(this.state.userSettings.defaultSnoozes+1)].forEach((x, i) => {
                           PushNotification.localNotificationSchedule({
                             message: item.label,
-                            date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 - item.prepTime*5*60*1000 - item.postTime*5*60*1000 + 1000*60*this.state.defaultSnoozeTime*i),
+                            date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 - item.prepTime*5*60*1000 - item.postTime*5*60*1000 + 1000*60*this.state.userSettings.defaultSnoozeTime*i),
                             userInfo: {
                              id: item.id,
                             },
                           });
-                        }
+                        });
                       });
 
                     })
