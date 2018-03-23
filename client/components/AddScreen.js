@@ -160,7 +160,7 @@ export default class AddScreen extends React.Component {
           />
         </View>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-          <Text style={{ fontWeight: '800' }}> Destination Address: </Text>
+          <Text style={{ fontWeight: '800' }}>Address: </Text>
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontWeight: '800' }}>DateTime: </Text>

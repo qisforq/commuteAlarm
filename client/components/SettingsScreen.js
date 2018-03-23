@@ -11,10 +11,12 @@ import store from 'react-native-simple-store';
 export default class SettingsScreen extends React.Component {
   constructor(props){
     super(props);
+    console.log(props);
     this.state = {
       prepTime: props.navigation.state.params.userSettings.defaultPrepTime,
       postTime: props.navigation.state.params.userSettings.defaultPostTime,
       snoozes: props.navigation.state.params.userSettings.defaultSnoozes,
+      snoozeTime: props.navigation.state.params.userSettings.defaultSnoozeTime,
     }
   }
 
@@ -48,20 +50,22 @@ export default class SettingsScreen extends React.Component {
   }
 
   _saveSettings = ({userId}, goBack) => {
-    let { prepTime, postTime, snoozes } = this.state;
+    let { prepTime, postTime, snoozes, snoozeTime } = this.state;
     axios.post('http://localhost:8082/settings/save', {
       userId: userId,
-      prepTime: prepTime/5,
-      postTime: postTime/5,
-      snoozes: snoozes,
+      prepTime,
+      postTime,
+      snoozes,
+      snoozeTime,
     }).then(data => {
       store.update('userSettings', {
-        defaultPostTime: prepTime/5,
-        defaultPrepTime: postTime/5,
+        defaultPostTime: prepTime,
+        defaultPrepTime: postTime,
         defaultSnoozes: snoozes,
+        defaultSnoozeTime: snoozeTime,
       })
     }).then(() => {
-      this.props.navigation.state.params.updateUserSettings(prepTime, postTime, snoozes)
+      this.props.navigation.state.params.updateUserSettings(prepTime, postTime, snoozes, snoozeTime)
     }).then(goBack);
 
   };
@@ -71,31 +75,40 @@ export default class SettingsScreen extends React.Component {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View></View>
         <View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', maxHeight: 40, width: 300 }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
               <Text>Number of Snoozes: </Text>
               <ModalDropdown
                 defaultIndex={this.state.snoozes}
                 defaultValue={(this.state.snoozes) + " snoozes" || "Please select..."}
-                style={styles.dropdown_1}
                 options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'}              `)}
                 onSelect={(idx, val) => {
                   this.setState({ snoozes: parseInt(val) })
                 }}
               />
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', maxHeight: 40, width: 300 }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
+              <Text>Snooze Time: </Text>
+              <ModalDropdown
+                defaultIndex={this.state.snoozeTime}
+                defaultValue={(this.state.snoozeTime) + " minutes" || "Please select..."}
+                options={[...Array(16)].map((x,i) => (i) + ` minute${i===1 ? '' : 's'}              `)}
+                onSelect={(idx, val) => {
+                  this.setState({ snoozeTime: parseInt(val) })
+                }}
+              />
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
             <Text>Prep Time: </Text>
             <ModalDropdown
               defaultIndex={this.state.prepTime}
               defaultValue={(this.state.prepTime*5) + " minutes" || "Please select..."}
-              style={styles.dropdown_1}
               options={[...Array(13)].map((x,i) => (i) * 5 + ' minutes               ')}
               onSelect={(idx, val) => {
-                this.setState({ prepTime: parseInt(val) })
+                this.setState({ prepTime: parseInt(val)/5 })
               }}
             />
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', maxHeight: 40, width: 300, flexWrap: 'nowrap' }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230, flexWrap: 'nowrap' }}>
             <View>
               <Text>Post-Travel Prep Time: </Text>
             </View>
@@ -105,20 +118,14 @@ export default class SettingsScreen extends React.Component {
                 defaultValue={(this.state.postTime*5) + " minutes" || "Please select..."}
                 options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
                 onSelect={(idx, val) => {
-                  this.setState({ postTime: parseInt(val) })
+                  this.setState({ postTime: parseInt(val)/5 })
                 }}
               />
             </View>
           </View>
         </View>
-        <View></View>
+        <View />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  dropdown_1: {
-
-  },
-});

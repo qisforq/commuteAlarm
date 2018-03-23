@@ -31,7 +31,7 @@ BackgroundTask.define(async () => {
 PushNotification.configure({
 
   onNotification(notification) {
-    console.log( 'NOTIFICATION:', notification);
+    // console.log( 'NOTIFICATION:', notification);
 
     if (notification.userInteraction) {
       PushNotification.cancelLocalNotifications({ id: notification.data.id });
@@ -95,6 +95,7 @@ export default class AlarmssScreen extends React.Component {
         defaultPrepTime: 0,
         defaultPostTime: 0,
         defaultSnoozes: 0,
+        defaultSnoozeTime: 8,
       },
       alarms: [],
     };
@@ -160,6 +161,7 @@ export default class AlarmssScreen extends React.Component {
             defaultPrepTime: 0,
             defaultPostTime: 0,
             defaultSnoozes: 0,
+            defaultSnoozeTime: 8,
           });
           this.setState({
             userId: data.data,
@@ -206,14 +208,15 @@ export default class AlarmssScreen extends React.Component {
     })
   }
 
-  _updateUserSettings(prep, post, snooze) {
+  _updateUserSettings(prep, post, snooze, snoozeTime) {
     this.setState({
       userSettings: {
         defaultPrepTime: prep,
         defaultPostTime: post,
         defaultSnoozes: snooze,
-      }
-    })
+        defaultSnoozeTime: snoozeTime,
+      },
+    });
   }
 
   editScreen(item) {
@@ -253,32 +256,25 @@ export default class AlarmssScreen extends React.Component {
         right={swipeBtns}
         backgroundColor="transparent"
       >
-        <View style={{ height: 80, borderWidth: 0.3, borderColor: 'black' }}>
+        <View style={{ height: 75, borderWidth: 0.3, borderColor: 'black' }}>
           <TouchableHighlight underlayColor="lightblue" onPress={() => this.editScreen(item)}>
             <View style={{ display: 'flex', flexDirection: 'row' }}>
               <View style={{ flex: 0.5 }} />
               <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35 }}>{Icons.clockO}</FontAwesome>
               <View style={{ flex: 10 }}>
-                <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}</Text>
-                <Text style={{}}>{new Date(item.time).toDateString()}</Text>
+                <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}<Text style={{ fontWeight: '400', fontSize: 12 }}> - {new Date(item.time).toDateString()}</Text></Text>
                 <Text style={{}}>Arrival Time: {new Date(item.time).toLocaleTimeString()}</Text>
                 <Text style={{}}>Alarm Time: {new Date(item.goOffTime).toLocaleTimeString()}</Text>
-                <Text style={{ fontWeight: '300', fontSize: 10 }}>-{item.address.slice(0, 32)}</Text>
-                <Text style={{}}>{item.location}</Text>
+                <Text style={{ fontWeight: '300' }}>{item.address.slice(0, 32)}...</Text>
               </View>
               <Switch
                 style={{ flex: 2, marginTop: 10 }}
                 tintColor="lightgrey"
                 value={item.onOff}
                 onValueChange={() => {
-                  store.get('alarms').then((alarms) => {
-                    console.log(alarms);
-                    alarms[item.id].onOff = !alarms[item.id].onOff;
-                    store.save('alarms', alarms);
-                  });
                   item.onOff = !item.onOff;
                   let {
-                    label, time, prepTime, postTime, locationId, address, onOff
+                    label, time, prepTime, postTime, locationId, address, onOff,
                   } = item;
                   console.log(onOff);
                   axios.post('http://localhost:8082/alarm/edit', {
@@ -293,9 +289,9 @@ export default class AlarmssScreen extends React.Component {
                     onOff,
                   });
                   if (onOff) {
-                    BackgroundGeolocation.getCurrentPosition((location)=>{
+                    BackgroundGeolocation.getCurrentPosition((location) => {
                       console.log('- Current position received!!!!');
-                      let {latitude, longitude} = location.coords;
+                      let { latitude, longitude } = location.coords;
 
                       axios.post('http://localhost:8082/commutetime/single', {
                         userId: this.state.userId,
@@ -303,29 +299,33 @@ export default class AlarmssScreen extends React.Component {
                         GPSLat: latitude,
                         GPSLong: longitude,
                       }).then((res) => {
-                        console.log("rory alarma", res.data);
-                        console.warn("START ADDRESS:", res.data.commuteData.routes[0].legs[0].start_address)
-                        console.log("PUT THIS ON THE SCREEN:", new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000));
+                        // console.log("rory alarma", res.data);
+                        // console.warn("START ADDRESS:", res.data.commuteData.routes[0].legs[0].start_address)
+                        // console.log("PUT THIS ON THE SCREEN:", new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000));
                         store.get('alarms').then((alarms) => {
                           console.log(alarms)
                           const newAlarms = Object.keys(alarms).map((k) => {
+                            console.log(k, item.id);
                             if (k === item.id) {
+                              console.log(k);
                               alarms[k].goOffTime = item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000;
+                              alarms[k].onOff = true;
                             }
+                            alarms[k].id = k;
                             return alarms[k];
                           });
-
+                          console.log(newAlarms)
                           this.setState({
                             alarms: newAlarms,
                           });
-                          alarms[item.id].goOffTime = item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000;
+                          console.log(alarms);
                           store.save('alarms', alarms);
                         });
 
-                        for (let i = 0; i < 5; i += 1) {
+                        for (let i = 0; i <= this.state.defaultSnoozes; i += 1) {
                           PushNotification.localNotificationSchedule({
                             message: item.label,
-                            date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 + 1000*10*i),
+                            date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 - item.prepTime*60*1000 - item.postTime*60*1000 + 1000*60*this.state.defaultSnoozeTime*i),
                             userInfo: {
                              id: item.id,
                             },
@@ -336,6 +336,22 @@ export default class AlarmssScreen extends React.Component {
                     })
             
                   } else {
+                    store.get('alarms').then((alarms) => {
+                      const newAlarms = Object.keys(alarms).map((k) => {
+                        if (k === item.id) {
+                          alarms[k].goOffTime = '';
+                          alarms[k].onOff = false;
+                        }
+                        alarms[k].id = k;
+                        return alarms[k];
+                      });
+
+                      this.setState({
+                        alarms: newAlarms,
+                      });
+                      console.log(alarms);
+                      store.save('alarms', alarms);
+                    });
                     console.log('cancel');
                     PushNotification.cancelLocalNotifications({ id: item.id });
                   }
@@ -362,58 +378,9 @@ export default class AlarmssScreen extends React.Component {
             data={this.state.alarms}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
-            //ItemSeparatorComponent={() => <View style={styles.separator} />}
-            //ListHeaderComponent={() => <Text style={styles.headerText}>Alarms</Text>}
           />
         </View>
       </View>
     );
   }
 }
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      marginTop: 20,
-    },
-    itemBlock: {
-      flexDirection: 'row',
-      paddingBottom: 10,
-    },
-    itemImage: {
-      width: 15,
-      height: 15,
-      marginTop: 10,
-      borderRadius: 0,
-    },
-    itemMeta: {
-      marginLeft: 20,
-      marginTop: -20,
-      justifyContent: 'center',
-    },
-    itemName: {
-      fontSize: 20,
-    },
-    itemLocation: {
-      fontSize: 12,
-      color: "#111",
-    },
-    itemTime: {
-      fontSize: 14,
-      color: "#111",
-    },
-    separator: {
-      height: 0.5,
-      width: "95%",
-      alignSelf: 'center',
-      backgroundColor: "#555"
-    },
-    header: {
-      padding: 10,
-      alignSelf: 'center'
-    },
-    headerText: {
-      fontSize: 30,
-      fontWeight: '900'
-    }
-  });

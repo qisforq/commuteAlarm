@@ -76,6 +76,7 @@ firebaseMethods.saveSettings = function (settings, cb) {
     defaultPrepTime: settings.prepTime,
     defaultPostTime: settings.postTime,
     defaultSnoozes: settings.snoozes,
+    defaultSnoozeTime: settings.snoozeTime,
   }).key);
 };
 
