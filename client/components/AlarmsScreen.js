@@ -31,7 +31,7 @@ BackgroundTask.define(async () => {
 PushNotification.configure({
 
   onNotification(notification) {
-    // console.log( 'NOTIFICATION:', notification);
+    console.log( 'NOTIFICATION:', notification);
 
     if (notification.userInteraction) {
       PushNotification.cancelLocalNotifications({ id: notification.data.id });
@@ -264,7 +264,7 @@ export default class AlarmssScreen extends React.Component {
               <View style={{ flex: 10 }}>
                 <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}<Text style={{ fontWeight: '400', fontSize: 12 }}> - {new Date(item.time).toDateString()}</Text></Text>
                 <Text style={{}}>Arrival Time: {new Date(item.time).toLocaleTimeString()}</Text>
-                <Text style={{}}>Alarm Time: {new Date(item.goOffTime).toLocaleTimeString()}</Text>
+                <Text style={{}}>Alarm Time: {item.goOffTime ? new Date(item.goOffTime).toLocaleTimeString() : 'Not Set'}</Text>
                 <Text style={{ fontWeight: '300' }}>{item.address.slice(0, 32)}...</Text>
               </View>
               <Switch
@@ -308,7 +308,7 @@ export default class AlarmssScreen extends React.Component {
                             console.log(k, item.id);
                             if (k === item.id) {
                               console.log(k);
-                              alarms[k].goOffTime = item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000;
+                              alarms[k].goOffTime = item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 - item.prepTime*5*60*1000 - item.postTime*5*60*1000;
                               alarms[k].onOff = true;
                             }
                             alarms[k].id = k;
@@ -322,10 +322,11 @@ export default class AlarmssScreen extends React.Component {
                           store.save('alarms', alarms);
                         });
 
+                         console.log(item);
                         for (let i = 0; i <= this.state.defaultSnoozes; i += 1) {
                           PushNotification.localNotificationSchedule({
                             message: item.label,
-                            date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 - item.prepTime*60*1000 - item.postTime*60*1000 + 1000*60*this.state.defaultSnoozeTime*i),
+                            date: new Date(item.time - res.data.commuteData.routes[0].legs[0].duration.value*1000 - item.prepTime*5*60*1000 - item.postTime*5*60*1000 + 1000*60*this.state.defaultSnoozeTime*i),
                             userInfo: {
                              id: item.id,
                             },
