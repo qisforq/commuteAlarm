@@ -47,14 +47,13 @@ firebaseMethods.getAlarms = function ({ userId, GPSLat, GPSLong }, cb) {
     const snapshots = [];
 
     snapshot.forEach((child) => {
-      let alarmObj = Object.assign({}, { alarmId: child.key }, child.val())
+      let alarmObj = Object.assign({}, { alarmId: child.key }, child.val());
       if (alarmObj.onOff) {
         snapshots.push(alarmObj);
         console.log(alarmObj.label, 'alarm is turned on');
       } else {
         console.log(alarmObj.label, 'alarm is turned off');
       }
-
     });
 
     Promise.all(snapshots.map(snap => getCommuteTime(snap, GPSLat, GPSLong)))
@@ -80,32 +79,31 @@ firebaseMethods.saveSettings = function (settings, cb) {
   }).key);
 };
 
-firebaseMethods.seed1 =  function() {
- usersRef.push({
-   userSettings: {
-     snoozes: 0,
-     prepTime: 0,
-     postTime: 0
-   },
-  alarms: {
-    alarm1: {
-      label: "work",
-      time: 1521472080122,
-      preptime: 20,
-      onOff: true,
-      location: "ChIJs980r6hZwokRJrYJwpNFwPE"
+firebaseMethods.seed1 = () => {
+  usersRef.push({
+    userSettings: {
+      snoozes: 0,
+      prepTime: 0,
+      postTime: 0,
     },
-    alarm2: {
-      label: "bed",
-      time: 1521472080122,
-      preptime: 20,
-      onOff: true,
-      location: "ChIJs980r6hZwokRJrYJwpNFwPE"
-    }
-
-  }
-})
-}
+    alarms: {
+      alarm1: {
+        label: 'work',
+        time: 1521472080122,
+        preptime: 20,
+        onOff: true,
+        location: 'ChIJs980r6hZwokRJrYJwpNFwPE',
+      },
+      alarm2: {
+        label: 'bed',
+        time: 1521472080122,
+        preptime: 20,
+        onOff: true,
+        location: 'ChIJs980r6hZwokRJrYJwpNFwPE',
+      },
+    },
+  });
+};
 
 
 module.exports = firebaseMethods;

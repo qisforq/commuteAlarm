@@ -20,8 +20,11 @@ exports.getCommuteTime = (alarm, GPSLat, GPSLong) => {
     '&mode=transit',
   ].join('');
   console.log('commuteURL', commuteURL);
-  return axios.get(commuteURL).then((data) => {
-    // return data.data.routes
-    return { alarmId, time, label, commuteData: data.data }
-  }).catch(err => console.log('error in getCommuteTime (server/apiHelpers.js) with this alarm:', alarm));
+  return axios.get(commuteURL).then(data => (
+    {
+      alarmId,
+      time,
+      label,
+      commuteData: data.data,
+    })).catch(err => console.log('error in getCommuteTime (server/apiHelpers.js) with this alarm:', alarm));
 };
