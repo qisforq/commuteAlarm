@@ -67,7 +67,9 @@ firebaseMethods.getAlarms = function ({ userId, GPSLat, GPSLong }, cb) {
 firebaseMethods.getAlarm = function ({ userId, alarmId, GPSLat, GPSLong }, cb) {
   firebase.database().ref(`users/${userId}/alarms/${alarmId}`).once('value').then((snapshot) => {
     console.log('snnapshot value :', snapshot.val());
-    getCommuteTime(snapshot.val(), GPSLat, GPSLong).then(result => cb(result));
+    const snap = snapshot.val();
+    snap.alarmId = alarmId;
+    getCommuteTime(snap, GPSLat, GPSLong).then(result => cb(result));
   });
 };
 

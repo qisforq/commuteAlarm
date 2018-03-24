@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-import alarmsListFunctions from '../alarmsListFunctions';
+import { switchChange } from '../alarmsListFunctions';
 
 
 function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, editScreen }) {
@@ -37,7 +37,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
                 style={{ flex: 2, marginTop: 10 }}
                 tintColor="lightgrey"
                 value={item.onOff}
-                onValueChange={() => alarmsListFunctions.switchChange(item, userId, userSettings, modifyAlarms)}
+                onValueChange={() => switchChange(item, userId, userSettings, modifyAlarms)}
               />
               <View style={{ flex: 0.5 }} />
             </View>
