@@ -11,20 +11,12 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { Alert, Button, Switch, View, Text, TouchableHighlight, AsyncStorage, Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS } from 'react-native';
 import BottomNavigation from './BottomNavigation';
 import dummyData from '../../server/dummyData';
-import serverCalls from '../serverCalls';
+import { getCommuteData } from '../commuteWorkers';
+import { geoConfig, geoSuccess } from '../geoWorker'
 
 
 BackgroundTask.define(async () => {
-  serverCalls.getCommuteData(this.state.userId, this)
-  // Fetch some data over the network which we want the user to have an up-to-
-  // date copy of, even if they have no network when using the app
-  // const response = await fetch('http://feeds.bbci.co.uk/news/rss.xml')
-  // const text = await response.text()
-
-  // // Data persisted to AsyncStorage can later be accessed by the foreground app
-  // await store.save('bbc', text).then(console.log(store.get('bbc')));
-  store.save('stuff', 'works');
-  // Remember to call finish()
+  getCommuteData(this.state.userId, this)
   BackgroundTask.finish();
 })
 
@@ -116,39 +108,17 @@ export default class AlarmssScreen extends React.Component {
       }),
     });
 
-    BackgroundGeolocation.ready({
-      // Geolocation Config
-      desiredAccuracy: 0,
-      distanceFilter: 15,
-      // Activity Recognition
-      stopTimeout: 2,
-      // Application config
-      debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
-      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-      stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-      startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-    }, (state) => {
-      console.log('- BackgroundGeolocation is configured and ready: ', state.enabled);
-
+    BackgroundGeolocation.ready(geoConfig, (state) => {
       if (!state.enabled) {
         // Start tracking!
         BackgroundGeolocation.start(() => {
-          serverCalls.getCommuteData(this.state.userId, this);
-          console.log('- Start success');
+            getCommuteData(this.state);
         });
       }
     });
   }
 
   componentDidMount() {
-
-    // PushNotification.localNotification({
-
-    //   /* iOS and Android properties */
-    //   title: "My Notification Title", // (optional)
-    //   message: "My Notification Message", // (required)
-    //   soundName: 'sound.wav', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-    // });
 
 
     BackgroundTask.schedule();
@@ -196,11 +166,11 @@ export default class AlarmssScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    BackgroundGeolocation.removeListeners();
+    // BackgroundGeolocation.removeListeners();
   }
 
   _toAddScreen() {
-    serverCalls.getCommuteData(this.state.userId, this); 
+    getCommuteData(this.state.userId, this); 
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
