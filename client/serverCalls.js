@@ -1,5 +1,5 @@
 import axios from 'axios';
-import BackgroundGeolocation from "react-native-background-geolocation";
+import BackgroundGeolocation from 'react-native-background-geolocation';
 import PushNotification from 'react-native-push-notification';
 
 

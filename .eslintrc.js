@@ -10,6 +10,7 @@ module.exports = {
       "space-infix-ops": 0,
       "no-unused-vars": [0, {"vars": "local", "args": "none"}],
       "no-console": 0,
-      "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }]
+      "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
+      "react/forbid-prop-types": 0,
     }
   }
