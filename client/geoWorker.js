@@ -13,23 +13,33 @@ const geoConfig = {
     startOnBoot: true, // <-- Auto start tracking when device is powered-up.
   }
 
-const geoSuccess = (state, that) => {
-    // console.warn('geoSuccess running!!! Here is this.state:', that.state)
-    // if (!state.enabled) {
-    //   // Start tracking!
-    // console.warn('geoSuccess state.enabled!')
-      
-    //   BackgroundGeolocation.start(() => {
-    //       console.warn("that.state=", that.state)
-    //       getCommuteData(that.state.userId, that);
-    //       console.log('- BackgroundGeolocation is configured and ready: ', state.enabled);
-    //   });
-    // }
-  }
-
-
   const getLocationSuccess = () => {}
 
-  const getLocationErr = () => {}
+  const getLocationErr = (errorCode) => {
+      switch (errorCode) {
+      case 0:
+          alert('Failed to retrieve location');
+          break;
+      case 1:
+          alert('You must enable location services in Settings');
+          break;
+      case 2:
+          alert('Network error');
+          break;
+      case 408:
+          alert('Location timeout');
+          break;
+      default:
+          break;
+      }
+  };
+
+  const getLocationParams = {
+    timeout: 30,      // 30 second timeout to fetch location
+    persist: false,
+    maximumAge: 5000, // Accept the last-known-location if not older than 5000 ms.
+    desiredAccuracy: 10,  // Try to fetch a location with an accuracy of `10` meters.
+    samples: 3,   // How many location samples to attempt.
+  };
   
-module.exports = { geoConfig, geoSuccess, getLocation }
+module.exports = { geoConfig, getLocationParams, getLocationErr }

@@ -13,10 +13,11 @@ import serverCalls from '../serverCalls';
 import AlarmsList from './AlarmsList';
 import { getCommuteData } from '../commuteWorkers';
 import { geoConfig, geoSuccess } from '../geoWorker'
+import { updateAlarms } from '../alarmsListFunctions';
 
 
 BackgroundTask.define(async () => {
-  serverCalls.getCommuteData(this.state.userId, this);
+  getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
   BackgroundTask.finish();
 });
 
@@ -170,7 +171,8 @@ export default class AlarmsScreen extends React.Component {
   }
 
   _toAddScreen() {
-    getCommuteData(this.state.userId, this); 
+    getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
+
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,

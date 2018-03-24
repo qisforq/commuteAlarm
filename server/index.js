@@ -48,8 +48,8 @@ app.get('/commutetime', ({ query }, res) => {
   });
 });
 
-app.post('/commutetime/single', (req, res) => {
-  firebase.getAlarm(req.body, (result) => {
+app.get('/commutetime/single', ({ query }, res) => {
+  firebase.getAlarm(query, (result) => {
     console.log('RESULT: ', result);
     res.send(result);
   });
