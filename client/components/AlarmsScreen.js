@@ -11,6 +11,8 @@ import BottomNavigation from './BottomNavigation';
 import dummyData from '../../server/dummyData';
 import serverCalls from '../serverCalls';
 import AlarmsList from './AlarmsList';
+import { getCommuteData } from '../commuteWorkers';
+import { geoConfig, geoSuccess } from '../geoWorker'
 
 
 BackgroundTask.define(async () => {
@@ -106,39 +108,17 @@ export default class AlarmsScreen extends React.Component {
       }),
     });
 
-    BackgroundGeolocation.ready({
-      // Geolocation Config
-      desiredAccuracy: 0,
-      distanceFilter: 15,
-      // Activity Recognition
-      stopTimeout: 2,
-      // Application config
-      debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
-      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-      stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-      startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-    }, (state) => {
-      console.log('- BackgroundGeolocation is configured and ready: ', state.enabled);
-
+    BackgroundGeolocation.ready(geoConfig, (state) => {
       if (!state.enabled) {
         // Start tracking!
         BackgroundGeolocation.start(() => {
-          serverCalls.getCommuteData(this.state.userId, this);
-          console.log('- Start success');
+            getCommuteData(this.state);
         });
       }
     });
   }
 
   componentDidMount() {
-
-    // PushNotification.localNotification({
-
-    //   /* iOS and Android properties */
-    //   title: "My Notification Title", // (optional)
-    //   message: "My Notification Message", // (required)
-    //   soundName: 'sound.wav', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-    // });
 
 
     BackgroundTask.schedule();
@@ -186,11 +166,11 @@ export default class AlarmsScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    BackgroundGeolocation.removeListeners();
+    // BackgroundGeolocation.removeListeners();
   }
 
   _toAddScreen() {
-    serverCalls.getCommuteData(this.state.userId, this); 
+    getCommuteData(this.state.userId, this); 
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
       userId: this.state.userId,
