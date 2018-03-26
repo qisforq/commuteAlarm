@@ -108,12 +108,14 @@ export default class AlarmsScreen extends React.Component {
         updateUserSettings: this._updateUserSettings,
       }),
     });
-
+    BackgroundGeolocation.on('heartbeat', (params) => {
+      console.log(params);
+    })
     BackgroundGeolocation.ready(geoConfig, (state) => {
       if (!state.enabled) {
         // Start tracking!
         BackgroundGeolocation.start(() => {
-            getCommuteData(this.state);
+            getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
         });
       }
     });
@@ -167,7 +169,7 @@ export default class AlarmsScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    // BackgroundGeolocation.removeListeners();
+    BackgroundGeolocation.removeListeners();
   }
 
   _toAddScreen() {
