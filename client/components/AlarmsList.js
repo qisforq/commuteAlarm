@@ -24,7 +24,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
       >
         <View style={{ height: 75, borderWidth: 0.3, borderColor: 'black' }}>
           <TouchableHighlight underlayColor="lightblue" onPress={() => editScreen(item)}>
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ flex: 0.5 }} />
               <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35 }}>{Icons.clockO}</FontAwesome>
               <View style={{ flex: 10 }}>
@@ -34,7 +34,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
                 <Text style={{ fontWeight: '300' }}>{item.address.slice(0, 32)}...</Text>
               </View>
               <Switch
-                style={{ flex: 2, marginTop: 10 }}
+                style={{ flex: 2 }}
                 tintColor="lightgrey"
                 value={item.onOff}
                 onValueChange={() => switchChange(item, userId, userSettings, modifyAlarms)}

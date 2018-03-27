@@ -18,6 +18,7 @@ app.get('/user/new', (req, res) => {
 });
 
 app.post('/alarm/save', (req, res) => {
+  console.log(req.body);
   firebase.newAlarm((req.body), (dat) => {
     res.status(200).send(dat);
   });

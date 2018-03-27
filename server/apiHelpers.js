@@ -3,7 +3,7 @@ const config = require('./config.js');
 
 exports.getCommuteTime = (alarm, GPSLat, GPSLong) => {
   let {
-    alarmId, label, location, onOff, postTime, prepTime, time,
+    alarmId, label, location, onOff, postTime, prepTime, time, travelMethod,
   } = alarm;
   const rootURL = 'https://maps.googleapis.com/maps/api/directions/json?';
 
@@ -11,13 +11,14 @@ exports.getCommuteTime = (alarm, GPSLat, GPSLong) => {
 
   let testOrigin = 'ChIJJWgxqOZawokRxM8nq5RnA7g';
   //  TODO: Access phone's current location for this!
+  console.log(travelMethod.toLowerCase());
   const commuteURL = [
     rootURL,
     `origin=${GPSLat},${GPSLong}`,
     `&destination=place_id:${location}`,
     `&key=${config.googleMapsAPI}`,
     `&arrival_time=${unixEpochTime}`,
-    '&mode=transit',
+    `&mode=${travelMethod.toLowerCase()}`,
   ].join('');
   console.log('commuteURL', commuteURL);
   return axios.get(commuteURL).then(data => (

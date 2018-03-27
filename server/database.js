@@ -16,25 +16,31 @@ firebaseMethods.newUser = function (cb) {
   }).key);
 };
 
-firebaseMethods.newAlarm = function (data, cb) {
-  cb(firebase.database().ref(`users/${data.userId}/alarms`).push({
-    label: data.label,
-    time: data.time,
-    prepTime: data.prepTime,
-    postTime: data.postTime,
+firebaseMethods.newAlarm = function ({
+  userId, label, time, prepTime, postTime, locationId, travelMethod,
+}, cb) {
+  cb(firebase.database().ref(`users/${userId}/alarms`).push({
+    label,
+    time,
+    prepTime,
+    postTime,
     onOff: false,
-    location: data.locationId,
+    location: locationId,
+    travelMethod,
   }).key);
 };
 
-firebaseMethods.editAlarm = function (data, cb) {
-  cb(firebase.database().ref(`users/${data.userId}/alarms/${data.alarmId}`).update({
-    label: data.label,
-    time: data.time,
-    prepTime: data.prepTime,
-    postTime: data.postTime,
-    onOff: data.onOff,
-    location: data.locationId,
+firebaseMethods.editAlarm = function ({
+  userId, alarmId, label, time, prepTime, postTime, onOff, locationId, travelMethod,
+}, cb) {
+  cb(firebase.database().ref(`users/${userId}/alarms/${alarmId}`).update({
+    label,
+    time,
+    prepTime,
+    postTime,
+    onOff,
+    location: locationId,
+    travelMethod,
   }).key);
 };
 
@@ -65,6 +71,7 @@ firebaseMethods.getAlarms = function ({ userId, GPSLat, GPSLong }, cb) {
 };
 
 firebaseMethods.getAlarm = function ({ userId, alarmId, GPSLat, GPSLong }, cb) {
+  console.log('herer we are once again', alarmId, userId);
   firebase.database().ref(`users/${userId}/alarms/${alarmId}`).once('value').then((snapshot) => {
     console.log('snnapshot value :', snapshot.val());
     const snap = snapshot.val();
