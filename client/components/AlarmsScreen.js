@@ -9,17 +9,16 @@ import BackgroundGeolocation from "react-native-background-geolocation";
 import { PushNotificationIOS } from 'react-native';
 import BottomNavigation from './BottomNavigation';
 import dummyData from '../../server/dummyData';
-import serverCalls from '../serverCalls';
 import AlarmsList from './AlarmsList';
 import { getCommuteData } from '../commuteWorkers';
 import { geoConfig, geoSuccess } from '../geoWorker'
 import { updateAlarms } from '../alarmsListFunctions';
 
 
-BackgroundTask.define(async () => {
-  getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
-  BackgroundTask.finish();
-});
+// BackgroundTask.define(async () => {
+//   // getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
+//   BackgroundTask.finish();
+// });
 
 PushNotification.configure({
 
@@ -108,23 +107,25 @@ export default class AlarmsScreen extends React.Component {
         updateUserSettings: this._updateUserSettings,
       }),
     });
-    BackgroundGeolocation.on('heartbeat', (params) => {
-      console.log(params);
+    BackgroundGeolocation.on('heartbeat', ({ location }) => {
+      console.log("THIS IS THE HEARTBEAT LISTENER", location);
+      getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
     })
+
+    BackgroundGeolocation.on("location", ({ location }) => {
+      getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
+    });
+
     BackgroundGeolocation.ready(geoConfig, (state) => {
       if (!state.enabled) {
         // Start tracking!
-        BackgroundGeolocation.start(() => {
-            getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
-        });
+        BackgroundGeolocation.start(); 
       }
     });
   }
 
   componentDidMount() {
-
-
-    BackgroundTask.schedule();
+    // BackgroundTask.schedule();
     store.get('userId').then((id) => {
       if (id === null) {
         axios.get('http://localhost:8082/user/new').then((data) => {
@@ -173,7 +174,7 @@ export default class AlarmsScreen extends React.Component {
   }
 
   _toAddScreen() {
-    getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
+    // getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
 
     this.props.navigation.navigate('AddScreen', {
       m: 'l',
@@ -222,6 +223,8 @@ export default class AlarmsScreen extends React.Component {
     console.log('modify: ', alarms);
     this.setState({
       alarms,
+    }, () => {
+      console.log(this.state, "<<<<this.state")
     });
   }
 

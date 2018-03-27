@@ -3,12 +3,14 @@ import BackgroundGeolocation from "react-native-background-geolocation";
 import axios from 'axios';
 import store from 'react-native-simple-store';
 import { getCommuteData } from './commuteWorkers';
+import { getLocationParams, getLocationErr } from './geoWorker';
 
 let alarmsListFunctions = {};
 
 const updateAlarms = (id, onOff, goOffTime, modifyAlarms) => {
   console.log('herer we are', id);
   store.get('alarms').then((alarms) => {
+    console.log('askdfbakjsdbfasbdfahsdf',alarms);
     const newAlarms = Object.keys(alarms).map((k) => {
       if (k === id) {
         alarms[k].onOff = onOff;
@@ -18,19 +20,22 @@ const updateAlarms = (id, onOff, goOffTime, modifyAlarms) => {
       return alarms[k];
     });
     modifyAlarms(newAlarms);
+    console.log(alarms);
     store.save('alarms', alarms);
   });
 };
 
 const alarmOn = (item, userId, userSettings, modifyAlarms) => {
-  getCommuteData({ userId, userSettings }, 'commutetime/single', item, modifyAlarms, updateAlarms);
+  BackgroundGeolocation.getCurrentPosition((location) => {
+    getCommuteData({ userId, userSettings }, 'commutetime/single', item, modifyAlarms, updateAlarms, location);  
+  }, getLocationErr, getLocationParams);
 };
 
 const switchChange = (item, userId, userSettings, modifyAlarms) => {
   let {
     label, time, prepTime, postTime, locationId, address, onOff, id,
   } = item;
-  onOff = !onOff;
+  onOff = !onOff; 
   updateAlarms(id, onOff, undefined, modifyAlarms);
   axios.post('http://localhost:8082/alarm/edit', {
     userId,
