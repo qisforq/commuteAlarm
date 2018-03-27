@@ -78,9 +78,10 @@ export default class SettingsScreen extends React.Component {
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
               <Text>Number of Snoozes: </Text>
               <ModalDropdown
+                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
                 defaultIndex={this.state.snoozes}
                 defaultValue={(this.state.snoozes) + " snoozes" || "Please select..."}
-                options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'}              `)}
+                options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'} `)}
                 onSelect={(idx, val) => {
                   this.setState({ snoozes: parseInt(val) })
                 }}
@@ -89,9 +90,10 @@ export default class SettingsScreen extends React.Component {
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
               <Text>Snooze Time: </Text>
               <ModalDropdown
+                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
                 defaultIndex={this.state.snoozeTime}
                 defaultValue={(this.state.snoozeTime) + " minutes" || "Please select..."}
-                options={[...Array(16)].map((x,i) => (i) + ` minute${i===1 ? '' : 's'}              `)}
+                options={[...Array(16)].map((x,i) => (i) + ` minute${i===1 ? '' : 's'}`)}
                 onSelect={(idx, val) => {
                   this.setState({ snoozeTime: parseInt(val) })
                 }}
@@ -100,9 +102,10 @@ export default class SettingsScreen extends React.Component {
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
             <Text>Prep Time: </Text>
             <ModalDropdown
+              dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
               defaultIndex={this.state.prepTime}
               defaultValue={(this.state.prepTime*5) + " minutes" || "Please select..."}
-              options={[...Array(13)].map((x,i) => (i) * 5 + ' minutes               ')}
+              options={[...Array(13)].map((x,i) => (i) * 5 + ' minutes ')}
               onSelect={(idx, val) => {
                 this.setState({ prepTime: parseInt(val)/5 })
               }}
@@ -114,9 +117,10 @@ export default class SettingsScreen extends React.Component {
             </View>
             <View>
               <ModalDropdown
+                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
                 defaultIndex={this.state.postTime}
                 defaultValue={(this.state.postTime*5) + " minutes" || "Please select..."}
-                options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
+                options={[...Array(13)].map((x,i) => (i)*5 + ' minutes ')}
                 onSelect={(idx, val) => {
                   this.setState({ postTime: parseInt(val)/5 })
                 }}

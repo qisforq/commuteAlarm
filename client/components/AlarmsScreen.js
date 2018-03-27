@@ -11,7 +11,7 @@ import BottomNavigation from './BottomNavigation';
 import dummyData from '../../server/dummyData';
 import AlarmsList from './AlarmsList';
 import { getCommuteData } from '../commuteWorkers';
-import { geoConfig, geoSuccess } from '../geoWorker'
+import { geoConfig, geoSuccess } from '../geoWorker';
 import { updateAlarms } from '../alarmsListFunctions';
 
 
@@ -96,6 +96,7 @@ export default class AlarmsScreen extends React.Component {
     this._updateUserSettings = this._updateUserSettings.bind(this);
     this.deleteAlarm = this.deleteAlarm.bind(this);
     this.modifyAlarms = this.modifyAlarms.bind(this);
+    this.commuteData = this.commuteData.bind(this);
   }
 
   componentWillMount() {
@@ -173,14 +174,17 @@ export default class AlarmsScreen extends React.Component {
     BackgroundGeolocation.removeListeners();
   }
 
+  commuteData(url, item) {
+    getCommuteData(this.state, url, item, this.modifyAlarms, updateAlarms);
+  }
+
   _toAddScreen() {
     // getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
 
     this.props.navigation.navigate('AddScreen', {
-      m: 'l',
       userId: this.state.userId,
       settings: this.state.userSettings,
-    })
+    });
   }
 
   _updateUserSettings(prep, post, snooze, snoozeTime) {
@@ -199,6 +203,7 @@ export default class AlarmsScreen extends React.Component {
     this.props.navigation.navigate('AddScreen', {
       data: item,
       userId: this.state.userId,
+      commuteData: this.commuteData,
     });
   }
 
@@ -223,9 +228,7 @@ export default class AlarmsScreen extends React.Component {
     console.log('modify: ', alarms);
     this.setState({
       alarms,
-    }, () => {
-      console.log(this.state, "<<<<this.state")
-    });
+    }, () => console.log(this.state));
   }
 
   render() {

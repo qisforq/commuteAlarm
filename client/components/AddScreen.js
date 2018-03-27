@@ -1,6 +1,7 @@
 import React from 'react';
 import BottomNavigation from './BottomNavigation';
-import {Button, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import {Button, View, Text, TextInput, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { RadioButtons, SegmentedControls } from 'react-native-radio-buttons'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -21,7 +22,8 @@ export default class AddScreen extends React.Component {
         locationId: this.props.navigation.state.params.data.locationId,
         address: this.props.navigation.state.params.data.address,
         onOff: this.props.navigation.state.params.data.onOff,
-        edit: true
+        edit: true,
+        travelMethod: this.props.navigation.state.params.data.travelMethod,
       };
     } else {
       this.state = {
@@ -34,6 +36,7 @@ export default class AddScreen extends React.Component {
         address: 'Search',
         onOff: false,
         edit: false,
+        travelMethod: 'Driving',
       };
     }
 
@@ -55,7 +58,7 @@ export default class AddScreen extends React.Component {
   }
 
   saveAlarm() {
-    let { label, time, prepTime, postTime, locationId, address, onOff } = this.state;
+    let { label, time, prepTime, postTime, locationId, address, onOff, travelMethod } = this.state;
     if(this.state.edit) {
       axios.post('http://localhost:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,
@@ -67,7 +70,11 @@ export default class AddScreen extends React.Component {
         locationId,
         onOff,
         address,
+        travelMethod,
       }).then(data => {
+        if(onOff) {
+          this.props.navigation.state.params.commuteData('commutetime/single', this.props.navigation.state.params.data)
+        }
         store.get('alarms').then(alarms => {
           alarms[this.props.navigation.state.params.data.id] = {
             label,
@@ -76,7 +83,8 @@ export default class AddScreen extends React.Component {
             postTime,
             onOff,
             locationId,
-            address
+            address,
+            travelMethod,
           };
           store.save('alarms', alarms).then(() => {
             this.props.navigation.navigate('AlarmsScreen');
@@ -92,6 +100,7 @@ export default class AddScreen extends React.Component {
         postTime,
         locationId,
         address,
+        travelMethod,
       }).then(data => {
         console.log(data.data);
         store.get('alarms').then(alarms => {
@@ -102,7 +111,8 @@ export default class AddScreen extends React.Component {
             postTime,
             onOff: false,
             locationId,
-            address
+            address,
+            travelMethod,
           };
           store.save('alarms', alarms).then(() => {
             this.props.navigation.navigate('AlarmsScreen');
@@ -152,7 +162,7 @@ export default class AddScreen extends React.Component {
             debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
           />
         </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%' }}>
           <Text style={{ fontWeight: '800' }}>Alarm Label: </Text>
           <TextInput
             onChangeText={(text) => this.setState({ label: text })}
@@ -162,7 +172,7 @@ export default class AddScreen extends React.Component {
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
           <Text style={{ fontWeight: '800' }}>Address: </Text>
         </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
           <Text style={{ fontWeight: '800' }}>DateTime: </Text>
           <TouchableOpacity
             onPress={() => this.setState({ showTime: true })}
@@ -176,22 +186,43 @@ export default class AddScreen extends React.Component {
           onConfirm={this.handleTimePicked}
           onCancel={() => this.setState({ showTime: false })}
         />
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
           <Text style={{ fontWeight: '800' }}>Prep Time Needed: </Text>
           <ModalDropdown
-            defaultIndex={this.state.prepTime}
+            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+            defaultIndex={Number(this.state.prepTime)}
             defaultValue={this.state.prepTime*5 + ' minutes'}
-            options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
+            options={[...Array(13)].map((x,i) => (i)*5 + ' minutes ')}
             onSelect={(idx, val) => this.setState({ prepTime: idx })}
           />
         </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
           <Text style={{ fontWeight: '800' }}>Post Time Needed: </Text>
           <ModalDropdown
+            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
             defaultIndex={this.state.postTime}
             defaultValue={this.state.postTime*5 + ' minutes'}
-            options={[...Array(13)].map((x,i) => (i)*5 + ' minutes               ')}
+            options={[...Array(13)].map((x,i) => (i)*5 + ' minutes  ')}
             onSelect={(idx, val) => this.setState({ postTime: idx })}
+          />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '60%' }}>
+          <Text style={{ fontWeight: '800' }}>Travel Method: {"\n"}</Text>
+          {/* <RadioButtons
+            options={['Transit', 'Driving']}
+            //onSelection={(opt) => { this.setState({ travelMethod: opt })}}
+            selectedOption={this.state.travelMethod }
+            renderOption={(option, selected, onSelect, index) => (
+              <TouchableWithoutFeedback onPress={() => { this.setState({ travelMethod: option })}} key={index}>
+                <Text style={selected ? { fontWeight: 'bold' } : {}}>{option}</Text>
+              </TouchableWithoutFeedback>
+            )}
+            renderContainer={(optionNodes) => (<View>{optionNodes}</View>)}
+          /> */}
+          <SegmentedControls
+            options={ ['Transit', 'Driving'] }
+            onSelection={(opt) => { this.setState({ travelMethod: opt })}}
+            selectedOption={ this.state.travelMethod }
           />
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>

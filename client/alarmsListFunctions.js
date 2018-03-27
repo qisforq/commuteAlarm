@@ -8,7 +8,7 @@ import { getLocationParams, getLocationErr } from './geoWorker';
 let alarmsListFunctions = {};
 
 const updateAlarms = (id, onOff, goOffTime, modifyAlarms) => {
-  console.log('herer we are', id);
+  console.log('herer we are', id, goOffTime, onOff);
   store.get('alarms').then((alarms) => {
     console.log('askdfbakjsdbfasbdfahsdf',alarms);
     const newAlarms = Object.keys(alarms).map((k) => {

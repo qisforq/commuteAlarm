@@ -45,6 +45,8 @@ getCommuteData = ({userId, userSettings}, url, item, modifyAlarms, updateAlarms,
           },
           soundName: 'annoying.mp3',
         });
+      }).catch((err) => {
+        console.log('Error in axios.get(/commutetime)',err);
       });
     });
 
