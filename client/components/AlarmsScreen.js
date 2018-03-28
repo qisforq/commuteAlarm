@@ -113,14 +113,15 @@ export default class AlarmsScreen extends React.Component {
       getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
     })
 
-    BackgroundGeolocation.on("location", ({ location }) => {
-      getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
-    });
+    // BackgroundGeolocation.on("location", (location) => {
+    //   console.log("THIS IS THE LOCATION LISTENER", location);
+    //   getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
+    // });
 
     BackgroundGeolocation.ready(geoConfig, (state) => {
       if (!state.enabled) {
         // Start tracking!
-        BackgroundGeolocation.start(); 
+        BackgroundGeolocation.start();
       }
     });
   }
@@ -180,7 +181,6 @@ export default class AlarmsScreen extends React.Component {
 
   _toAddScreen() {
     // getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
-
     this.props.navigation.navigate('AddScreen', {
       userId: this.state.userId,
       settings: this.state.userSettings,

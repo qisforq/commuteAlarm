@@ -2,6 +2,7 @@ import React from 'react';
 import AlarmsScreen from './AlarmsScreen';
 import AddScreen from './AddScreen';
 import SettingsScreen from './SettingsScreen';
+import CalendarScreen from './CalendarScreen';
 import {Button, View, Text } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
@@ -15,6 +16,9 @@ const RootStack = StackNavigator(
     },
     AddScreen: {
       screen: AddScreen,
+    },
+    CalendarScreen: {
+      screen: CalendarScreen,
     }
   },
   {

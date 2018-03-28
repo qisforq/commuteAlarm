@@ -9,7 +9,8 @@ let alarmsListFunctions = {};
 
 const updateAlarms = (id, onOff, goOffTime, modifyAlarms) => {
   console.log('herer we are', id, goOffTime, onOff);
-  store.get('alarms').then((alarms) => {
+  store.get('alarms')
+  .then((alarms) => {
     console.log('askdfbakjsdbfasbdfahsdf',alarms);
     const newAlarms = Object.keys(alarms).map((k) => {
       if (k === id) {
@@ -27,16 +28,16 @@ const updateAlarms = (id, onOff, goOffTime, modifyAlarms) => {
 
 const alarmOn = (item, userId, userSettings, modifyAlarms) => {
   BackgroundGeolocation.getCurrentPosition((location) => {
-    getCommuteData({ userId, userSettings }, 'commutetime/single', item, modifyAlarms, updateAlarms, location);  
+    getCommuteData({ userId, userSettings }, 'commutetime/single', item, modifyAlarms, updateAlarms, location);
   }, getLocationErr, getLocationParams);
 };
 
 const switchChange = (item, userId, userSettings, modifyAlarms) => {
   let {
-    label, time, prepTime, postTime, locationId, address, onOff, id,
+    label, time, prepTime, postTime, locationId, address, onOff, id, travelMethod,
   } = item;
-  onOff = !onOff; 
-  updateAlarms(id, onOff, undefined, modifyAlarms);
+  onOff = !onOff;
+  updateAlarms(id, onOff, undefined, modifyAlarms)
   axios.post('http://localhost:8082/alarm/edit', {
     userId,
     alarmId: id,
@@ -47,12 +48,15 @@ const switchChange = (item, userId, userSettings, modifyAlarms) => {
     locationId,
     address,
     onOff,
+    travelMethod,
+  }).catch((err) => {
+    console.log('ERRRRRRRRROR', err);
   });
   if (onOff) {
     alarmOn(item, userId, userSettings, modifyAlarms);
   } else {
     updateAlarms(id, false, undefined, modifyAlarms);
-    PushNotification.cancelLocalNotifications({ id });
+    PushNotification.cancelLocalNotifications({ id })
   }
 };
 

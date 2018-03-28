@@ -32,9 +32,7 @@ module.exports = {
               });
             });
           });
-        }).catch((err) => {
-          console.log('Error in axios.get(/commutetime)',err);
-        });
+        })
     }, (errorCode) => {
       switch (errorCode) {
         case 0:

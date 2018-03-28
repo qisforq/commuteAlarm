@@ -18,6 +18,7 @@ export default class SettingsScreen extends React.Component {
       snoozes: props.navigation.state.params.userSettings.defaultSnoozes,
       snoozeTime: props.navigation.state.params.userSettings.defaultSnoozeTime,
     }
+    this.toCalendarScreen = this.toCalendarScreen.bind(this);
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -69,6 +70,10 @@ export default class SettingsScreen extends React.Component {
     }).then(goBack);
 
   };
+
+  toCalendarScreen() {
+    this.props.navigation.navigate('CalendarScreen');
+  }
 
   render() {
     return (
@@ -129,6 +134,9 @@ export default class SettingsScreen extends React.Component {
           </View>
         </View>
         <View />
+        <View>
+          <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button>
+        </View>
       </View>
     );
   }
