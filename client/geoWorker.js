@@ -14,7 +14,7 @@ const geoConfig = {
     stopTimeout: 5,
     // Application config
     debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
-    logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+    logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
     stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
     startOnBoot: true, // <-- Auto start tracking when device is powered-up.
   }
@@ -53,7 +53,7 @@ const geoConfig = {
     BackgroundGeolocation.stopSchedule(() => {
       BackgroundGeolocation.stop(() => {
         store.get('alarms').then((alarms) => {
-          schedule = Object.entries(alarms).filter((alarm) => alarm[1].onOff).map((alarm) => alarm[1].scheduleStr)
+          schedule = Object.entries(alarms).filter((alarm) => alarm[1].onOff).map((alarm) => alarm[1].scheduleStr || [])
           BackgroundGeolocation.setConfig({
             schedule: schedule,
             heartbeat: 1,
@@ -76,6 +76,6 @@ const geoConfig = {
 
   }
 
-  
-  
+
+
 module.exports = { geoConfig, getLocationParams, getLocationErr, setSchedule }
