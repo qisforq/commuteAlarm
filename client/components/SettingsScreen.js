@@ -98,9 +98,9 @@ export default class SettingsScreen extends React.Component {
                 dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
                 defaultIndex={this.state.snoozeTime}
                 defaultValue={(this.state.snoozeTime) + " minutes" || "Please select..."}
-                options={[...Array(16)].map((x,i) => (i) + ` minute${i===1 ? '' : 's'}`)}
+                options={[...Array(16)].map((x,i) => (i || 0.5) + ` minute${i===1 ? '' : 's'}`)}
                 onSelect={(idx, val) => {
-                  this.setState({ snoozeTime: parseInt(val) })
+                  this.setState({ snoozeTime: parseFloat(val) })
                 }}
               />
           </View>

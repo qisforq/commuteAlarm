@@ -13,7 +13,7 @@ const geoConfig = {
     // Activity Recognition
     stopTimeout: 5,
     // Application config
-    debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+    debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
     logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
     stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
     startOnBoot: true, // <-- Auto start tracking when device is powered-up.
@@ -58,6 +58,7 @@ const geoConfig = {
             schedule: schedule,
             heartbeat: 1,
             preventSuspend: true,
+            logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
           }, () => {
             BackgroundGeolocation.startSchedule((state) => {
               console.log("schedule has been started");
