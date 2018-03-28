@@ -6,7 +6,7 @@ import PushNotification from 'react-native-push-notification';
 import HeaderButton from 'react-navigation-header-buttons';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import BackgroundGeolocation from "react-native-background-geolocation";
-import { PushNotificationIOS } from 'react-native';
+import { PushNotificationIOS, Alert } from 'react-native';
 import BottomNavigation from './BottomNavigation';
 import dummyData from '../../server/dummyData';
 import AlarmsList from './AlarmsList';
@@ -27,6 +27,10 @@ PushNotification.configure({
 
     if (notification.userInteraction) {
       PushNotification.cancelLocalNotifications({ id: notification.data.id });
+      // This is to remove all past notifications from the notifications screen.
+      PushNotificationIOS.removeAllDeliveredNotifications();
+    } else {
+      Alert.alert(notification.alert, 'hah', [], {soundName: 'annoying.mp3'})
     }
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },

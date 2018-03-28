@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "server-dev": "nodemon server/index.js",
+    "start": "react-native run-ios",
     "test": "jest"
   },
   "dependencies": {
