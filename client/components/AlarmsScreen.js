@@ -113,9 +113,9 @@ export default class AlarmsScreen extends React.Component {
       getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
     })
 
-    BackgroundGeolocation.on("location", ({ location }) => {
-      getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
-    });
+    // BackgroundGeolocation.on("location", (location) => {
+    //   getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
+    // });
 
     BackgroundGeolocation.ready(geoConfig, (state) => {
       if (!state.enabled) {

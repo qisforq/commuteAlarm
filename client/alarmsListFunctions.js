@@ -33,7 +33,7 @@ const alarmOn = (item, userId, userSettings, modifyAlarms) => {
 
 const switchChange = (item, userId, userSettings, modifyAlarms) => {
   let {
-    label, time, prepTime, postTime, locationId, address, onOff, id,
+    label, time, prepTime, postTime, locationId, address, onOff, id, travelMethod,
   } = item;
   onOff = !onOff; 
   updateAlarms(id, onOff, undefined, modifyAlarms);
@@ -47,6 +47,9 @@ const switchChange = (item, userId, userSettings, modifyAlarms) => {
     locationId,
     address,
     onOff,
+    travelMethod,
+  }).catch((err)=> {
+    console.log(err);
   });
   if (onOff) {
     alarmOn(item, userId, userSettings, modifyAlarms);

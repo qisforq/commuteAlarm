@@ -3,8 +3,23 @@ const { firebase } = require('./config');
 const { getCommuteTime } = require('./apiHelpers');
 
 const usersRef = firebase.database().ref('users/');
+const tokensRef = firebase.database().ref('tokens/');
 
 let firebaseMethods = {};
+
+firebaseMethods.storeToken = function (accessToken, refreshToken) {
+  tokensRef.push({
+    token: {
+      accessToken
+    }
+  }).key
+}
+
+firebaseMethods.getToken = function() {
+  return firebase.database().ref('tokens/-L8iE6OW8PCMtsKWATl4/token/accessToken').once('value').then((snapshot) => {
+    return snapshot.val(); 
+  });
+}
 
 firebaseMethods.newUser = function (cb) {
   cb(usersRef.push({
