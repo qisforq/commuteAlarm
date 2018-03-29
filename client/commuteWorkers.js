@@ -44,7 +44,7 @@ const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updat
           // End of Q + D code ^^^^
           PushNotification.cancelLocalNotifications({ id: alarm.alarmId });
           [...Array(userSettings.defaultSnoozes+1)].forEach((x, i) => {
-            let alarmTime = new Date(alarm.time - alarm.commuteData.routes[0].legs[0].duration.value*1000 - alarm.prepTime*5*60*1000 - alarm.postTime*5*60*1000 + 1000*60*userSettings.defaultSnoozeTime*i);
+            const alarmTime = new Date(alarm.time - (alarm.commuteData.routes[0].legs[0].duration.value*1000) - (alarm.prepTime*5*60*1000) - (alarm.postTime*5*60*1000) - (1000*60*userSettings.defaultSnoozeTime*userSettings.defaultSnoozes) - offSet + (1000*60*userSettings.defaultSnoozeTime*i));
 
             if (alarm.time > Date.now()) {
               PushNotification.localNotificationSchedule({
@@ -52,10 +52,10 @@ const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updat
                 date: alarmTime,
                 userInfo: {
                   id: alarm.alarmId,
-                  userId: userId,
-                  userSettings: userSettings,
+                  userId,
+                  userSettings,
                   alarmData: item,
-                  alarmTime: alarmTime,
+                  alarmTime,
                 },
                 soundName: 'annoying.mp3',
               });

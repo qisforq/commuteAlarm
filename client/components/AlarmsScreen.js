@@ -72,8 +72,9 @@ PushNotification.configure({
             console.warn('Failed to add geofence', error);
           });
         });
+        alarms[notification.data.id].turnedOff = true;
+        store.save('alarms', alarms);
       });
-      PushNotification.cancelLocalNotifications({ id: notification.data.id });
       // This is to remove all past notifications from the notifications screen.
       PushNotificationIOS.removeAllDeliveredNotifications();
     } else if (Date.parse(notification.data.alarmTime) > (Date.now() - 100)) {
@@ -91,7 +92,6 @@ PushNotification.configure({
               let { alarmData, userId, userSettings, alarmTime } = notification.data
               switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
               whoosh.release()
-              notification.finish(PushNotificationIOS.FetchResult.NoData);
 
               alarmsObj[alarmData.id].turnedOff = true;
               store.save('alarms', alarmsObj);
@@ -101,6 +101,7 @@ PushNotification.configure({
         {text: 'Snooze', onPress: () => whoosh.release()},
       ]);
     }
+    PushNotification.cancelLocalNotifications({ id: notification.data.id });
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 
