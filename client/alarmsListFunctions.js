@@ -1,6 +1,7 @@
 import PushNotification from 'react-native-push-notification';
 import BackgroundGeolocation from "react-native-background-geolocation";
 import axios from 'axios';
+import { Alert } from 'react-native';
 import store from 'react-native-simple-store';
 import { getCommuteData } from './commuteWorkers';
 import { getLocationParams, getLocationErr } from './geoWorker';
@@ -32,32 +33,50 @@ const alarmOn = (item, userId, userSettings, modifyAlarms) => {
   }, getLocationErr, getLocationParams);
 };
 
-const switchChange = (item, userId, userSettings, modifyAlarms) => {
+const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
   let {
     label, time, prepTime, postTime, locationId, address, onOff, id, travelMethod,
   } = item;
-  onOff = !onOff;
-  updateAlarms(id, onOff, undefined, modifyAlarms)
-  axios.post('http://localhost:8082/alarm/edit', {
-    userId,
-    alarmId: id,
-    label,
-    time,
-    prepTime,
-    postTime,
-    locationId,
-    address,
-    onOff,
-    travelMethod,
-  }).catch((err) => {
-    console.log('ERRRRRRRRROR', err);
-  });
-  if (onOff) {
-    alarmOn(item, userId, userSettings, modifyAlarms);
-  } else {
-    updateAlarms(id, false, undefined, modifyAlarms);
-    PushNotification.cancelLocalNotifications({ id })
+
+  if (item.time < Date.now()) {
+    return setTimeout(() => Alert.alert('This alarm has already passed =\'('), 300);
   }
+  store.get('alarms').then((alarmsObj) => {
+    console.log('ALARMSOBJ in switchChange', alarmsObj)
+
+    if (alarmsObj[id].turnedOff) {
+      return setTimeout(() => Alert.alert('This alarm has already passed =\'('), 300);
+    }
+
+      onOff = !onOff;
+      updateAlarms(id, onOff, undefined, modifyAlarms)
+      axios.post('http://localhost:8082/alarm/edit', {
+        userId,
+        alarmId: id,
+        label,
+        time,
+        prepTime,
+        postTime,
+        locationId,
+        address,
+        onOff,
+        travelMethod,
+      }).catch((err) => {
+        console.log('ERRRRRRRRROR', err);
+      });
+
+      if (onOff && !notif) {
+        alarmOn(item, userId, userSettings, modifyAlarms);
+      } else {
+        updateAlarms(id, false, undefined, modifyAlarms);
+        PushNotification.cancelLocalNotifications({ id })
+      }
+  })
+
+
+
+
+
 };
 
 module.exports = { switchChange, alarmOn, updateAlarms };

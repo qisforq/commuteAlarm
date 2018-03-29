@@ -29,6 +29,7 @@
     "react-native-push-notification": "^3.0.2",
     "react-native-radio-buttons": "^1.0.0",
     "react-native-simple-store": "^1.3.0",
+    "react-native-sound": "^0.10.9",
     "react-native-swipeout": "^2.3.3",
     "react-native-vector-icons": "^4.5.0",
     "react-navigation": "^1.5.7",
