@@ -3,8 +3,32 @@ const { firebase } = require('./config');
 const { getCommuteTime } = require('./apiHelpers');
 
 const usersRef = firebase.database().ref('users/');
+const tokensRef = firebase.database().ref('tokens/');
+const calendarRef = firebase.database().ref('calendars/');
 
 let firebaseMethods = {};
+
+firebaseMethods.storeCalendar = function (item) {
+  calendarRef.push({
+    calendar: {
+      events: item
+    }
+  }).key
+}
+
+firebaseMethods.storeToken = function (accessToken, refreshToken, id) {
+  console.log("here", accessToken, refreshToken, id)
+  firebase.database().ref(`users/${id}/token`).set({
+    accessToken,
+    refreshToken
+  }).key
+}
+
+firebaseMethods.getToken = function(id) {
+  return firebase.database().ref(`users/${id}/token`).once('value').then((snapshot) => {
+    return snapshot.val(); 
+  });
+}
 
 firebaseMethods.newUser = function (cb) {
   cb(usersRef.push({

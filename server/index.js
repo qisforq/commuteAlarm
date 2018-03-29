@@ -2,12 +2,20 @@ const express = require('express');
 const parser = require('body-parser');
 const firebase = require('./database');
 const { getCommuteTime } = require('./apiHelpers');
+const passport = require("passport");
+const authRoutes = require('./auth-routes');
 
 const app = express();
 
 app.use(parser.json());
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/test', (req, res) => {
+//auth middleware routes
+app.use('/auth', authRoutes);
+
+
+app.get('/', (req, res) => {
   res.status(200).send('it works');
 });
 
