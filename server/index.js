@@ -25,6 +25,7 @@ app.post('/alarm/save', (req, res) => {
 });
 
 app.post('/alarm/edit', (req, res) => {
+  console.log(req.body);
   firebase.editAlarm((req.body), (dat) => {
     res.status(200).send(dat);
   });

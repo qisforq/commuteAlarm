@@ -7,6 +7,8 @@ import HeaderButton from 'react-navigation-header-buttons';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import BackgroundGeolocation from "react-native-background-geolocation";
 import { PushNotificationIOS, Alert } from 'react-native';
+import Geocoder from 'react-native-geocoding';
+
 import BottomNavigation from './BottomNavigation';
 import dummyData from '../../server/dummyData';
 import AlarmsList from './AlarmsList';
@@ -21,13 +23,58 @@ import Sound from 'react-native-sound'
 //   BackgroundTask.finish();
 // });
 
+Geocoder.setApiKey('AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw');
+
 PushNotification.configure({
 
   onNotification(notification) {
     console.log( 'NOTIFICATION:', notification);
 
     if (notification.userInteraction) {
-      PushNotification.cancelLocalNotifications({ id: notification.data.id });
+      BackgroundGeolocation.getCurrentPosition((location) => {
+        BackgroundGeolocation.addGeofence({
+          identifier: 'Start',
+          radius: 150,
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          notifyOnEntry: false,
+          notifyOnExit: true,
+          notifyOnDwell: true,
+          loiteringDelay: 30000,  // 30 seconds
+          extras: {               // Optional arbitrary meta-data
+            alarmId: notification.data.id,
+          },
+        }, () => {
+          console.log('Successfully added geofence');
+        }, (error) => {
+          console.warn('Failed to add geofence', error);
+        });
+      });
+      store.get('alarms').then((alarms) => {
+        Geocoder.getFromLocation(alarms[notification.data.id].address).then((json) => {
+          let { location } = json.results[0].geometry;
+          console.log(location);
+          BackgroundGeolocation.addGeofence({
+            identifier: 'End',
+            radius: 150,
+            latitude: location.lat,
+            longitude: location.lng,
+            notifyOnEntry: true,
+            notifyOnExit: false,
+            notifyOnDwell: false,
+            loiteringDelay: 30000,  // 30 seconds
+            extras: {               // Optional arbitrary meta-data
+              alarmId: notification.data.id,
+            },
+          }, () => {
+            console.log('Successfully added geofence');
+          }, (error) => {
+            console.warn('Failed to add geofence', error);
+          });
+        });
+        alarms[notification.data.id].turnedOff = true;
+        store.save('alarms', alarms);
+      });
       // This is to remove all past notifications from the notifications screen.
       PushNotificationIOS.removeAllDeliveredNotifications();
     } else if (Date.parse(notification.data.alarmTime) > (Date.now() - 100)) {
@@ -45,7 +92,6 @@ PushNotification.configure({
               let { alarmData, userId, userSettings, alarmTime } = notification.data
               switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
               whoosh.release()
-              notification.finish(PushNotificationIOS.FetchResult.NoData);
 
               alarmsObj[alarmData.id].turnedOff = true;
               store.save('alarms', alarmsObj);
@@ -55,6 +101,7 @@ PushNotification.configure({
         {text: 'Snooze', onPress: () => whoosh.release()},
       ]);
     }
+    PushNotification.cancelLocalNotifications({ id: notification.data.id });
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 
@@ -138,11 +185,34 @@ export default class AlarmsScreen extends React.Component {
     BackgroundGeolocation.on('heartbeat', ({ location }) => {
       console.log("THIS IS THE HEARTBEAT LISTENER", location);
       getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
-    })
+    });
+    BackgroundGeolocation.on('geofence', (geofence) => {
+      console.log("THIS IS THE GEOFENCE", geofence);
+      const { alarmId, identifier } = geofence.extras;
+      store.get('alarms').then((alarms) => {
+        if (identifier === 'Start') {
+          alarms[alarmId].commuteStart = Date.getTime();
+        } else if (identifier === 'End') {
+          alarms[alarmId].commuteEnd = Date.getTime();
+        }
+        if (alarms[alarmId].commuteStart && alarms[alarmId].commuteEnd) {
+          let start = alarms[alarmId].commuteStart;
+          let end = alarms[alarmId].commuteEnd;
+          store.get('travel').then((travel) => {
+            travel.push((end - start) - alarms[alarmId].commuteTime);
+            store.save('travel', travel);
+          });
+          alarms[alarmId].commuteStart = 0;
+          alarms[alarmId].commuteEnd = 0;
+        }
+        alarms[alarmId].id = alarmId;
+        store.save('alarms', alarms);
+      });
+    });
 
     // BackgroundGeolocation.on("location", (location) => {
-    //   console.log("THIS IS THE LOCATION LISTENER", location);
-    //   getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
+    //   console.log(location);
+    //   //getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
     // });
 
     BackgroundGeolocation.ready(geoConfig, (state) => {
@@ -154,13 +224,14 @@ export default class AlarmsScreen extends React.Component {
   }
 
   componentDidMount() {
-    PushNotification.modAlarms = this.modifyAlarms
+    PushNotification.modAlarms = this.modifyAlarms;
     // BackgroundTask.schedule();
     store.get('userId').then((id) => {
       if (id === null) {
-        axios.get('http://localhost:8082/user/new').then((data) => {
+        axios.get('http://roryeagan.com:8082/user/new').then((data) => {
           store.save('userId', data.data);
           store.save('alarms', {});
+          store.save('travel', []);
           store.save('userSettings', {
             defaultPrepTime: 0,
             defaultPostTime: 0,
@@ -203,8 +274,10 @@ export default class AlarmsScreen extends React.Component {
     BackgroundGeolocation.removeListeners();
   }
 
-  commuteData(url, item) {
-    getCommuteData(this.state, url, item, this.modifyAlarms, updateAlarms);
+  commuteData(url, item, edit) {
+    BackgroundGeolocation.getCurrentPosition((location) => {
+      getCommuteData(this.state, url, item, this.modifyAlarms, updateAlarms, location, edit);
+    });
   }
 
   _toAddScreen() {
@@ -246,17 +319,21 @@ export default class AlarmsScreen extends React.Component {
       });
       store.save('alarms', alarms);
     });
-    axios.post('http://localhost:8082/alarm/delete', {
+    axios.post('http://roryeagan.com:8082/alarm/delete', {
       alarmId: item.id,
       userId: this.state.userId,
     });
   }
 
-  modifyAlarms(alarms) {
+  modifyAlarms(alarms, edit) {
     console.log('modify: ', alarms);
     this.setState({
       alarms,
-    }, () => console.log(this.state));
+    }, () => {
+      if (edit) {
+        this.props.navigation.navigate('AlarmsScreen');
+      }
+    });
   }
 
   render() {

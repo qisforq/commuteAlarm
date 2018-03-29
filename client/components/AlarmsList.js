@@ -19,7 +19,6 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
       backgroundColor: 'red',
       onPress: () => { deleteAlarm(item); },
     }];
-
     return (
       <Swipeout
         right={swipeBtns}

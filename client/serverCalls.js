@@ -9,7 +9,7 @@ module.exports = {
       console.log('- Current position received!!!!');
       let {latitude, longitude} = location.coords;
 
-      axios.get('http://localhost:8082/commutetime', {
+      axios.get('http://roryeagan.com:8082/commutetime', {
         params: {
           userId,
           GPSLat: latitude,
