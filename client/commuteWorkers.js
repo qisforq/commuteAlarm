@@ -3,6 +3,8 @@ import BackgroundGeolocation from 'react-native-background-geolocation';
 import PushNotification from 'react-native-push-notification';
 import { getLocationErr, getLocationParams, setSchedule } from './geoWorker';
 import store from 'react-native-simple-store';
+import { switchChange, alarmOn, updateAlarms } from './alarmsListFunctions';
+
 
 getCommuteData = ({userId, userSettings}, url, item, modifyAlarms, updateAlarms, location) => {
   console.log('- Current position received!!!!');
@@ -24,7 +26,8 @@ getCommuteData = ({userId, userSettings}, url, item, modifyAlarms, updateAlarms,
       const calcGoOff = alarm.time - alarm.commuteData.routes[0].legs[0].duration.value*1000 - alarm.prepTime*5*60*1000 - alarm.postTime*5*60*1000;
       // Q + D new code vvvvv
       // let startTime = endTime - 1*60*60
-      const endTime = new Date(calcGoOff);
+      const endTime = new Date(calcGoOff + 100000);
+      // added extra 100000 ms to endTime to add extra minute of background operation (line 27:44)
       const startTime = new Date(calcGoOff - 1 * 60 * 60 * 1000);
       const alarmDay =  endTime.getDay() + 1 + '';
       const scheduleStr = `${alarmDay} ${startTime.toString().slice(16,21)}-${endTime.toString().slice(16, 21)}`;
@@ -37,14 +40,22 @@ getCommuteData = ({userId, userSettings}, url, item, modifyAlarms, updateAlarms,
       // End of Q + D code ^^^^
       PushNotification.cancelLocalNotifications({ id: alarm.alarmId });
       [...Array(userSettings.defaultSnoozes+1)].forEach((x, i) => {
-        PushNotification.localNotificationSchedule({
-          message: alarm.label,
-          date: new Date(alarm.time - alarm.commuteData.routes[0].legs[0].duration.value*1000 - alarm.prepTime*5*60*1000 - alarm.postTime*5*60*1000 + 1000*60*userSettings.defaultSnoozeTime*i),
-          userInfo: {
-            id: alarm.alarmId,
-          },
-          soundName: 'annoying.mp3',
-        });
+        let alarmTime = new Date(alarm.time - alarm.commuteData.routes[0].legs[0].duration.value*1000 - alarm.prepTime*5*60*1000 - alarm.postTime*5*60*1000 + 1000*60*userSettings.defaultSnoozeTime*i);
+
+        if (alarm.time > Date.now()) {
+          PushNotification.localNotificationSchedule({
+            message: alarm.label,
+            date: alarmTime,
+            userInfo: {
+              id: alarm.alarmId,
+              userId: userId,
+              userSettings: userSettings,
+              alarmData: item,
+              alarmTime: alarmTime,
+            },
+            soundName: 'annoying.mp3',
+          });
+        }
       });
     });
 
