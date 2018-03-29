@@ -37,10 +37,9 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* commuteAlarmTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* commuteAlarmTests.m */; };
 		3085EEB0EC244D74B54F1D5C /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59BEC50C4E164C2FB0B82F50 /* FontAwesome.ttf */; };
+		308E6DE9206D90DF00DB9FD2 /* annoying.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 308E6DBA206D90DF00DB9FD2 /* annoying.mp3 */; };
 		4D858D8A2C75490D81C33442 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4B5681611944A8B8B0C4BF3 /* Octicons.ttf */; };
 		54A5EE982061A5C000AE4D1B /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54A5EE792061A56200AE4D1B /* libRCTPushNotification.a */; };
-		54A5EEA02061C44D00AE4D1B /* annoying.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 54A5EE9F2061C44B00AE4D1B /* annoying.mp3 */; };
-		54A5EEA12061C44D00AE4D1B /* annoying.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 54A5EE9F2061C44B00AE4D1B /* annoying.mp3 */; };
 		5D6555D5C64B4ABE9644588E /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8D7C3642E2D4DEEB90E6C62 /* Feather.ttf */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		664DA67533974838A66B57E9 /* libRNBackgroundFetch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F1A4FA3E554BEA8993B79A /* libRNBackgroundFetch.a */; };
@@ -433,10 +432,10 @@
 		2D02E4901E0B4A5D006451C7 /* commuteAlarm-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "commuteAlarm-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E309C7FD02C4D1C9311C8F5 /* TSBackgroundFetch.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = TSBackgroundFetch.framework; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/TSBackgroundFetch.framework"; sourceTree = SDKROOT; };
+		308E6DBA206D90DF00DB9FD2 /* annoying.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = annoying.mp3; path = ../../Downloads/annoying.mp3; sourceTree = "<group>"; };
 		462465ECD4114B749A2717CB /* RNBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		4E4FE312688245669FC9534B /* RNCalendarEvents.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCalendarEvents.xcodeproj; path = "../node_modules/react-native-calendar-events/RNCalendarEvents.xcodeproj"; sourceTree = "<group>"; };
 		54A5EE672061A56200AE4D1B /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
-		54A5EE9F2061C44B00AE4D1B /* annoying.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = annoying.mp3; path = ../../../Downloads/annoying.mp3; sourceTree = "<group>"; };
 		59BEC50C4E164C2FB0B82F50 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		64F1A4FA3E554BEA8993B79A /* libRNBackgroundFetch.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBackgroundFetch.a; sourceTree = "<group>"; };
@@ -831,7 +830,7 @@
 		CE7C724C11E0467994643207 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				54A5EE9F2061C44B00AE4D1B /* annoying.mp3 */,
+				308E6DBA206D90DF00DB9FD2 /* annoying.mp3 */,
 				BC4007D7F48E430B910DF183 /* Entypo.ttf */,
 				A58BCD98583944FFBD449594 /* EvilIcons.ttf */,
 				A8D7C3642E2D4DEEB90E6C62 /* Feather.ttf */,
@@ -1385,7 +1384,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54A5EEA12061C44D00AE4D1B /* annoying.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1393,7 +1391,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54A5EEA02061C44D00AE4D1B /* annoying.mp3 in Resources */,
+				308E6DE9206D90DF00DB9FD2 /* annoying.mp3 in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				B3DC29DCBB55499BABD1782E /* Entypo.ttf in Resources */,
