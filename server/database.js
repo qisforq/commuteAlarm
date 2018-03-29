@@ -4,19 +4,28 @@ const { getCommuteTime } = require('./apiHelpers');
 
 const usersRef = firebase.database().ref('users/');
 const tokensRef = firebase.database().ref('tokens/');
+const calendarRef = firebase.database().ref('calendars/');
 
 let firebaseMethods = {};
 
-firebaseMethods.storeToken = function (accessToken, refreshToken) {
-  tokensRef.push({
-    token: {
-      accessToken
+firebaseMethods.storeCalendar = function (item) {
+  calendarRef.push({
+    calendar: {
+      events: item
     }
   }).key
 }
 
-firebaseMethods.getToken = function() {
-  return firebase.database().ref('tokens/-L8iE6OW8PCMtsKWATl4/token/accessToken').once('value').then((snapshot) => {
+firebaseMethods.storeToken = function (accessToken, refreshToken, id) {
+  console.log("here", accessToken, refreshToken, id)
+  firebase.database().ref(`users/${id}/token`).set({
+    accessToken,
+    refreshToken
+  }).key
+}
+
+firebaseMethods.getToken = function(id) {
+  return firebase.database().ref(`users/${id}/token`).once('value').then((snapshot) => {
     return snapshot.val(); 
   });
 }
