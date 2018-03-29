@@ -35,7 +35,7 @@ getCommuteData = ({userId, userSettings}, url, item, modifyAlarms, updateAlarms,
       store.get('alarms').then((alarmsObj)=>{
         alarmsObj[alarm.alarmId].scheduleStr = scheduleStr || '';
         store.save('alarms', alarmsObj).then(() => updateAlarms(alarm.alarmId, true, calcGoOff, modifyAlarms));
-      })
+      }).catch((err) => console.log('Error in getCommuteData in store.get(alarms):', err);)
       // schedule.push(scheduleStr);
       // End of Q + D code ^^^^
       PushNotification.cancelLocalNotifications({ id: alarm.alarmId });
