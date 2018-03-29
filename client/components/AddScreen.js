@@ -8,6 +8,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import store from 'react-native-simple-store';
 import axios from 'axios';
 
+
 export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -60,7 +61,7 @@ export default class AddScreen extends React.Component {
   saveAlarm() {
     let { label, time, prepTime, postTime, locationId, address, onOff, travelMethod } = this.state;
     if(this.state.edit) {
-      axios.post('http://localhost:8082/alarm/edit', {
+      axios.post('http://roryeagan.com:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,
         alarmId: this.props.navigation.state.params.data.id,
         label,
@@ -72,9 +73,6 @@ export default class AddScreen extends React.Component {
         address,
         travelMethod,
       }).then(data => {
-        if(onOff) {
-          this.props.navigation.state.params.commuteData('commutetime/single', this.props.navigation.state.params.data)
-        }
         store.get('alarms').then(alarms => {
           alarms[this.props.navigation.state.params.data.id] = {
             label,
@@ -86,13 +84,19 @@ export default class AddScreen extends React.Component {
             address,
             travelMethod,
           };
+          console.log(alarms);
           store.save('alarms', alarms).then(() => {
-            this.props.navigation.navigate('AlarmsScreen');
+            if(onOff) {
+              console.log('its goioooing', onOff);
+              this.props.navigation.state.params.commuteData('commutetime/single', this.props.navigation.state.params.data, true)
+            } else {
+              this.props.navigation.navigate('AlarmsScreen');
+            }
           });
         })
       });
     } else {
-      axios.post('http://localhost:8082/alarm/save', {
+      axios.post('http://roryeagan.com:8082/alarm/save', {
         userId: this.props.navigation.state.params.userId,
         label,
         time,
@@ -118,7 +122,7 @@ export default class AddScreen extends React.Component {
             this.props.navigation.navigate('AlarmsScreen');
           });
         })
-      });
+      }).catch(err => console.log(err));
     }
   }
 
@@ -150,6 +154,7 @@ export default class AddScreen extends React.Component {
             placeholder={this.state.address}
             minLength={2} // minimum length of text to search
             onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+              console.log(details);
               this.setState({
                 locationId: data.place_id,
                 address: data.description,

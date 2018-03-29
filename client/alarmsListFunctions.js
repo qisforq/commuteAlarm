@@ -8,7 +8,7 @@ import { getLocationParams, getLocationErr } from './geoWorker';
 
 let alarmsListFunctions = {};
 
-const updateAlarms = (id, onOff, goOffTime, modifyAlarms) => {
+const updateAlarms = (id, onOff, goOffTime, modifyAlarms, edit) => {
   console.log('herer we are', id, goOffTime, onOff);
   store.get('alarms')
   .then((alarms) => {
@@ -21,7 +21,7 @@ const updateAlarms = (id, onOff, goOffTime, modifyAlarms) => {
       alarms[k].id = k;
       return alarms[k];
     });
-    modifyAlarms(newAlarms);
+    modifyAlarms(newAlarms, edit);
     console.log(alarms);
     store.save('alarms', alarms);
   });
@@ -42,41 +42,35 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
     return setTimeout(() => Alert.alert('This alarm has already passed =\'('), 300);
   }
   store.get('alarms').then((alarmsObj) => {
-    console.log('ALARMSOBJ in switchChange', alarmsObj)
 
     if (alarmsObj[id].turnedOff) {
       return setTimeout(() => Alert.alert('This alarm has already passed =\'('), 300);
     }
 
-      onOff = !onOff;
-      updateAlarms(id, onOff, undefined, modifyAlarms)
-      axios.post('http://localhost:8082/alarm/edit', {
-        userId,
-        alarmId: id,
-        label,
-        time,
-        prepTime,
-        postTime,
-        locationId,
-        address,
-        onOff,
-        travelMethod,
-      }).catch((err) => {
-        console.log('ERRRRRRRRROR', err);
-      });
+    onOff = !onOff;
+    updateAlarms(id, onOff, undefined, modifyAlarms)
+    axios.post('http://roryeagan.com:8082/alarm/edit', {
+      userId,
+      alarmId: id,
+      label,
+      time,
+      prepTime,
+      postTime,
+      locationId,
+      address,
+      onOff,
+      travelMethod,
+    }).catch((err) => {
+      console.log('ERRRRRRRRROR', err);
+    });
 
-      if (onOff && !notif) {
-        alarmOn(item, userId, userSettings, modifyAlarms);
-      } else {
-        updateAlarms(id, false, undefined, modifyAlarms);
-        PushNotification.cancelLocalNotifications({ id })
-      }
-  })
-
-
-
-
-
+    if (onOff && !notif) {
+      alarmOn(item, userId, userSettings, modifyAlarms);
+    } else {
+      updateAlarms(id, false, undefined, modifyAlarms);
+      PushNotification.cancelLocalNotifications({ id })
+    }
+  });
 };
 
 module.exports = { switchChange, alarmOn, updateAlarms };
