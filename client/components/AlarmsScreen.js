@@ -12,7 +12,8 @@ import dummyData from '../../server/dummyData';
 import AlarmsList from './AlarmsList';
 import { getCommuteData } from '../commuteWorkers';
 import { geoConfig, geoSuccess } from '../geoWorker';
-import { updateAlarms } from '../alarmsListFunctions';
+import { updateAlarms, switchChange } from '../alarmsListFunctions';
+import Sound from 'react-native-sound'
 
 
 // BackgroundTask.define(async () => {
@@ -29,8 +30,30 @@ PushNotification.configure({
       PushNotification.cancelLocalNotifications({ id: notification.data.id });
       // This is to remove all past notifications from the notifications screen.
       PushNotificationIOS.removeAllDeliveredNotifications();
-    } else {
-      Alert.alert(notification.alert, 'hah', [], {soundName: 'annoying.mp3'})
+    } else if (Date.parse(notification.data.alarmTime) > (Date.now() - 100)) {
+      Sound.setCategory('Playback');
+      let whoosh = new Sound('annoying.mp3', Sound.MAIN_BUNDLE, (err) => {
+        if (err) throw err;
+        whoosh.play()
+      })
+      Alert.alert(notification.alert, '', [
+        {
+          text: 'Turn Off',
+          onPress: () => {
+
+            store.get('alarms').then((alarmsObj) => {
+              let { alarmData, userId, userSettings, alarmTime } = notification.data
+              switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
+              whoosh.release()
+              notification.finish(PushNotificationIOS.FetchResult.NoData);
+
+              alarmsObj[alarmData.id].turnedOff = true;
+              store.save('alarms', alarmsObj);
+            })
+          }
+        },
+        {text: 'Snooze', onPress: () => whoosh.release()},
+      ]);
     }
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
@@ -131,6 +154,7 @@ export default class AlarmsScreen extends React.Component {
   }
 
   componentDidMount() {
+    PushNotification.modAlarms = this.modifyAlarms
     // BackgroundTask.schedule();
     store.get('userId').then((id) => {
       if (id === null) {

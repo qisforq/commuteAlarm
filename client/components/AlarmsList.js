@@ -11,6 +11,9 @@ import { switchChange } from '../alarmsListFunctions';
 function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, editScreen }) {
 
   let renderItem = ({ item, index }) => {
+    if (item.onOff && item.time < Date.now()) {
+      item.onOff = false
+    }
     let swipeBtns = [{
       text: 'Delete',
       backgroundColor: 'red',
@@ -29,7 +32,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
               <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35 }}>{Icons.clockO}</FontAwesome>
               <View style={{ flex: 10 }}>
                 <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}<Text style={{ fontWeight: '400', fontSize: 12 }}> - {new Date(item.time).toDateString()}</Text></Text>
-                <Text style={{}}>Arrival Time: {new Date(item.time).toLocaleTimeString()}</Text>
+                <Text style={{}}>Arrival Time: {item.time > Date.now() ? new Date(item.time).toLocaleTimeString() : 'Already Passed'}</Text>
                 <Text style={{}}>Alarm Time: {item.goOffTime ? new Date(item.goOffTime).toLocaleTimeString() : 'Not Set'}</Text>
                 <Text style={{ fontWeight: '300' }}>{item.address.slice(0, 32)}...</Text>
               </View>
