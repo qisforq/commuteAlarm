@@ -83,7 +83,15 @@ export default class SettingsScreen extends React.Component {
   };
 
   toCalendarScreen() {
-    this.props.navigation.navigate('CalendarScreen');
+    const userId = this.props.navigation.state.params.userId 
+    axios.get("http://localhost:8082/auth/calendar", {
+      params: {
+        userId,
+      }
+    }).then((data) => {
+      console.log(data.data);
+    })
+    // this.props.navigation.navigate('CalendarScreen');
   }
 
 
@@ -153,7 +161,7 @@ export default class SettingsScreen extends React.Component {
         </View>
         <View />
         <View> {
-          token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
+          !token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
         }
         </View>
         
