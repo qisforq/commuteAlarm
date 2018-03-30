@@ -40,9 +40,10 @@ passport.use(
     callbackURL: '/auth/google/redirect',
     clientID: keys.google.clientID,
     clientSecret: keys.google.clientSecret,
-  }, (accessToken, refreshToken, profile, done) => {
+    passReqToCallback: true,
+  }, (reqThingy, accessToken, refreshToken, profile, done) => {
     //passport callback function
-    console.log("refreshing", refreshToken)
+    console.log('thingy:', reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
     // mega(accessToken);
     // firebase.storeToken(accessToken, refreshToken, '-L8hPGeCBZrUQB8TCibi');
     return done(null, profile);
@@ -80,19 +81,20 @@ router.get('/test', (req, res) => {
 })
 //callback for google to redirect to calendar
 
-router.get('/google/redirect/', passport.authenticate('google', { 
+router.get('/google/redirect/', passport.authenticate('google', {
   successRedirect: '/auth/testing',
-  failureRedirect: '/auth/testing'
+  failureRedirect: '/auth/testing',
 }), (req, res) => {
-console.log("redirect", req)
+console.log("redirect", req.body);
 });
 
 router.get('/google', (req, res, next) => {
-  console.log("req", req.query);
+  console.log("req1", req.query);
   passport.authenticate('google', {
-    scope: [ 'profile', 'https://www.googleapis.com/auth/calendar'],
+    scope: ['profile', 'https://www.googleapis.com/auth/calendar'],
     accessType: 'offline',
-     approvalPrompt: 'force'
+    approvalPrompt: 'force',
+    state: req.query.userId,
   })(req, res, next);
 });
 //login with token for google calendar

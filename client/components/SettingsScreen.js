@@ -88,20 +88,8 @@ export default class SettingsScreen extends React.Component {
 
 
   handleLogin() {
-    // console.warn("hit handleLogin");
     const userId = this.props.navigation.state.params.userId  
-    axios.get('http://localhost:8082/auth/google', {
-      params: {
-        userId,
-      }
-    })
-    .then((data) => {
-      // axios.update()
-      // firebase.storetokenforthisuser(userid, token)
-      Linking.openURL(data.config.url).catch(err => console.error('An error occurred', err));
-      console.log(data.config.url);
-    })
-    .catch(()=>{console.log('error in handleLogin in SettingsScreen')})
+    Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`).catch(err => console.error('An error occurred', err));
   }  
 
   render() {
