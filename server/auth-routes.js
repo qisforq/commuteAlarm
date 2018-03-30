@@ -2,12 +2,14 @@ const router = require('express').Router();
 const passport = require('passport');
 const googleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('./keys.js');
+const firebase = require('./database');
 var axios = require('axios');
 
-var mega = function(token) {
+var mega = function(token, cb) {
   var headers = {
     access_token: token
   }
+  let finalArray = [];
   axios.get(`https://www.googleapis.com/calendar/v3/calendars/hackreactor.com_v5k5rbga5om6rvfl65r259c0tk@group.calendar.google.com/events/?access_token=${token}`, headers)
   .then((data) => {
     var newArray = data.data.items.map((item) => {
@@ -16,21 +18,25 @@ var mega = function(token) {
         id: item.id
       }
     })
-    var finalArray = newArray.map((item) => {
+    finalArray = newArray.map((item, i) => {
       let id = item.id;
         axios.get(`https://www.googleapis.com/calendar/v3/calendars/hackreactor.com_v5k5rbga5om6rvfl65r259c0tk@group.calendar.google.com/events/${id}?access_token=${token}`)
         .then((res) => {
           item.time = res.data.start;
-          console.log(item);
+          // console.log(item);
+          cb(item, newArray.length-1 === i);
           // firebase.storeCalendar(item);
         }).catch((err) => {
           console.log("err" , err);
         })
     })
+    //console.log('final arr', finalArray);
     })
   .catch((err) => {
     console.log("err" , err);
   })
+  console.log('asdfadsgadgg');
+  return finalArray
 }
 
 
@@ -43,29 +49,14 @@ passport.use(
     passReqToCallback: true,
   }, (reqThingy, accessToken, refreshToken, profile, done) => {
     //passport callback function
-    console.log('thingy:', reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
+    firebase.storeToken(accessToken, refreshToken,  reqThingy.query.state)
+    console.log('thingy:', accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
     // mega(accessToken);
     // firebase.storeToken(accessToken, refreshToken, '-L8hPGeCBZrUQB8TCibi');
     return done(null, profile);
   })
 )
 
-//auth with google
-// router.get('/google', 
-//   passport.authenticate('google', {
-//     scope: [ 'profile', 'https://www.googleapis.com/auth/calendar'],
-//     accessType: 'offline',
-//     approvalPrompt: 'force'
-//   }), 
-//   (req, res) => {
-//     console.log(req, "<req")
-//     console.log("res???", res)
-//     res.status(201).send()
-//   }, 
-//   (err) => {
-//     console.log('Hello?', err)
-//   }
-// );
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -74,6 +65,24 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
+
+router.get('/calendar', (req, res) => {
+  console.log("hit calendar");
+  firebase.getToken(req.query.userId).then(async (data) => {
+    // mega(data.accessToken);
+    let arr = []
+    await mega(data.accessToken, (item, end) => {
+      //console.log(item);
+      arr.push(item);
+      if (end) {
+        res.status(200).send(arr);
+      }
+    });
+  }).catch((err) => {
+    console.log(err);
+  })
+  // mega(req.query.userId);
+})
 
 
 router.get('/test', (req, res) => {
