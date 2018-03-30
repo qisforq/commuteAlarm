@@ -228,7 +228,7 @@ export default class AlarmsScreen extends React.Component {
     // BackgroundTask.schedule();
     store.get('userId').then((id) => {
       if (id === null) {
-        axios.get('http://roryeagan.com:8082/user/new').then((data) => {
+        axios.get('http://localhost:8082/user/new').then((data) => {
           store.save('userId', data.data);
           store.save('alarms', {});
           store.save('travel', []);
@@ -319,7 +319,7 @@ export default class AlarmsScreen extends React.Component {
       });
       store.save('alarms', alarms);
     });
-    axios.post('http://roryeagan.com:8082/alarm/delete', {
+    axios.post('http://locahost:8082/alarm/delete', {
       alarmId: item.id,
       userId: this.state.userId,
     });
