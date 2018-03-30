@@ -43,12 +43,28 @@ passport.use(
   }, (accessToken, refreshToken, profile, done) => {
     //passport callback function
     console.log("refreshing", refreshToken)
-    mega(accessToken);
+    // mega(accessToken);
     // firebase.storeToken(accessToken, refreshToken, '-L8hPGeCBZrUQB8TCibi');
     return done(null, profile);
   })
 )
 
+//auth with google
+// router.get('/google', 
+//   passport.authenticate('google', {
+//     scope: [ 'profile', 'https://www.googleapis.com/auth/calendar'],
+//     accessType: 'offline',
+//     approvalPrompt: 'force'
+//   }), 
+//   (req, res) => {
+//     console.log(req, "<req")
+//     console.log("res???", res)
+//     res.status(201).send()
+//   }, 
+//   (err) => {
+//     console.log('Hello?', err)
+//   }
+// );
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -59,13 +75,25 @@ passport.deserializeUser(function(user, done) {
 });
 
 
+router.get('/test', (req, res) => {
+  console.log("hit auth test");
+})
 //callback for google to redirect to calendar
 
-router.get('/google/redirect', passport.authenticate('google', { 
+router.get('/google/redirect/', passport.authenticate('google', { 
   successRedirect: '/auth/testing',
   failureRedirect: '/auth/testing'
 }), (req, res) => {
+console.log("redirect", req)
+});
 
+router.get('/google', (req, res, next) => {
+  console.log("req", req.query);
+  passport.authenticate('google', {
+    scope: [ 'profile', 'https://www.googleapis.com/auth/calendar'],
+    accessType: 'offline',
+     approvalPrompt: 'force'
+  })(req, res, next);
 });
 //login with token for google calendar
 router.get('/testing', (req, res) => {
@@ -74,16 +102,9 @@ router.get('/testing', (req, res) => {
 
 router.get('/login', (req, res) => {
   firebase.getToken(req.body.params.id).then((token) => {
-
   });
 });
 
-//auth with google
-router.get('/google', passport.authenticate('google', {
-  scope: [ 'profile', 'https://www.googleapis.com/auth/calendar'],
-  accessType: 'offline',
-   approvalPrompt: 'force'
-}));
 
 
 module.exports = router;

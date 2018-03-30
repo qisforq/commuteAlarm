@@ -61,7 +61,7 @@ export default class AddScreen extends React.Component {
   saveAlarm() {
     let { label, time, prepTime, postTime, locationId, address, onOff, travelMethod } = this.state;
     if(this.state.edit) {
-      axios.post('http://roryeagan.com:8082/alarm/edit', {
+      axios.post('localhost:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,
         alarmId: this.props.navigation.state.params.data.id,
         label,
@@ -96,7 +96,7 @@ export default class AddScreen extends React.Component {
         })
       });
     } else {
-      axios.post('http://roryeagan.com:8082/alarm/save', {
+      axios.post('localhost:8082/alarm/save', {
         userId: this.props.navigation.state.params.userId,
         label,
         time,

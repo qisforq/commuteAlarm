@@ -6,7 +6,7 @@ import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import axios from 'axios';
 import store from 'react-native-simple-store';
-
+import { Linking } from 'react-native';
 
 export default class SettingsScreen extends React.Component {
   constructor(props){
@@ -19,6 +19,7 @@ export default class SettingsScreen extends React.Component {
       snoozeTime: props.navigation.state.params.userSettings.defaultSnoozeTime,
     }
     this.toCalendarScreen = this.toCalendarScreen.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -38,6 +39,16 @@ export default class SettingsScreen extends React.Component {
         </HeaderButton>
       ),
     }
+  }
+
+  componentDidMount() {
+    Linking.addEventListener('url', this._handleOpenURL);
+  }
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this._handleOpenURL);
+  }
+  _handleOpenURL(event) {
+    console.log(event.url);
   }
 
   componentWillMount() {
@@ -75,7 +86,26 @@ export default class SettingsScreen extends React.Component {
     this.props.navigation.navigate('CalendarScreen');
   }
 
+
+  handleLogin() {
+    // console.warn("hit handleLogin");
+    const userId = this.props.navigation.state.params.userId  
+    axios.get('http://localhost:8082/auth/google', {
+      params: {
+        userId,
+      }
+    })
+    .then((data) => {
+      // axios.update()
+      // firebase.storetokenforthisuser(userid, token)
+      Linking.openURL(data.config.url).catch(err => console.error('An error occurred', err));
+      console.log(data.config.url);
+    })
+    .catch(()=>{console.log('error in handleLogin in SettingsScreen')})
+  }  
+
   render() {
+    let token = false;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View></View>
@@ -134,10 +164,21 @@ export default class SettingsScreen extends React.Component {
           </View>
         </View>
         <View />
-        <View>
-          <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button>
+        <View> {
+          token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
+        }
         </View>
+        
       </View>
     );
   }
 }
+
+
+
+
+
+
+
+
+
