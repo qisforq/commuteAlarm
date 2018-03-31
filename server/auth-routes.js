@@ -10,7 +10,7 @@ var mega = function(token, cb) {
     access_token: token
   }
   let finalArray = [];
-  axios.get(`https://www.googleapis.com/calendar/v3/calendars/hackreactor.com_v5k5rbga5om6rvfl65r259c0tk@group.calendar.google.com/events/?access_token=${token}`, headers)
+  axios.get(`https://www.googleapis.com/calendar/v3/calendars/primary/events/?access_token=${token}`, headers)
   .then((data) => {
     var newArray = data.data.items.map((item) => {
       return {
@@ -19,15 +19,16 @@ var mega = function(token, cb) {
       }
     })
     finalArray = newArray.map((item, i) => {
+      console.log("the one" , item);
       let id = item.id;
-        axios.get(`https://www.googleapis.com/calendar/v3/calendars/hackreactor.com_v5k5rbga5om6rvfl65r259c0tk@group.calendar.google.com/events/${id}?access_token=${token}`)
+        axios.get(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${id}?access_token=${token}`)
         .then((res) => {
           item.time = res.data.start;
           // console.log(item);
           cb(item, newArray.length-1 === i);
           // firebase.storeCalendar(item);
         }).catch((err) => {
-          console.log("err" , err);
+          // console.log("err" , err);
         })
     })
     //console.log('final arr', finalArray);
@@ -35,7 +36,7 @@ var mega = function(token, cb) {
   .catch((err) => {
     console.log("err" , err);
   })
-  console.log('asdfadsgadgg');
+  // console.log('asdfadsgadgg');
   return finalArray
 }
 
@@ -73,8 +74,10 @@ router.get('/calendar', (req, res) => {
     let arr = []
     await mega(data.accessToken, (item, end) => {
       //console.log(item);
+      console.log(item)
       arr.push(item);
       if (end) {
+        console.log("                array                        " , arr);
         res.status(200).send(arr);
       }
     });
