@@ -83,7 +83,15 @@ export default class SettingsScreen extends React.Component {
 
   toCalendarScreen() {
     const userId = this.props.navigation.state.params.userId
-
+      axios.get("http://localhost:8082/auth/calendar", {
+      params: {
+        userId: this.props.navigation.state.params.userId,
+      }
+    }).then(({ data }) => {
+      console.log(data);
+   
+      console.log(data, "This dot props dot navvv-ih-gay-shun dot state dot p'rams dot user-eye-dee!");
+    })
     this.props.navigation.navigate('CalendarScreen', {
       userId: this.props.navigation.state.params.userId,
     });

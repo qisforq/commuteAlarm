@@ -20,20 +20,20 @@ export default class AddScreen extends React.Component {
   };
 
   componentWillMount() {
-    axios.get("http://localhost:8082/auth/calendar", {
-      params: {
-        userId: this.props.navigation.state.params.userId,
-      }
-    }).then(({ data }) => {
-      // this.setState({
-      //   :
-      // });
+    // axios.get("http://localhost:8082/auth/calendar", {
+    //   params: {
+    //     userId: this.props.navigation.state.params.userId,
+    //   }
+    // }).then(({ data }) => {
+    //   // this.setState({
+    //   //   :
+    //   // });
 
-      data.forEach((event, i) => {
+    //   data.forEach((event, i) => {
 
-      })
-      console.log(data, "This dot props dot navvv-ih-gay-shun dot state dot p'rams dot user-eye-dee!");
-    })
+    //   })
+    //   console.log(data, "This dot props dot navvv-ih-gay-shun dot state dot p'rams dot user-eye-dee!");
+    // })
   }
 
   render() {
