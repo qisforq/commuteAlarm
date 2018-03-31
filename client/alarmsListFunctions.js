@@ -40,7 +40,7 @@ const alarmOn = (item, userId, userSettings, modifyAlarms) => {
 
 const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
   let {
-    label, time, prepTime, postTime, locationId, address, onOff, id, travelMethod,
+    label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, onOff, id, travelMethod,
   } = item;
 
   if (item.time < Date.now()) {
@@ -53,8 +53,8 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
     }
 
     onOff = !onOff;
-    updateAlarms(id, onOff, undefined, modifyAlarms)
-    axios.post('http://roryeagan.com:8082/alarm/edit', {
+    updateAlarms(id, onOff, undefined, modifyAlarms);
+    axios.post('http://localhost:8082/alarm/edit', {
       userId,
       alarmId: id,
       label,
@@ -63,6 +63,8 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
       postTime,
       locationId,
       address,
+      snoozes,
+      snoozeTime,
       onOff,
       travelMethod,
     }).catch((err) => {

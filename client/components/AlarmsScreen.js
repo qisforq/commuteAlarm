@@ -164,6 +164,7 @@ export default class AlarmsScreen extends React.Component {
         defaultSnoozeTime: 8,
       },
       alarms: [],
+      favPlaces: [],
     };
     this._toAddScreen = this._toAddScreen.bind(this);
     this.editScreen = this.editScreen.bind(this);
@@ -232,6 +233,7 @@ export default class AlarmsScreen extends React.Component {
           store.save('userId', data.data);
           store.save('alarms', {});
           store.save('travel', []);
+          store.save('places', {});
           store.save('userSettings', {
             defaultPrepTime: 0,
             defaultPostTime: 0,
@@ -265,7 +267,15 @@ export default class AlarmsScreen extends React.Component {
               }),
             });
           });
-        })
+        });
+        store.get('places').then((places) => {
+          let favPlaces = Object.entries(places).sort((a, b) => a[1].count < b[1].count);
+          console.log(favPlaces);
+          favPlaces = favPlaces.map(p => ({ description: p[1].address, place_id: p[0] })).slice(0,2);
+          this.setState({
+            favPlaces,
+          });
+        });
       }
     });
   }
@@ -285,6 +295,7 @@ export default class AlarmsScreen extends React.Component {
     this.props.navigation.navigate('AddScreen', {
       userId: this.state.userId,
       settings: this.state.userSettings,
+      favPlaces: this.state.favPlaces,
     });
   }
 

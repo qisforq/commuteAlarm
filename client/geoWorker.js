@@ -55,6 +55,7 @@ const setSchedule = () => {
     BackgroundGeolocation.stop(() => {
       store.get('alarms').then((alarms) => {
         schedule = Object.entries(alarms).filter(alarm => alarm[1].onOff).map(alarm => alarm[1].scheduleStr).concat(Object.entries(alarms).filter(alarm => alarm[1].onOff).map(alarm => alarm[1].scheduleStrArrive));
+        console.log(schedule);
         BackgroundGeolocation.setConfig({
           schedule,
           heartbeat: 1,
