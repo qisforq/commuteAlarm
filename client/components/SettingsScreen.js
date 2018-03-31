@@ -62,7 +62,7 @@ export default class SettingsScreen extends React.Component {
 
   _saveSettings = ({userId}, goBack) => {
     let { prepTime, postTime, snoozes, snoozeTime } = this.state;
-    axios.post('http://roryeagan.com:8082/settings/save', {
+    axios.post('http://localhost:8082/settings/save', {
       userId: userId,
       prepTime,
       postTime,

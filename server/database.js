@@ -41,13 +41,15 @@ firebaseMethods.newUser = function (cb) {
 };
 
 firebaseMethods.newAlarm = function ({
-  userId, label, time, prepTime, postTime, locationId, travelMethod,
+  userId, label, time, prepTime, postTime, locationId, travelMethod, snoozes, snoozeTime,
 }, cb) {
   cb(firebase.database().ref(`users/${userId}/alarms`).push({
     label,
     time,
     prepTime,
     postTime,
+    snoozes,
+    snoozeTime,
     onOff: false,
     location: locationId,
     travelMethod,
@@ -55,7 +57,7 @@ firebaseMethods.newAlarm = function ({
 };
 
 firebaseMethods.editAlarm = function ({
-  userId, alarmId, label, time, prepTime, postTime, onOff, locationId, travelMethod,
+  userId, alarmId, label, time, prepTime, postTime, onOff, locationId, travelMethod, snoozes, snoozeTime,
 }, cb) {
   cb(firebase.database().ref(`users/${userId}/alarms/${alarmId}`).update({
     label,
@@ -63,6 +65,8 @@ firebaseMethods.editAlarm = function ({
     prepTime,
     postTime,
     onOff,
+    snoozes,
+    snoozeTime,
     location: locationId,
     travelMethod,
   }).key);

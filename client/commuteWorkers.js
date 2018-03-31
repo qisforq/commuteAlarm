@@ -9,8 +9,8 @@ import { switchChange, alarmOn, updateAlarms } from './alarmsListFunctions';
 const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updateAlarms, location, edit) => {
   console.log('- Current position received!!!!');
   let { latitude, longitude } = location.coords;
-
-  axios.get(`http://roryeagan.com:8082/${url}`, {
+  console.log(url);
+  axios.get(`http://localhost:8082/${url}`, {
     params: {
       userId,
       alarmId: item ? item.id : null,
@@ -19,21 +19,25 @@ const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updat
     },
   })
     .then(({ data }) => {
+      console.log(data);
       if (!Array.isArray(data)) {
         data = [data];
       }
       store.get('travel').then((travel) => {
         let offSet = travel.length ? travel.reduce((ac, c) => ac + c) / travel.length : 0;
         data.forEach((alarm) => {
-          const calcGoOff = alarm.time - (alarm.commuteData.routes[0].legs[0].duration.value*1000) - (alarm.prepTime*5*60*1000) - (alarm.postTime*5*60*1000) - (1000*60*userSettings.defaultSnoozeTime*userSettings.defaultSnoozes) - offSet;
+          console.log(alarm);
+          const calcGoOff = alarm.time - (alarm.commuteData.routes[0].legs[0].duration.value*1000) - (alarm.prepTime*5*60*1000) - (alarm.postTime*5*60*1000) - (1000*60*alarm.snoozeTime*alarm.snoozes) - offSet;
           // Q + D new code vvvvv
           // let startTime = endTime - 1*60*60
+          console.log(calcGoOff);
           const endTime = new Date(calcGoOff + alarm.prepTime*5*60*1000 + 1000*60*20);
           const startTime = new Date(calcGoOff - 1 * 60 * 60 * 1000);
           const alarmDay =  endTime.getDay() + 1 + '';
+          console.log(startTime, endTime);
           const scheduleStr = `${alarmDay} ${startTime.toString().slice(16,21)}-${endTime.toString().slice(16, 21)}`;
           const scheduleStrArrive = `${alarmDay} ${new Date(alarm.time - alarm.commuteData.routes[0].legs[0].duration.value*1000/2).toString().slice(16,21)}-${new Date(alarm.time + alarm.commuteData.routes[0].legs[0].duration.value*1000/2).toString().slice(16, 21)}`;
-  
+          console.log(scheduleStr, scheduleStrArrive);
           store.get('alarms').then((alarmsObj) => {
             alarmsObj[alarm.alarmId].scheduleStr = scheduleStr || '';
             alarmsObj[alarm.alarmId].scheduleStrArrive = scheduleStrArrive || '';
@@ -42,9 +46,10 @@ const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updat
           });
           // schedule.push(scheduleStr);
           // End of Q + D code ^^^^
+          console.log(alarm);
           PushNotification.cancelLocalNotifications({ id: alarm.alarmId });
-          [...Array(userSettings.defaultSnoozes+1)].forEach((x, i) => {
-            const alarmTime = new Date(alarm.time - (alarm.commuteData.routes[0].legs[0].duration.value*1000) - (alarm.prepTime*5*60*1000) - (alarm.postTime*5*60*1000) - (1000*60*userSettings.defaultSnoozeTime*userSettings.defaultSnoozes) - offSet + (1000*60*userSettings.defaultSnoozeTime*i));
+          [...Array(alarm.snoozes+1)].forEach((x, i) => {
+            const alarmTime = new Date(alarm.time - (alarm.commuteData.routes[0].legs[0].duration.value*1000) - (alarm.prepTime*5*60*1000) - (alarm.postTime*5*60*1000) - (1000*60*alarm.snoozeTime*alarm.snoozes) - offSet + (1000*60*alarm.snoozeTime*i));
 
             if (alarm.time > Date.now()) {
               PushNotification.localNotificationSchedule({
@@ -54,7 +59,7 @@ const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updat
                   id: alarm.alarmId,
                   userId,
                   userSettings,
-                  alarmData: item,
+                  alarmData: alarm,
                   alarmTime,
                 },
                 soundName: 'annoying.mp3',

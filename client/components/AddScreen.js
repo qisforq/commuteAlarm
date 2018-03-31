@@ -22,6 +22,8 @@ export default class AddScreen extends React.Component {
         postTime: this.props.navigation.state.params.data.postTime,
         locationId: this.props.navigation.state.params.data.locationId,
         address: this.props.navigation.state.params.data.address,
+        snoozes: this.props.navigation.state.params.data.snoozes,
+        snoozeTime: this.props.navigation.state.params.data.snoozeTime,
         onOff: this.props.navigation.state.params.data.onOff,
         edit: true,
         travelMethod: this.props.navigation.state.params.data.travelMethod,
@@ -35,6 +37,8 @@ export default class AddScreen extends React.Component {
         postTime: this.props.navigation.state.params.settings.defaultPostTime,
         locationId: null,
         address: 'Search',
+        snoozes: this.props.navigation.state.params.settings.defaultSnoozes,
+        snoozeTime: this.props.navigation.state.params.settings.defaultSnoozeTime,
         onOff: false,
         edit: false,
         travelMethod: 'Driving',
@@ -59,7 +63,18 @@ export default class AddScreen extends React.Component {
   }
 
   saveAlarm() {
-    let { label, time, prepTime, postTime, locationId, address, onOff, travelMethod } = this.state;
+    let { label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, onOff, travelMethod } = this.state;
+    store.get('places').then((places) => {
+      if (places[locationId]) {
+        places[locationId].count += 1;
+      } else {
+        places[locationId] = {
+          count: 1,
+          address,
+        };
+      }
+      store.save('places', places)
+    });
     if(this.state.edit) {
       axios.post('http://localhost:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,
@@ -71,6 +86,8 @@ export default class AddScreen extends React.Component {
         locationId,
         onOff,
         address,
+        snoozes,
+        snoozeTime,
         travelMethod,
       }).then(data => {
         store.get('alarms').then(alarms => {
@@ -82,6 +99,8 @@ export default class AddScreen extends React.Component {
             onOff,
             locationId,
             address,
+            snoozes,
+            snoozeTime,
             travelMethod,
           };
           console.log(alarms);
@@ -104,6 +123,8 @@ export default class AddScreen extends React.Component {
         postTime,
         locationId,
         address,
+        snoozes,
+        snoozeTime,
         travelMethod,
       }).then(data => {
         console.log(data.data);
@@ -116,8 +137,11 @@ export default class AddScreen extends React.Component {
             onOff: false,
             locationId,
             address,
+            snoozes,
+            snoozeTime,
             travelMethod,
           };
+          console.log(alarms);
           store.save('alarms', alarms).then(() => {
             this.props.navigation.navigate('AlarmsScreen');
           });
@@ -131,9 +155,11 @@ export default class AddScreen extends React.Component {
     timeString = timeString.split('')
     timeString.splice(timeString.indexOf(':', 3), 3);
     timeString = timeString.join('');
+    let favPlaces = this.props.navigation.state.params.favPlaces;
+    console.log(favPlaces);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
-        <View style={{ flex: 0, position: 'absolute', width: '100%', top: '20%', backgroundColor: 'white', zIndex: 100 }}>
+        <View style={{ flex: 0, position: 'absolute', width: '100%', top: '15%', backgroundColor: 'white', zIndex: 100 }}>
           <GooglePlacesAutocomplete
             listUnderlayColor="white"
             styles={{
@@ -155,6 +181,7 @@ export default class AddScreen extends React.Component {
             minLength={2} // minimum length of text to search
             onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
               console.log(details);
+              console.log(data);
               this.setState({
                 locationId: data.place_id,
                 address: data.description,
@@ -165,6 +192,7 @@ export default class AddScreen extends React.Component {
               language: 'en', // language of the results
             }}
             debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+            predefinedPlaces={favPlaces}
           />
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%' }}>
@@ -211,19 +239,28 @@ export default class AddScreen extends React.Component {
             onSelect={(idx, val) => this.setState({ postTime: idx })}
           />
         </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
+          <Text style={{ fontWeight: '800' }}>Snoozes: </Text>
+          <ModalDropdown
+            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+            defaultIndex={Number(this.state.snoozes)}
+            defaultValue={this.state.snoozes + ` snooze${this.state.snoozes === 1 ? '' : 's'}`}
+            options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'} `)}
+            onSelect={(idx, val) => this.setState({ snoozes: Number(idx) })}
+          />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
+          <Text style={{ fontWeight: '800' }}>Snooze Time: </Text>
+          <ModalDropdown
+            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+            defaultIndex={Number(this.state.snoozeTime)}
+            defaultValue={this.state.snoozeTime + ' snoozes'}
+            options={[...Array(13)].map((x,i) => i + ' minutes  ')}
+            onSelect={(idx, val) => this.setState({ snoozeTime: Number(idx) })}
+          />
+        </View>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '60%' }}>
           <Text style={{ fontWeight: '800' }}>Travel Method: {"\n"}</Text>
-          {/* <RadioButtons
-            options={['Transit', 'Driving']}
-            //onSelection={(opt) => { this.setState({ travelMethod: opt })}}
-            selectedOption={this.state.travelMethod }
-            renderOption={(option, selected, onSelect, index) => (
-              <TouchableWithoutFeedback onPress={() => { this.setState({ travelMethod: option })}} key={index}>
-                <Text style={selected ? { fontWeight: 'bold' } : {}}>{option}</Text>
-              </TouchableWithoutFeedback>
-            )}
-            renderContainer={(optionNodes) => (<View>{optionNodes}</View>)}
-          /> */}
           <SegmentedControls
             options={ ['Transit', 'Driving'] }
             onSelection={(opt) => { this.setState({ travelMethod: opt })}}
