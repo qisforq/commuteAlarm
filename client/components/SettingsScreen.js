@@ -17,6 +17,7 @@ export default class SettingsScreen extends React.Component {
       postTime: props.navigation.state.params.userSettings.defaultPostTime,
       snoozes: props.navigation.state.params.userSettings.defaultSnoozes,
       snoozeTime: props.navigation.state.params.userSettings.defaultSnoozeTime,
+      token: false,
     }
     this.toCalendarScreen = this.toCalendarScreen.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
@@ -54,11 +55,9 @@ export default class SettingsScreen extends React.Component {
   componentWillMount() {
     let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
     this.props.navigation.setParams({ saveSettings: this._saveSettings });
-    // this.setState({
-    //   prepTime: defaultPrepTime,
-    //   postTime: defaultPostTime,
-    //   snoozes: defaultSnoozes,
-    // });
+    store.get('token').then((token) => {
+      this.setState({token: token},() => console.log('this is the token biatchhhh', this.state))
+    })
   }
 
   _saveSettings = ({userId}, goBack) => {
@@ -83,25 +82,40 @@ export default class SettingsScreen extends React.Component {
   };
 
   toCalendarScreen() {
-    const userId = this.props.navigation.state.params.userId 
-    axios.get("http://localhost:8082/auth/calendar", {
-      params: {
-        userId,
-      }
-    }).then((data) => {
-      console.log(data.data);
-    })
-    // this.props.navigation.navigate('CalendarScreen');
+    const userId = this.props.navigation.state.params.userId
+
+    this.props.navigation.navigate('CalendarScreen', {
+      userId: this.props.navigation.state.params.userId,
+    });
   }
 
 
-  handleLogin() {
-    const userId = this.props.navigation.state.params.userId  
-    Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`).catch(err => console.error('An error occurred', err));
-  }  
+  handleLogin() {adsf
+    const userId = this.props.navigation.state.params.userId
+
+
+    Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`)
+    .then(() => {
+      setTimeout(() => {
+        axios.get(`http://localhost:8082/auth/token`, {params: {userId,}}).then((data) => {
+          console.log('THIS IS WHAT WE WANT!!!', data.data);
+          let {token} = data.data
+          if (token) {
+            store.save('token', true).then(() => {
+              this.setState({
+                token: true
+              });
+            });
+          } else {
+            store.save('token', false);
+          }
+        })
+      }, 2000)
+    })
+    .catch(err => console.error('An error occurred', err));
+  }
 
   render() {
-    let token = false;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View></View>
@@ -161,20 +175,10 @@ export default class SettingsScreen extends React.Component {
         </View>
         <View />
         <View> {
-          !token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
+          this.state.token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
         }
         </View>
-        
       </View>
     );
   }
 }
-
-
-
-
-
-
-
-
-

@@ -79,7 +79,7 @@ export default class SettingsScreen extends React.Component {
 
 
   handleLogin() {
-    const userId = props.navigation.state.params.userId  
+    const userId = props.navigation.state.params.userId
     axios.get('http://roryeagan.com:8082/auth/google', {
       params: {
         userId,
@@ -88,7 +88,7 @@ export default class SettingsScreen extends React.Component {
     .then((data) => {
       console.log(data.data);
     })
-  }  
+  }
 
   render() {
     let token = false;
@@ -153,7 +153,7 @@ export default class SettingsScreen extends React.Component {
         <View> {
           token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
         }
-          
+
         </View>
       </View>
     );

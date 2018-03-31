@@ -52,7 +52,7 @@ passport.use(
     firebase.storeToken(accessToken, refreshToken,  reqThingy.query.state)
     console.log('thingy:', accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
     // mega(accessToken);
-    // firebase.storeToken(accessToken, refreshToken, '-L8hPGeCBZrUQB8TCibi');
+    firebase.storeToken(accessToken, refreshToken, reqThingy.query.state);
     return done(null, profile);
   })
 )
@@ -116,7 +116,11 @@ router.get('/login', (req, res) => {
   });
 });
 
+router.get('/token', (req, res) => {
+  firebase.getToken(req.query.userId).then((token) => {
+    res.send({token, poop: 'POOPOY'})
+  });
+})
 
 
 module.exports = router;
-

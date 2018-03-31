@@ -20,13 +20,13 @@ firebaseMethods.storeToken = function (accessToken, refreshToken, id) {
   console.log("here", accessToken, refreshToken, id)
   firebase.database().ref(`users/${id}/token`).set({
     accessToken,
-   
+
   }).key
 }
 
 firebaseMethods.getToken = function(id) {
   return firebase.database().ref(`users/${id}/token`).once('value').then((snapshot) => {
-    return snapshot.val(); 
+    return snapshot.val();
   });
 }
 
