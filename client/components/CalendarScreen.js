@@ -1,161 +1,142 @@
-import React from 'react';
-import BottomNavigation from './BottomNavigation';
-import {Button, View, Text, TextInput, Picker, StyleSheet } from 'react-native';
-import ModalDropdown from 'react-native-modal-dropdown';
-import HeaderButton from 'react-navigation-header-buttons'
-import Icon from 'react-native-vector-icons/Ionicons.js';
-import axios from 'axios';
-import store from 'react-native-simple-store';
+import React, { Component } from 'react';
+import { Button, View, Text, StyleSheet } from 'react-native';
+import {Agenda} from 'react-native-calendars';
 
-
-export default class SettingsScreen extends React.Component {
-  constructor(props){
+export default class AddScreen extends React.Component {
+  constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
-      prepTime: props.navigation.state.params.userSettings.defaultPrepTime,
-      postTime: props.navigation.state.params.userSettings.defaultPostTime,
-      snoozes: props.navigation.state.params.userSettings.defaultSnoozes,
-      snoozeTime: props.navigation.state.params.userSettings.defaultSnoozeTime,
-    }
-    this.toCalendarScreen = this.toCalendarScreen.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
+      items: {}
+    };
+
+    this.loadItems = this.loadItems.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+    this.renderEmptyDate = this.renderEmptyDate.bind(this);
   }
 
-  static navigationOptions = ({ navigation }) => {
-    const params = navigation.state.params || {};
-
-    return {
-      title: 'Settings',
-      headerLeft: null,
-      headerRight: (
-        <HeaderButton IconComponent={Icon} iconSize={23} color="blue">
-          <HeaderButton.Item
-            title="Done/Save"
-            onPress={() => {
-              params.saveSettings(params, navigation.goBack)
-            }}
-          />
-        </HeaderButton>
-      ),
-    }
-  }
-
-  componentWillMount() {
-    let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
-    this.props.navigation.setParams({ saveSettings: this._saveSettings });
-    // this.setState({
-    //   prepTime: defaultPrepTime,
-    //   postTime: defaultPostTime,
-    //   snoozes: defaultSnoozes,
-    // });
-  }
-
-  _saveSettings = ({userId}, goBack) => {
-    let { prepTime, postTime, snoozes, snoozeTime } = this.state;
-    axios.post('http://roryeagan.com:8082/settings/save', {
-      userId: userId,
-      prepTime,
-      postTime,
-      snoozes,
-      snoozeTime,
-    }).then(data => {
-      store.update('userSettings', {
-        defaultPostTime: prepTime,
-        defaultPrepTime: postTime,
-        defaultSnoozes: snoozes,
-        defaultSnoozeTime: snoozeTime,
-      })
-    }).then(() => {
-      this.props.navigation.state.params.updateUserSettings(prepTime, postTime, snoozes, snoozeTime)
-    }).then(goBack);
-
+  static navigationOptions = {
+    title: 'CalendarScreen',
   };
 
-  toCalendarScreen() {
-
-    this.props.navigation.navigate('CalendarScreen');
-  }
-
-
-  handleLogin() {
-    const userId = props.navigation.state.params.userId
-    axios.get('http://roryeagan.com:8082/auth/google', {
-      params: {
-        userId,
-      }
-    })
-    .then((data) => {
-      console.log(data.data);
-    })
-  }
-
   render() {
-    let token = false;
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
-        <View></View>
-        <View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
-              <Text>Number of Snoozes: </Text>
-              <ModalDropdown
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-                defaultIndex={this.state.snoozes}
-                defaultValue={(this.state.snoozes) + " snoozes" || "Please select..."}
-                options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'} `)}
-                onSelect={(idx, val) => {
-                  this.setState({ snoozes: parseInt(val) })
-                }}
-              />
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
-              <Text>Snooze Time: </Text>
-              <ModalDropdown
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-                defaultIndex={this.state.snoozeTime}
-                defaultValue={(this.state.snoozeTime) + " minutes" || "Please select..."}
-                options={[...Array(16)].map((x,i) => (i || 0.5) + ` minute${i===1 ? '' : 's'}`)}
-                onSelect={(idx, val) => {
-                  this.setState({ snoozeTime: parseFloat(val) })
-                }}
-              />
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
-            <Text>Prep Time: </Text>
-            <ModalDropdown
-              dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-              defaultIndex={this.state.prepTime}
-              defaultValue={(this.state.prepTime*5) + " minutes" || "Please select..."}
-              options={[...Array(13)].map((x,i) => (i) * 5 + ' minutes ')}
-              onSelect={(idx, val) => {
-                this.setState({ prepTime: parseInt(val)/5 })
-              }}
-            />
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230, flexWrap: 'nowrap' }}>
-            <View>
-              <Text>Post-Travel Prep Time: </Text>
-            </View>
-            <View>
-              <ModalDropdown
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-                defaultIndex={this.state.postTime}
-                defaultValue={(this.state.postTime*5) + " minutes" || "Please select..."}
-                options={[...Array(13)].map((x,i) => (i)*5 + ' minutes ')}
-                onSelect={(idx, val) => {
-                  this.setState({ postTime: parseInt(val)/5 })
-                }}
-              />
-            </View>
-          </View>
-        </View>
-        <View />
-        <View> {
-          token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
-        }
+      <Agenda
+        // the list of items that have to be displayed in agenda. If you want to render item as empty date
+        // the value of date key kas to be an empty array []. If there exists no value for date key it is
+        // considered that the date in question is not yet loaded
+        items={this.state.items}
+        // callback that gets called when items for a certain month should be loaded (month became visible)
+        loadItemsForMonth={this.loadItems}
+        // initially selected day
+        selected={'2017-05-16'}
+        // specify how each item should be rendered in agenda
+        renderItem={this.renderItem}
+        // specify how empty date content with no items should be rendered
+        renderEmptyDate={this.renderEmptyDate}
+        // specify your item comparison function for increased performance
+        rowHasChanged={this.rowHasChanged.bind(this)}
 
-        </View>
+         // callback that fires when the calendar is opened or closed
+         onCalendarToggled={(calendarOpened) => {console.log(calendarOpened)}}
+         // callback that gets called on day press
+         onDayPress={(day)=>{console.log('day pressed')}}
+         // callback that gets called when day changes while scrolling agenda list
+         onDayChange={(day)=>{console.log('day changed')}}
+         // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+         minDate={'2017-05-10'}
+         // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
+         maxDate={'2018-03-30'}
+         // Max amount of months allowed to scroll to the past. Default = 50
+         pastScrollRange={10}
+         // Max amount of months allowed to scroll to the future. Default = 50
+         futureScrollRange={3}
+         // specify how each date should be rendered. day can be undefined if the item is not first in that day.
+         // renderDay={(day, item) => {
+         //   if (!day) day = {dateString: 'fuck off'}
+         //   return <View><Text>{day.dateString}</Text></View>}}
+         // // specify how agenda knob should look like
+         // renderKnob={() => <View><Text>this was rendered by...renderKnob!</Text></View>}
+         // // specify what should be rendered instead of ActivityIndicator
+         // renderEmptyData = {() => <View><Text>this was rendered by...renderEmptyData!</Text></View>}
+         // // specify your item comparison function for increased performance
+         rowHasChanged={(r1, r2) => {return r1.text !== r2.text}}
+         // Hide knob button. Default = false
+         hideKnob={false}
+         // By default, agenda dates are marked if they have at least one item, but you can override this if needed
+         // markedDates={{
+         //   '2018-06-16': {selected: true, marked: true},
+         //   '2018-06-17': {marked: true},
+         //   '2018-06-18': {disabled: true},
+         // }}
+      />
+    );
+  }
+
+  loadItems(day) {
+    // NOTE: THIS FUNCTION IS GENERATING FAKE CALENDAR EVENTS
+    setTimeout(() => {
+      for (let i = -15; i < 85; i++) {
+        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+        const strTime = this.timeToString(time);
+        if (!this.state.items[strTime]) {
+          this.state.items[strTime] = [];
+          const numItems = Math.floor(Math.random() * 5);
+          for (let j = 0; j < numItems; j++) {
+            this.state.items[strTime].push({
+              name: 'Item for ' + strTime,
+              height: Math.max(50, Math.floor(Math.random() * 150))
+            });
+          }
+        }
+      }
+      const newItems = {};
+      Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
+      this.setState({
+        items: newItems
+      }, console.log(this.state));
+    }, 1000);
+  }
+
+  renderItem(item) {
+    // console.log('THIS IS THE renderItem FUNCTION. Here is the item rendered:', item)
+    return (
+      <View style={[styles.item, {height: item.height*1.5}]}>
+        <Text>{item.name} HAHAHAHAHAHA =D</Text>
+        <Button title="add to alarms" onPress={() => console.log('You pressed me! =D')}></Button>
       </View>
     );
   }
+
+  renderEmptyDate() {
+    // console.log('THIS IS THE renderEmptyDate FUNCTION.')
+    return (
+      <View style={styles.emptyDate}><Text>This is empty date!</Text></View>
+    );
+  }
+
+  rowHasChanged(r1, r2) {
+    // NOTE: THIS FUNCTION updates the modules' shouldComponentUpdate function, so it needs to return either TRUE or FALSE
+    return r1.name !== r2.name;
+  }
+
+  timeToString(time) {
+    const date = new Date(time);
+    return date.toISOString().split('T')[0];
+  }
 }
+
+const styles = StyleSheet.create({
+  item: {
+    backgroundColor: 'pink',
+    flex: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
+    marginTop: 17
+  },
+  emptyDate: {
+    height: 15,
+    flex:1,
+    paddingTop: 30
+  }
+});
