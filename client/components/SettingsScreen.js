@@ -56,7 +56,7 @@ export default class SettingsScreen extends React.Component {
     let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
     this.props.navigation.setParams({ saveSettings: this._saveSettings });
     store.get('token').then((token) => {
-      this.setState({token: token},() => console.log('this is the token biatchhhh', this.state))
+      this.setState({token: token},() => console.log('this is the token', this.state))
     })
   }
 
@@ -90,7 +90,7 @@ export default class SettingsScreen extends React.Component {
   }
 
 
-  handleLogin() {adsf
+  handleLogin() {
     const userId = this.props.navigation.state.params.userId
 
 

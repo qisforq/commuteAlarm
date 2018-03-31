@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import {Agenda} from 'react-native-calendars';
+import axios from 'axios';
 
 export default class AddScreen extends React.Component {
   constructor(props) {
@@ -17,6 +18,23 @@ export default class AddScreen extends React.Component {
   static navigationOptions = {
     title: 'CalendarScreen',
   };
+
+  componentWillMount() {
+    axios.get("http://localhost:8082/auth/calendar", {
+      params: {
+        userId: this.props.navigation.state.params.userId,
+      }
+    }).then(({ data }) => {
+      // this.setState({
+      //   :
+      // });
+
+      data.forEach((event, i) => {
+
+      })
+      console.log(data, "This dot props dot navvv-ih-gay-shun dot state dot p'rams dot user-eye-dee!");
+    })
+  }
 
   render() {
     return (
@@ -93,7 +111,7 @@ export default class AddScreen extends React.Component {
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
       this.setState({
         items: newItems
-      }, console.log(this.state));
+      }, console.log(this.state, "YIPPEEE AYE YAY"));
     }, 1000);
   }
 
