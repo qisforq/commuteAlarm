@@ -11,8 +11,10 @@ export default class AddScreen extends React.Component {
     };
 
     this.loadItems = this.loadItems.bind(this);
+    this.loadGoogleItems = this.loadGoogleItems.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderEmptyDate = this.renderEmptyDate.bind(this);
+    this.findMaxDay = this.findMaxDay.bind(this);
   }
 
   static navigationOptions = {
@@ -20,20 +22,7 @@ export default class AddScreen extends React.Component {
   };
 
   componentWillMount() {
-    // axios.get("http://localhost:8082/auth/calendar", {
-    //   params: {
-    //     userId: this.props.navigation.state.params.userId,
-    //   }
-    // }).then(({ data }) => {
-    //   // this.setState({
-    //   //   :
-    //   // });
 
-    //   data.forEach((event, i) => {
-
-    //   })
-    //   console.log(data, "This dot props dot navvv-ih-gay-shun dot state dot p'rams dot user-eye-dee!");
-    // })
   }
 
   render() {
@@ -46,7 +35,7 @@ export default class AddScreen extends React.Component {
         // callback that gets called when items for a certain month should be loaded (month became visible)
         loadItemsForMonth={this.loadItems}
         // initially selected day
-        selected={'2017-05-16'}
+        selected={new Date().toISOString().slice(0,10)}
         // specify how each item should be rendered in agenda
         renderItem={this.renderItem}
         // specify how empty date content with no items should be rendered
@@ -61,9 +50,9 @@ export default class AddScreen extends React.Component {
          // callback that gets called when day changes while scrolling agenda list
          onDayChange={(day)=>{console.log('day changed')}}
          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-         minDate={'2017-05-10'}
+         minDate={new Date(new Date().setFullYear(new Date().getUTCFullYear() - 1)).toISOString().slice(0,10)}
          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-         maxDate={'2018-03-30'}
+         maxDate={new Date(new Date().setFullYear(new Date().getUTCFullYear() + 1)).toISOString().slice(0,10)}
          // Max amount of months allowed to scroll to the past. Default = 50
          pastScrollRange={10}
          // Max amount of months allowed to scroll to the future. Default = 50
@@ -89,30 +78,115 @@ export default class AddScreen extends React.Component {
       />
     );
   }
+  loadItems(date) {
+    const { timestamp } = date;
 
-  loadItems(day) {
-    // NOTE: THIS FUNCTION IS GENERATING FAKE CALENDAR EVENTS
-    setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-        if (!this.state.items[strTime]) {
-          this.state.items[strTime] = [];
-          const numItems = Math.floor(Math.random() * 5);
-          for (let j = 0; j < numItems; j++) {
-            this.state.items[strTime].push({
-              name: 'Item for ' + strTime,
-              height: Math.max(50, Math.floor(Math.random() * 150))
-            });
-          }
-        }
+    for (let i = -15; i < 85; i++) {
+      const defaultTime = timestamp + i * 24 * 60 * 60 * 1000;
+      const defaultStrTime = this.timeToString(defaultTime);
+      if (!this.state.items[defaultStrTime]) {
+        this.state.items[defaultStrTime] = [];
       }
+    }
+    const defItems = {};
+    Object.keys(this.state.items).forEach(key => {defItems[key] = this.state.items[key];});
+    this.setState({
+      items: defItems
+    },() => {
+      this.loadGoogleItems(date);
+    });
+  }
+
+  loadGoogleItems(date) {
+    const { dateString, day, month, year } = date;
+    const minTime = `${year}-${month}-01T00:00:00-01:00:00`
+    const maxTime = `${year}-${month}-${this.findMaxDay(month)}T11:59:58-11:59:59`
+    // for (let i = 1; i <= this.findMaxDay(month); i++) {
+    //   if (i < 10) {
+    //     newItems[`${year}-${month}-0${i}`] = [{name: 'Empty', height: 50}]
+    //   } else {
+    //     newItems[`${year}-${month}-${i}`] = [{name: 'Empty', height: 50}]
+    //   }
+    // }
+
+    axios.get("http://localhost:8082/auth/calendar", {
+      params: {
+        userId: this.props.navigation.state.params.userId,
+        minTime,
+        maxTime,
+      }
+    }).then(({ data }) => {
       const newItems = {};
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
+
+      data.forEach((event, i) => {
+        let { id, name, time } = event
+        if (!time.date) {
+          let dateStr = time.dateTime.slice(0,10)
+          let timeStr = time.dateTime.slice(11)
+          let eventData = {
+            height: 50,
+            name: event.name,
+            time: timeStr,
+          }
+          // newItems[dateStr] ? newItems[dateStr].push(eventData) : newItems[dateStr] = [eventData];
+          if (newItems[dateStr]) {
+            newItems[dateStr].forEach((ev) => {
+              if ((ev.time && ev.name === eventData.name && ev.time === eventData.time)) {
+                console.log('Dont push oldevent:', ev, "newEvent:", eventData)
+
+              } else {
+                newItems[dateStr].push(eventData);
+
+              }
+            })
+          } else {
+            newItems[dateStr] = [eventData];
+          }
+        }
+      });
       this.setState({
-        items: newItems
-      }, console.log(this.state, "YIPPEEE AYE YAY"));
-    }, 1000);
+        items: newItems,
+      }, () => console.log("zippidee doo daa", this.state.items));
+    }).catch(() => console.log('NOOOOOO'))
+  }
+
+
+
+  // loadItems(day) {
+  //   console.log('THE FUCK IS DAY?', day);
+  //   // NOTE: THIS FUNCTION IS GENERATING FAKE CALENDAR EVENTS
+  //   setTimeout(() => {
+  //     for (let i = -15; i < 85; i++) {
+  //       const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+  //       const strTime = this.timeToString(time);
+  //       if (!this.state.items[strTime]) {
+  //         this.state.items[strTime] = [];
+  //         const numItems = Math.floor(Math.random() * 5);
+  //         for (let j = 0; j < numItems; j++) {
+  //           this.state.items[strTime].push({
+  //             name: 'Item for ' + strTime,
+  //             height: Math.max(50, Math.floor(Math.random() * 150))
+  //           });
+  //         }
+  //       }
+  //     }
+  //     const newItems = {};
+  //     Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
+  //     this.setState({
+  //       items: newItems
+  //     }, console.log(this.state, "YIPPEEE AYE YAY"));
+  //   }, 1000);
+  // }
+
+  findMaxDay(month) {
+    if (month === 2) {
+      return 28;
+    } else if (month === 1 || month === 3 ||month === 5 || month === 8 || month === 10 || month === 12) {
+      return 31;
+    } else {
+      return 30;
+    }
   }
 
   renderItem(item) {
