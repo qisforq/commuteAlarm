@@ -82,17 +82,14 @@ export default class SettingsScreen extends React.Component {
   };
 
   toCalendarScreen() {
-    const userId = this.props.navigation.state.params.userId
-
-    this.props.navigation.navigate('CalendarScreen', {
-      userId: this.props.navigation.state.params.userId,
-    });
-  }
+     this.props.navigation.navigate('CalendarScreen', {
+       userId: this.props.navigation.state.params.userId,
+     });
+   }
 
 
   handleLogin() {
     const userId = this.props.navigation.state.params.userId
-
 
     Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`)
     .then(() => {

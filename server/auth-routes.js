@@ -5,13 +5,15 @@ const keys = require('./keys.js');
 const firebase = require('./database');
 var axios = require('axios');
 
-var mega = function(token, cb) {
+var mega = function(token, minTime, maxTime, cb) {
   var headers = {
     access_token: token
   }
   let finalArray = [];
-  axios.get(`https://www.googleapis.com/calendar/v3/calendars/hackreactor.com_v5k5rbga5om6rvfl65r259c0tk@group.calendar.google.com/events/?access_token=${token}`, headers)
+  axios.get(`https://www.googleapis.com/calendar/v3/calendars/hackreactor.com_v5k5rbga5om6rvfl65r259c0tk@group.calendar.google.com/events/?access_token=${token}&timeMin=${minTime}&timeMax=${maxTime}`, headers)
   .then((data) => {
+    console.log("\\^o^/", minTime, maxTime);
+
     var newArray = data.data.items.map((item) => {
       return {
         name: item.summary,
@@ -27,15 +29,14 @@ var mega = function(token, cb) {
           cb(item, newArray.length-1 === i);
           // firebase.storeCalendar(item);
         }).catch((err) => {
-          console.log("err" , err);
+          console.log("err");
         })
     })
     //console.log('final arr', finalArray);
     })
   .catch((err) => {
-    console.log("err" , err);
+    console.log("Error inside axios call to mega");
   })
-  console.log('asdfadsgadgg');
   return finalArray
 }
 
@@ -50,7 +51,7 @@ passport.use(
   }, (reqThingy, accessToken, refreshToken, profile, done) => {
     //passport callback function
     firebase.storeToken(accessToken, refreshToken,  reqThingy.query.state)
-    console.log('thingy:', accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
+    // console.log('thingy:', accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
     // mega(accessToken);
     firebase.storeToken(accessToken, refreshToken, reqThingy.query.state);
     return done(null, profile);
@@ -66,12 +67,13 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-router.get('/calendar', (req, res) => {
+router.get('/calendar', ({ query }, res) => {
   console.log("hit calendar");
-  firebase.getToken(req.query.userId).then(async (data) => {
+  firebase.getToken(query.userId).then(async ({ accessToken }) => {
     // mega(data.accessToken);
     let arr = []
-    await mega(data.accessToken, (item, end) => {
+    console.log('da data:', query)
+    await mega(accessToken, query.minTime, query.maxTime, (item, end) => {
       //console.log(item);
       arr.push(item);
       if (end) {
@@ -94,7 +96,8 @@ router.get('/google/redirect/', passport.authenticate('google', {
   successRedirect: '/auth/testing',
   failureRedirect: '/auth/testing',
 }), (req, res) => {
-console.log("redirect", req.body);
+// console.log("redirect", req.body);
+console.log("redirect");
 });
 
 router.get('/google', (req, res, next) => {
@@ -118,7 +121,7 @@ router.get('/login', (req, res) => {
 
 router.get('/token', (req, res) => {
   firebase.getToken(req.query.userId).then((token) => {
-    res.send({token, poop: 'POOPOY'})
+    res.send({token})
   });
 })
 
