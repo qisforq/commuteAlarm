@@ -62,8 +62,25 @@ const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updat
                   alarmData: alarm,
                   alarmTime,
                 },
-                soundName: 'annoying.mp3',
+                soundName: `${alarm.alarmSound}.mp3`,
               });
+              if (i === alarm.snoozes) {
+                for (let j = 1; j < 60; j+=1) {
+                  const extraAlarm = new Date(alarmTime.getTime() + (j*60*1000));
+                  PushNotification.localNotificationSchedule({
+                    message: alarm.label,
+                    date: extraAlarm,
+                    userInfo: {
+                      id: alarm.alarmId,
+                      userId,
+                      userSettings,
+                      alarmData: alarm,
+                      alarmTime,
+                    },
+                    soundName: `${alarm.alarmSound}.mp3`,
+                  });
+                }
+              }
             }
           });
         });
