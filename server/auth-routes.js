@@ -50,8 +50,8 @@ passport.use(
     passReqToCallback: true,
   }, (reqThingy, accessToken, refreshToken, profile, done) => {
     //passport callback function
-    firebase.storeToken(accessToken, refreshToken,  reqThingy.query.state)
-    console.log('thingy:', accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
+    // firebase.storeToken(accessToken, refreshToken,  reqThingy.query.state)
+    console.log( accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
     // mega(accessToken);
     firebase.storeToken(accessToken, refreshToken, reqThingy.query.state);
     return done(null, profile);
@@ -68,12 +68,9 @@ passport.deserializeUser(function(user, done) {
 });
 
 router.get('/calendar', (req, res) => {
-  console.log("hit calendar");
   firebase.getToken(req.query.userId).then(async (data) => {
-    // mega(data.accessToken);
     let arr = []
     await mega(data.accessToken, (item, end) => {
-      //console.log(item);
       console.log(item)
       arr.push(item);
       if (end) {
@@ -97,7 +94,7 @@ router.get('/google/redirect/', passport.authenticate('google', {
   successRedirect: '/auth/testing',
   failureRedirect: '/auth/testing',
 }), (req, res) => {
-console.log("redirect", req.body);
+
 });
 
 router.get('/google', (req, res, next) => {
@@ -121,7 +118,7 @@ router.get('/login', (req, res) => {
 
 router.get('/token', (req, res) => {
   firebase.getToken(req.query.userId).then((token) => {
-    res.send({token, poop: 'POOPOY'})
+    res.send({token,})
   });
 })
 
