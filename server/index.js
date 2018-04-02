@@ -59,7 +59,6 @@ app.get('/commutetime', ({ query }, res) => {
 });
 
 app.get('/commutetime/single', ({ query }, res) => {
-  console.log('aksdbvjhabsf');
   firebase.getAlarm(query, (result) => {
     console.log('RESULT: ', result);
     res.send(result);

@@ -51,6 +51,7 @@ passport.use(
     passReqToCallback: true,
   }, (reqThingy, accessToken, refreshToken, profile, done) => {
     //passport callback function
+
     firebase.storeToken(accessToken, refreshToken,  reqThingy.query.state)
     // console.log('thingy:', accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
     // mega(accessToken);
@@ -67,6 +68,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
+
 
 router.get('/calendar', ({ query }, res) => {
   console.log("hit calendar");
@@ -99,6 +101,7 @@ router.get('/google/redirect/', passport.authenticate('google', {
   successRedirect: '/auth/testing',
   failureRedirect: '/auth/testing',
 }), (req, res) => {
+
 // console.log("redirect", req.body);
 console.log("redirect");
 });
@@ -124,7 +127,8 @@ router.get('/login', (req, res) => {
 
 router.get('/token', (req, res) => {
   firebase.getToken(req.query.userId).then((token) => {
-    res.send({token})
+    res.send({token,})
+
   });
 })
 
