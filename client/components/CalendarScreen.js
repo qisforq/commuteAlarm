@@ -15,15 +15,13 @@ export default class AddScreen extends React.Component {
     this.renderItem = this.renderItem.bind(this);
     this.renderEmptyDate = this.renderEmptyDate.bind(this);
     this.findMaxDay = this.findMaxDay.bind(this);
+    this.makeAlarm = this.makeAlarm.bind(this);
   }
 
   static navigationOptions = {
     title: 'CalendarScreen',
   };
 
-  componentWillMount() {
-
-  }
 
   render() {
     return (
@@ -167,36 +165,12 @@ export default class AddScreen extends React.Component {
       this.setState({
         items: newItems,
       }, () => console.log("zippidee doo daa", this.state.items));
-    }).catch(() => console.log('NOOOOOO'))
+    }).catch(() => console.log('Error in loadGoogleItems'))
   }
 
-
-
-  // loadItems(day) {
-  //   console.log('THE FUCK IS DAY?', day);
-  //   // NOTE: THIS FUNCTION IS GENERATING FAKE CALENDAR EVENTS
-  //   setTimeout(() => {
-  //     for (let i = -15; i < 85; i++) {
-  //       const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-  //       const strTime = this.timeToString(time);
-  //       if (!this.state.items[strTime]) {
-  //         this.state.items[strTime] = [];
-  //         const numItems = Math.floor(Math.random() * 5);
-  //         for (let j = 0; j < numItems; j++) {
-  //           this.state.items[strTime].push({
-  //             name: 'Item for ' + strTime,
-  //             height: Math.max(50, Math.floor(Math.random() * 150))
-  //           });
-  //         }
-  //       }
-  //     }
-  //     const newItems = {};
-  //     Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-  //     this.setState({
-  //       items: newItems
-  //     }, console.log(this.state, "YIPPEEE AYE YAY"));
-  //   }, 1000);
-  // }
+  makeAlarm() {
+    
+  }
 
   findMaxDay(month) {
     if (month === 2) {
@@ -212,7 +186,8 @@ export default class AddScreen extends React.Component {
     // console.log('THIS IS THE renderItem FUNCTION. Here is the item rendered:', item)
     return (
       <View style={[styles.item, {height: item.height*1.5}]}>
-        <Text>{item.name} HAHAHAHAHAHA =D</Text>
+        <Text>{item.name}</Text>
+        <Text>{item.time}</Text>
         <Button title="add to alarms" onPress={() => console.log('You pressed me! =D')}></Button>
       </View>
     );
@@ -221,7 +196,7 @@ export default class AddScreen extends React.Component {
   renderEmptyDate() {
     // console.log('THIS IS THE renderEmptyDate FUNCTION.')
     return (
-      <View style={styles.emptyDate}><Text>This is empty date!</Text></View>
+      <View style={styles.emptyDate}></View>
     );
   }
 
