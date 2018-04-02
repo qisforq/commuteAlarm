@@ -48,6 +48,7 @@ const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updat
           // End of Q + D code ^^^^
           console.log(alarm);
           PushNotification.cancelLocalNotifications({ id: alarm.alarmId });
+          console.log(`${alarm.alarmSound}.mp3`);
           [...Array(alarm.snoozes+1)].forEach((x, i) => {
             const alarmTime = new Date(alarm.time - (alarm.commuteData.routes[0].legs[0].duration.value*1000) - (alarm.prepTime*5*60*1000) - (alarm.postTime*5*60*1000) - (1000*60*alarm.snoozeTime*alarm.snoozes) - offSet + (1000*60*alarm.snoozeTime*i));
 

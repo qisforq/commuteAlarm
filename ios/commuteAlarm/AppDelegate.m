@@ -12,10 +12,11 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTPushNotificationManager.h>
+#import <React/RCTLinkingManager.h>
+
 
 @implementation AppDelegate
 
-#import <React/RCTLinkingManager.h>
 
 - (BOOL)application:(UIApplication *)application
    openURL:(NSURL *)url
