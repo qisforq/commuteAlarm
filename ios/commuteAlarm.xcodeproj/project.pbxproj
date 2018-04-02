@@ -39,6 +39,7 @@
 		3085EEB0EC244D74B54F1D5C /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59BEC50C4E164C2FB0B82F50 /* FontAwesome.ttf */; };
 		308E6DE9206D90DF00DB9FD2 /* annoying.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 308E6DBA206D90DF00DB9FD2 /* annoying.mp3 */; };
 		4D858D8A2C75490D81C33442 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4B5681611944A8B8B0C4BF3 /* Octicons.ttf */; };
+		545163232072BA0D002A0A65 /* alarmchi.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 545162F52072BA0D002A0A65 /* alarmchi.mp3 */; };
 		54A5EE982061A5C000AE4D1B /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54A5EE792061A56200AE4D1B /* libRCTPushNotification.a */; };
 		5D6555D5C64B4ABE9644588E /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8D7C3642E2D4DEEB90E6C62 /* Feather.ttf */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
@@ -389,13 +390,6 @@
 			remoteGlobalIDString = 83FF5F851AFD0D2B0016A13E;
 			remoteInfo = RNBackgroundGeolocation;
 		};
-		A826838D2064415500E45334 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 462465ECD4114B749A2717CB /* RNBackgroundGeolocation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 83FF5F901AFD0D2B0016A13E;
-			remoteInfo = RNBackgroundGeolocationTests;
-		};
 		ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
@@ -435,6 +429,7 @@
 		308E6DBA206D90DF00DB9FD2 /* annoying.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = annoying.mp3; path = ../../Downloads/annoying.mp3; sourceTree = "<group>"; };
 		462465ECD4114B749A2717CB /* RNBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		4E4FE312688245669FC9534B /* RNCalendarEvents.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCalendarEvents.xcodeproj; path = "../node_modules/react-native-calendar-events/RNCalendarEvents.xcodeproj"; sourceTree = "<group>"; };
+		545162F52072BA0D002A0A65 /* alarmchi.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = alarmchi.mp3; path = ../alarmchi.mp3; sourceTree = "<group>"; };
 		54A5EE672061A56200AE4D1B /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		59BEC50C4E164C2FB0B82F50 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -813,7 +808,6 @@
 			isa = PBXGroup;
 			children = (
 				A826838C2064415500E45334 /* libRNBackgroundGeolocation.a */,
-				A826838E2064415500E45334 /* RNBackgroundGeolocationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -830,6 +824,7 @@
 		CE7C724C11E0467994643207 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				545162F52072BA0D002A0A65 /* alarmchi.mp3 */,
 				308E6DBA206D90DF00DB9FD2 /* annoying.mp3 */,
 				BC4007D7F48E430B910DF183 /* Entypo.ttf */,
 				A58BCD98583944FFBD449594 /* EvilIcons.ttf */,
@@ -1363,13 +1358,6 @@
 			remoteRef = A826838B2064415500E45334 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A826838E2064415500E45334 /* RNBackgroundGeolocationTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNBackgroundGeolocationTests.xctest;
-			remoteRef = A826838D2064415500E45334 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1404,6 +1392,7 @@
 				A0C32537882943B69E344CE7 /* MaterialIcons.ttf in Resources */,
 				4D858D8A2C75490D81C33442 /* Octicons.ttf in Resources */,
 				95F0B0BD2EEC425AB1F5E47A /* SimpleLineIcons.ttf in Resources */,
+				545163232072BA0D002A0A65 /* alarmchi.mp3 in Resources */,
 				C22BB28AD4804025BF44AF00 /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

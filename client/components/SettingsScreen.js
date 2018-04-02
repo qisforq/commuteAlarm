@@ -17,6 +17,7 @@ export default class SettingsScreen extends React.Component {
       postTime: props.navigation.state.params.userSettings.defaultPostTime,
       snoozes: props.navigation.state.params.userSettings.defaultSnoozes,
       snoozeTime: props.navigation.state.params.userSettings.defaultSnoozeTime,
+      alarmSound: props.navigation.state.params.userSettings.defaultAlarmSound,
       token: false,
     }
     this.toCalendarScreen = this.toCalendarScreen.bind(this);
@@ -61,22 +62,24 @@ export default class SettingsScreen extends React.Component {
   }
 
   _saveSettings = ({userId}, goBack) => {
-    let { prepTime, postTime, snoozes, snoozeTime } = this.state;
+    let { prepTime, postTime, snoozes, snoozeTime, alarmSound } = this.state;
     axios.post('http://localhost:8082/settings/save', {
       userId: userId,
       prepTime,
       postTime,
       snoozes,
       snoozeTime,
+      alarmSound,
     }).then(data => {
       store.update('userSettings', {
         defaultPostTime: prepTime,
         defaultPrepTime: postTime,
         defaultSnoozes: snoozes,
         defaultSnoozeTime: snoozeTime,
+        defaultAlarmSound: alarmSound,
       })
     }).then(() => {
-      this.props.navigation.state.params.updateUserSettings(prepTime, postTime, snoozes, snoozeTime)
+      this.props.navigation.state.params.updateUserSettings(prepTime, postTime, snoozes, snoozeTime, alarmSound)
     }).then(goBack);
 
   };
@@ -165,6 +168,22 @@ export default class SettingsScreen extends React.Component {
                 options={[...Array(13)].map((x,i) => (i)*5 + ' minutes ')}
                 onSelect={(idx, val) => {
                   this.setState({ postTime: parseInt(val)/5 })
+                }}
+              />
+            </View>
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230, flexWrap: 'nowrap' }}>
+            <View>
+              <Text>Default Alarm Sound: </Text>
+            </View>
+            <View>
+              <ModalDropdown
+                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+                defaultIndex={this.state.postTime}
+                defaultValue={this.state.alarmSound}
+                options={['annoying', 'alarmchi']}
+                onSelect={(idx, val) => {
+                  this.setState({ alarmSound: val })
                 }}
               />
             </View>

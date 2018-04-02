@@ -239,6 +239,7 @@ export default class AlarmsScreen extends React.Component {
             defaultPostTime: 0,
             defaultSnoozes: 0,
             defaultSnoozeTime: 8,
+            defaultAlarmSound: 'annoying',
           });
           this.setState({
             userId: data.data,
@@ -299,13 +300,14 @@ export default class AlarmsScreen extends React.Component {
     });
   }
 
-  _updateUserSettings(prep, post, snooze, snoozeTime) {
+  _updateUserSettings(prep, post, snooze, snoozeTime, alarmSound) {
     this.setState({
       userSettings: {
         defaultPrepTime: prep,
         defaultPostTime: post,
         defaultSnoozes: snooze,
         defaultSnoozeTime: snoozeTime,
+        defaultAlarmSound: alarmSound,
       },
     });
   }

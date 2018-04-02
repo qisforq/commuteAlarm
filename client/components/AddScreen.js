@@ -24,6 +24,7 @@ export default class AddScreen extends React.Component {
         address: this.props.navigation.state.params.data.address,
         snoozes: this.props.navigation.state.params.data.snoozes,
         snoozeTime: this.props.navigation.state.params.data.snoozeTime,
+        alarmSound: this.props.navigation.state.params.data.alarmSound,
         onOff: this.props.navigation.state.params.data.onOff,
         edit: true,
         travelMethod: this.props.navigation.state.params.data.travelMethod,
@@ -39,6 +40,7 @@ export default class AddScreen extends React.Component {
         address: 'Search',
         snoozes: this.props.navigation.state.params.settings.defaultSnoozes,
         snoozeTime: this.props.navigation.state.params.settings.defaultSnoozeTime,
+        alarmSound: this.props.navigation.state.params.settings.defaulAlarmSound,
         onOff: false,
         edit: false,
         travelMethod: 'Driving',
@@ -63,7 +65,7 @@ export default class AddScreen extends React.Component {
   }
 
   saveAlarm() {
-    let { label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, onOff, travelMethod } = this.state;
+    let { label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, alarmSound, onOff, travelMethod } = this.state;
     store.get('places').then((places) => {
       if (places[locationId]) {
         places[locationId].count += 1;
@@ -89,6 +91,7 @@ export default class AddScreen extends React.Component {
         snoozes,
         snoozeTime,
         travelMethod,
+        alarmSound
       }).then(data => {
         store.get('alarms').then(alarms => {
           alarms[this.props.navigation.state.params.data.id] = {
@@ -102,6 +105,7 @@ export default class AddScreen extends React.Component {
             snoozes,
             snoozeTime,
             travelMethod,
+            alarmSound
           };
           console.log(alarms);
           store.save('alarms', alarms).then(() => {
@@ -126,6 +130,7 @@ export default class AddScreen extends React.Component {
         snoozes,
         snoozeTime,
         travelMethod,
+        alarmSound,
       }).then(data => {
         console.log(data.data);
         store.get('alarms').then(alarms => {
@@ -140,6 +145,7 @@ export default class AddScreen extends React.Component {
             snoozes,
             snoozeTime,
             travelMethod,
+            alarmSound,
           };
           console.log(alarms);
           store.save('alarms', alarms).then(() => {
@@ -159,7 +165,7 @@ export default class AddScreen extends React.Component {
     console.log(favPlaces);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
-        <View style={{ flex: 0, position: 'absolute', width: '100%', top: '15%', backgroundColor: 'white', zIndex: 100 }}>
+        <View style={{ flex: 0, position: 'absolute', width: '100%', top: '12%', backgroundColor: 'white', zIndex: 100 }}>
           <GooglePlacesAutocomplete
             listUnderlayColor="white"
             styles={{
@@ -265,6 +271,17 @@ export default class AddScreen extends React.Component {
             options={ ['Transit', 'Driving'] }
             onSelection={(opt) => { this.setState({ travelMethod: opt })}}
             selectedOption={ this.state.travelMethod }
+          />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
+          <Text style={{ fontWeight: '800' }}>Alarm Sound: </Text>
+          <ModalDropdown
+            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+            defaultValue={this.state.alarmSound}
+            options={['annoying', 'alarmchi']}
+            onSelect={(idx, val) => {
+              this.setState({ alarmSound: val })
+            }}
           />
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
