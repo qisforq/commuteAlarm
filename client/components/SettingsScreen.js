@@ -49,7 +49,9 @@ export default class SettingsScreen extends React.Component {
     Linking.removeEventListener('url', this._handleOpenURL);
   }
   _handleOpenURL(event) {
-    console.log(event.url);
+    console.log(event.url, "FIGURE OUT WHAT THIS IS!!!!!");
+    console.log(event, "FIGURE OUT WHAT THIS IS!!!!!");
+    console.warn("HANDLED URL!");
   }
 
   componentWillMount() {
