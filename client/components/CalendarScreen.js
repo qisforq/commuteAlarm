@@ -54,9 +54,9 @@ export default class AddScreen extends React.Component {
          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
          maxDate={new Date(new Date().setFullYear(new Date().getUTCFullYear() + 1)).toISOString().slice(0,10)}
          // Max amount of months allowed to scroll to the past. Default = 50
-         pastScrollRange={10}
+         pastScrollRange={12}
          // Max amount of months allowed to scroll to the future. Default = 50
-         futureScrollRange={3}
+         futureScrollRange={18}
          // specify how each date should be rendered. day can be undefined if the item is not first in that day.
          // renderDay={(day, item) => {
          //   if (!day) day = {dateString: 'fuck off'}
@@ -80,6 +80,9 @@ export default class AddScreen extends React.Component {
   }
   loadItems(date) {
     const { timestamp } = date;
+    const defItems = {};
+    let firstKey = '';
+    let lastKey = '';
 
     for (let i = -15; i < 85; i++) {
       const defaultTime = timestamp + i * 24 * 60 * 60 * 1000;
@@ -88,26 +91,28 @@ export default class AddScreen extends React.Component {
         this.state.items[defaultStrTime] = [];
       }
     }
-    const defItems = {};
-    Object.keys(this.state.items).forEach(key => {defItems[key] = this.state.items[key];});
+    Object.keys(this.state.items).forEach((key, i, arr) => {
+      if (i === 0) {
+        firstKey = key;
+      } else if (i === arr.length - 1) {
+        lastKey = key;
+      }
+      defItems[key] = this.state.items[key];
+    });
     this.setState({
       items: defItems
     },() => {
-      this.loadGoogleItems(date);
+      this.loadGoogleItems(date, firstKey, lastKey);
     });
   }
 
-  loadGoogleItems(date) {
+  loadGoogleItems(date, startDate, endDate) {
     const { dateString, day, month, year } = date;
-    const minTime = `${year}-${month}-01T00:00:00-01:00:00`
-    const maxTime = `${year}-${month}-${this.findMaxDay(month)}T11:59:58-11:59:59`
-    // for (let i = 1; i <= this.findMaxDay(month); i++) {
-    //   if (i < 10) {
-    //     newItems[`${year}-${month}-0${i}`] = [{name: 'Empty', height: 50}]
-    //   } else {
-    //     newItems[`${year}-${month}-${i}`] = [{name: 'Empty', height: 50}]
-    //   }
-    // }
+    const minTime = `${startDate}T00:00:00-01:00:00`
+    // const minTime = `${year}-${month}-01T00:00:00-01:00:00`
+    const maxTime = `${endDate}T11:59:58-11:59:59`
+    // const maxTime = `${year}-${month}-${this.findMaxDay(month)}T11:59:58-11:59:59`
+    console.log('minTime:', minTime, 'endTime:', maxTime)
 
     axios.get("http://localhost:8082/auth/calendar", {
       params: {
@@ -116,6 +121,7 @@ export default class AddScreen extends React.Component {
         maxTime,
       }
     }).then(({ data }) => {
+      console.log('ORIGINAL DATA', data)
       const newItems = {};
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
 
@@ -130,14 +136,12 @@ export default class AddScreen extends React.Component {
             time: timeStr,
           }
           // newItems[dateStr] ? newItems[dateStr].push(eventData) : newItems[dateStr] = [eventData];
-          if (newItems[dateStr]) {
+          console.log("datstr?", dateStr, newItems);
+          console.log('newItems[dateStr]', newItems[dateStr])
+          if (newItems[dateStr].length) {
             newItems[dateStr].forEach((ev) => {
-              if ((ev.time && ev.name === eventData.name && ev.time === eventData.time)) {
-                console.log('Dont push oldevent:', ev, "newEvent:", eventData)
-
-              } else {
+              if (!(ev.time && ev.name === eventData.name && ev.time === eventData.time)) {
                 newItems[dateStr].push(eventData);
-
               }
             })
           } else {
@@ -145,6 +149,21 @@ export default class AddScreen extends React.Component {
           }
         }
       });
+      Object.keys(newItems).forEach((date) => {
+        if (newItems[date] && newItems[date].length) {
+          console.log("?",newItems[date])
+          let uniqArr = [];
+          newItems[date].forEach((evt) => {
+            if (!(uniqArr.find(el => el.name === evt.name && el.time === evt.time))) {
+              console.log('push event!:', evt);
+              uniqArr.push(evt)
+            } else {
+              console.log('this event already exists!');
+            }
+          })
+          newItems[date] = uniqArr;
+        }
+      })
       this.setState({
         items: newItems,
       }, () => console.log("zippidee doo daa", this.state.items));
