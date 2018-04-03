@@ -18,10 +18,11 @@ firebaseMethods.storeCalendar = function (item) {
 
 firebaseMethods.storeToken = function (accessToken, refreshToken, id) {
   console.log("here", accessToken, refreshToken, id)
+  let expirationDate = Date.now() + 1000*60*60;
   firebase.database().ref(`users/${id}/token`).set({
     accessToken,
-    refreshToken
-
+    refreshToken,
+    expirationDate,
   }).key
 }
 
