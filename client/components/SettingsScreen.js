@@ -11,7 +11,6 @@ import { Linking } from 'react-native';
 export default class SettingsScreen extends React.Component {
   constructor(props){
     super(props);
-    console.log(props);
     this.state = {
       prepTime: props.navigation.state.params.userSettings.defaultPrepTime,
       postTime: props.navigation.state.params.userSettings.defaultPostTime,
@@ -21,6 +20,7 @@ export default class SettingsScreen extends React.Component {
     }
     this.toCalendarScreen = this.toCalendarScreen.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleOpenURL = this.handleOpenURL.bind(this);
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -43,22 +43,34 @@ export default class SettingsScreen extends React.Component {
   }
 
   componentDidMount() {
-    Linking.addEventListener('url', this._handleOpenURL);
+    Linking.addEventListener('url', this.handleOpenURL);
   }
   componentWillUnmount() {
-    Linking.removeEventListener('url', this._handleOpenURL);
+    Linking.removeEventListener('url', this.handleOpenURL);
   }
-  _handleOpenURL(event) {
-    console.log(event.url, "FIGURE OUT WHAT THIS IS!!!!!");
-    console.log(event, "FIGURE OUT WHAT THIS IS!!!!!");
-    console.warn("HANDLED URL!");
+  handleOpenURL(event) {
+    console.log(event.url.slice(15, 22), "the fuck man");
+    let status = event.url.slice(15, 22)
+    if (status === 'success') {
+      console.log('SUCCESS!!!')
+      store.save('token', true).then(() => {
+        this.setState({
+          token: true
+        }, this.toCalendarScreen);
+      });
+    } else if (status === 'failure'){
+      console.log('FAILURE!! The good kind! =D')
+      store.save('token', false);
+    } else {
+      console.log('Ok, something fishy is going on...');
+    }
   }
 
   componentWillMount() {
     let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
     this.props.navigation.setParams({ saveSettings: this._saveSettings });
     store.get('token').then((token) => {
-      this.setState({token: token},() => console.log('this is the token', this.state))
+      this.setState({token: token},() => console.log('this is the state after getting token:', this.state))
     })
   }
 
@@ -94,23 +106,6 @@ export default class SettingsScreen extends React.Component {
     const userId = this.props.navigation.state.params.userId
 
     Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`)
-    .then(() => {
-      setTimeout(() => {
-        axios.get(`http://localhost:8082/auth/token`, {params: {userId,}}).then((data) => {
-          console.log('THIS IS WHAT WE WANT!!!', data.data);
-          let {token} = data.data
-          if (token) {
-            store.save('token', true).then(() => {
-              this.setState({
-                token: true
-              });
-            });
-          } else {
-            store.save('token', false);
-          }
-        })
-      }, 2000)
-    })
     .catch(err => console.error('An error occurred', err));
   }
 
