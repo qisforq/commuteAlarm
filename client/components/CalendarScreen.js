@@ -15,15 +15,14 @@ export default class AddScreen extends React.Component {
     this.renderItem = this.renderItem.bind(this);
     this.renderEmptyDate = this.renderEmptyDate.bind(this);
     this.findMaxDay = this.findMaxDay.bind(this);
+    this.calculateHeight = this.calculateHeight.bind(this);
+    this.makeAlarm = this.makeAlarm.bind(this);
   }
 
   static navigationOptions = {
     title: 'CalendarScreen',
   };
 
-  componentWillMount() {
-
-  }
 
   render() {
     return (
@@ -44,7 +43,7 @@ export default class AddScreen extends React.Component {
         rowHasChanged={this.rowHasChanged.bind(this)}
 
          // callback that fires when the calendar is opened or closed
-         onCalendarToggled={(calendarOpened) => {console.log(calendarOpened)}}
+         onCalendarToggled={(calendarOpened) => {console.log("calendar opened data:", calendarOpened)}}
          // callback that gets called on day press
          onDayPress={(day)=>{console.log('day pressed')}}
          // callback that gets called when day changes while scrolling agenda list
@@ -112,7 +111,6 @@ export default class AddScreen extends React.Component {
     // const minTime = `${year}-${month}-01T00:00:00-01:00:00`
     const maxTime = `${endDate}T11:59:58-11:59:59`
     // const maxTime = `${year}-${month}-${this.findMaxDay(month)}T11:59:58-11:59:59`
-    console.log('minTime:', minTime, 'endTime:', maxTime)
 
     axios.get("http://localhost:8082/auth/calendar", {
       params: {
@@ -126,18 +124,21 @@ export default class AddScreen extends React.Component {
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
 
       data.forEach((event, i) => {
-        let { id, name, time } = event
+        let { id, name, time, endTime, location } = event
         if (!time.date) {
           let dateStr = time.dateTime.slice(0,10)
-          let timeStr = time.dateTime.slice(11)
+          let startTimeStr = time.dateTime.slice(11,19)
+          let endTimeStr = endTime.dateTime.slice(11,19)
+
+          // let height = 50 +
           let eventData = {
-            height: 50,
-            name: event.name,
-            time: timeStr,
+            name,
+            location,
+            time: startTimeStr,
+            endTime: endTimeStr,
+            height: this.calculateHeight(startTimeStr, endTimeStr),
           }
           // newItems[dateStr] ? newItems[dateStr].push(eventData) : newItems[dateStr] = [eventData];
-          console.log("datstr?", dateStr, newItems);
-          console.log('newItems[dateStr]', newItems[dateStr])
           if (newItems[dateStr].length) {
             newItems[dateStr].forEach((ev) => {
               if (!(ev.time && ev.name === eventData.name && ev.time === eventData.time)) {
@@ -151,14 +152,13 @@ export default class AddScreen extends React.Component {
       });
       Object.keys(newItems).forEach((date) => {
         if (newItems[date] && newItems[date].length) {
-          console.log("?",newItems[date])
           let uniqArr = [];
           newItems[date].forEach((evt) => {
             if (!(uniqArr.find(el => el.name === evt.name && el.time === evt.time))) {
-              console.log('push event!:', evt);
+              // console.log('push event!:', evt);
               uniqArr.push(evt)
             } else {
-              console.log('this event already exists!');
+              console.log('this event already exists!', evt);
             }
           })
           newItems[date] = uniqArr;
@@ -166,37 +166,19 @@ export default class AddScreen extends React.Component {
       })
       this.setState({
         items: newItems,
-      }, () => console.log("zippidee doo daa", this.state.items));
-    }).catch(() => console.log('NOOOOOO'))
+      }, () => console.log("this.state.items after newItems are set:", this.state.items));
+    }).catch(() => console.log('Error in loadGoogleItems'))
   }
 
+  makeAlarm() {
 
+  }
 
-  // loadItems(day) {
-  //   console.log('THE FUCK IS DAY?', day);
-  //   // NOTE: THIS FUNCTION IS GENERATING FAKE CALENDAR EVENTS
-  //   setTimeout(() => {
-  //     for (let i = -15; i < 85; i++) {
-  //       const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-  //       const strTime = this.timeToString(time);
-  //       if (!this.state.items[strTime]) {
-  //         this.state.items[strTime] = [];
-  //         const numItems = Math.floor(Math.random() * 5);
-  //         for (let j = 0; j < numItems; j++) {
-  //           this.state.items[strTime].push({
-  //             name: 'Item for ' + strTime,
-  //             height: Math.max(50, Math.floor(Math.random() * 150))
-  //           });
-  //         }
-  //       }
-  //     }
-  //     const newItems = {};
-  //     Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-  //     this.setState({
-  //       items: newItems
-  //     }, console.log(this.state, "YIPPEEE AYE YAY"));
-  //   }, 1000);
-  // }
+  calculateHeight(startTimeStr, endTimeStr) {
+    let startInSeconds = startTimeStr.split(':').reduce((acc, el, i) => acc + (parseInt(el) * 60 ** (2 - i)), 0);
+    let endInSeconds = endTimeStr.split(':').reduce((acc, el, i) => acc + (parseInt(el) * 60 ** (2 - i)), 0);
+    return ((endInSeconds - startInSeconds) / 250 + 50);
+  }
 
   findMaxDay(month) {
     if (month === 2) {
@@ -209,10 +191,30 @@ export default class AddScreen extends React.Component {
   }
 
   renderItem(item) {
-    // console.log('THIS IS THE renderItem FUNCTION. Here is the item rendered:', item)
+    let { height, name, time, endTime } = item;
+    const convertHours = function convertHoursToHumanReadableTimeForDisplay(time) {
+      let hours = parseInt(time.slice(0,2))
+      let restOfTimeStr = time.slice(2,5)
+      let resultTime = '';
+
+      if (hours === 0) {
+        resultTime = `12${restOfTimeStr}AM`;
+      } else if (hours < 12) {
+        resultTime = `${hours}${restOfTimeStr}AM`;
+      } else if (hours === 12) {
+        resultTime = `12${restOfTimeStr}PM`;
+      } else if (hours > 12) {
+        resultTime = `${hours-12}${restOfTimeStr}PM`;
+      } else {
+        resultTime = time
+      }
+      return resultTime;
+    }
+
     return (
       <View style={[styles.item, {height: item.height*1.5}]}>
-        <Text>{item.name} HAHAHAHAHAHA =D</Text>
+        <Text>{item.name}</Text>
+        <Text>{convertHours(time)}-{convertHours(endTime)}</Text>
         <Button title="add to alarms" onPress={() => console.log('You pressed me! =D')}></Button>
       </View>
     );
@@ -221,7 +223,7 @@ export default class AddScreen extends React.Component {
   renderEmptyDate() {
     // console.log('THIS IS THE renderEmptyDate FUNCTION.')
     return (
-      <View style={styles.emptyDate}><Text>This is empty date!</Text></View>
+      <View style={styles.emptyDate}></View>
     );
   }
 
