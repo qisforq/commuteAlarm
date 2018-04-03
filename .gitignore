@@ -2,6 +2,7 @@ ios/commuteAlarm.xcodeproj/project.xcworkspace/xcuserdata/roryeagan.xcuserdatad/
 ios/commuteAlarm.xcodeproj/xcuserdata/roryeagan.xcuserdatad/
 ios/build
 .DS_Store
+ios/Index
 
 # Logs
 logs
@@ -61,4 +62,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
