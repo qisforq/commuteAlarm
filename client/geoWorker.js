@@ -8,7 +8,7 @@ const geoConfig = {
   //schedules time window in which hearbeat operates
   schedule: [],
   //interval in which user location is updated or a specified function is run
-  heartbeatInterval: 10 * 60,
+  heartbeatInterval: 5 * 60,
   preventSuspend: false,
   // Activity Recognition
   stopTimeout: 5,
@@ -58,7 +58,7 @@ const setSchedule = () => {
         console.log(schedule);
         BackgroundGeolocation.setConfig({
           schedule,
-          heartbeat: 1,
+          // heartbeatInterval: 1,
           preventSuspend: true,
           logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
         }, () => {

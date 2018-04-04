@@ -19,8 +19,8 @@ const updateAlarms = (id, onOff, goOffTime, modifyAlarms, edit) => {
           alarms[k].goOffTime = goOffTime;
           if (goOffTime < Date.now()) {
             alarms[k].onOff = false;
-            // alarms[k].goOffTime = '';
-            Alert.alert('This alarm has already passed =\'(');
+            alarms[k].goOffTime = '';
+            // Alert.alert('This alarm has already passed =\'(');
           }
         }
         alarms[k].id = k;
@@ -40,7 +40,7 @@ const alarmOn = (item, userId, userSettings, modifyAlarms) => {
 
 const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
   let {
-    label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, onOff, id, travelMethod,
+    label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, onOff, id, travelMethod, alarmSound
   } = item;
 
   if (item.time < Date.now()) {
@@ -67,6 +67,7 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
       snoozeTime,
       onOff,
       travelMethod,
+      alarmSound,
     }).catch((err) => {
       console.log('ERRRRRRRRROR', err);
     });

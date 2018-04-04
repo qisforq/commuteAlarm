@@ -4,6 +4,7 @@ import {Button, View, Text, TextInput, Image, TouchableOpacity, TouchableWithout
 import { RadioButtons, SegmentedControls } from 'react-native-radio-buttons'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
+import CustomMultiPicker from "../../custom_modules/react-native-multiple-select-list";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import store from 'react-native-simple-store';
 import axios from 'axios';
@@ -179,7 +180,7 @@ export default class AddScreen extends React.Component {
     console.log(favPlaces);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
-        <View style={{ flex: 0, position: 'absolute', width: '100%', top: '12%', backgroundColor: 'white', zIndex: 100 }}>
+        <View style={{ flex: 0, position: 'absolute', width: '100%', top: '18%', backgroundColor: 'white', zIndex: 100 }}>
           <GooglePlacesAutocomplete
             listUnderlayColor="white"
             styles={{
@@ -239,45 +240,47 @@ export default class AddScreen extends React.Component {
           onConfirm={this.handleTimePicked}
           onCancel={() => this.setState({ showTime: false })}
         />
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
-          <Text style={{ fontWeight: '800' }}>Prep Time Needed: </Text>
-          <ModalDropdown
-            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-            defaultIndex={Number(this.state.prepTime)}
-            defaultValue={this.state.prepTime*5 + ' minutes'}
-            options={[...Array(13)].map((x,i) => (i)*5 + ' minutes ')}
-            onSelect={(idx, val) => this.setState({ prepTime: idx })}
-          />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
-          <Text style={{ fontWeight: '800' }}>Post Time Needed: </Text>
-          <ModalDropdown
-            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-            defaultIndex={this.state.postTime}
-            defaultValue={this.state.postTime*5 + ' minutes'}
-            options={[...Array(13)].map((x,i) => (i)*5 + ' minutes  ')}
-            onSelect={(idx, val) => this.setState({ postTime: idx })}
-          />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
-          <Text style={{ fontWeight: '800' }}>Snoozes: </Text>
-          <ModalDropdown
-            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-            defaultIndex={Number(this.state.snoozes)}
-            defaultValue={this.state.snoozes + ` snooze${this.state.snoozes === 1 ? '' : 's'}`}
-            options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'} `)}
-            onSelect={(idx, val) => this.setState({ snoozes: Number(idx) })}
-          />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
-          <Text style={{ fontWeight: '800' }}>Snooze Time: </Text>
-          <ModalDropdown
-            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-            defaultIndex={Number(this.state.snoozeTime)}
-            defaultValue={this.state.snoozeTime + ' snoozes'}
-            options={[...Array(13)].map((x,i) => i + ' minutes  ')}
-            onSelect={(idx, val) => this.setState({ snoozeTime: Number(idx) })}
-          />
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+            <Text style={{ fontWeight: '800' }}>Prep Time Needed: </Text>
+            <ModalDropdown
+              dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              defaultIndex={Number(this.state.prepTime)}
+              defaultValue={this.state.prepTime*5 + ' minutes'}
+              options={[...Array(13)].map((x,i) => (i)*5 + ' minutes ')}
+              onSelect={(idx, val) => this.setState({ prepTime: idx })}
+            />
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+            <Text style={{ fontWeight: '800' }}>Post Time Needed: </Text>
+            <ModalDropdown
+              dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              defaultIndex={this.state.postTime}
+              defaultValue={this.state.postTime*5 + ' minutes'}
+              options={[...Array(13)].map((x,i) => (i)*5 + ' minutes  ')}
+              onSelect={(idx, val) => this.setState({ postTime: idx })}
+            />
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+            <Text style={{ fontWeight: '800' }}>Snoozes: </Text>
+            <ModalDropdown
+              dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              defaultIndex={Number(this.state.snoozes)}
+              defaultValue={this.state.snoozes + ` snooze${this.state.snoozes === 1 ? '' : 's'}`}
+              options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'} `)}
+              onSelect={(idx, val) => this.setState({ snoozes: Number(idx) })}
+            />
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+            <Text style={{ fontWeight: '800' }}>Snooze Time: </Text>
+            <ModalDropdown
+              dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              defaultIndex={Number(this.state.snoozeTime)}
+              defaultValue={this.state.snoozeTime + ' snoozes'}
+              options={[...Array(13)].map((x,i) => i + ' minutes  ')}
+              onSelect={(idx, val) => this.setState({ snoozeTime: Number(idx) })}
+            />
+          </View>
         </View>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '60%' }}>
           <Text style={{ fontWeight: '800' }}>Travel Method: {"\n"}</Text>
@@ -296,6 +299,26 @@ export default class AddScreen extends React.Component {
             onSelect={(idx, val) => {
               this.setState({ alarmSound: val })
             }}
+          />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
+          <Text style={{ fontWeight: '800' }}>Repeat Days: </Text>
+          <CustomMultiPicker
+            options={{0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}}
+            multiple={true}
+            placeholder={"Search"}
+            placeholderTextColor={'#757575'}
+            returnValue={"value"}
+            callback={(res)=>{ console.log(Number('res')) }} // callback, array of selected items
+            rowBackgroundColor={"#eee"}
+            rowHeight={40}
+            rowRadius={5}
+            iconColor={"#00a2dd"}
+            iconSize={30}
+            selectedIconName={"ios-checkmark-circle-outline"}
+            unselectedIconName={"ios-radio-button-off-outline"}
+            scrollViewHeight={130}
+            selected={[1,2]} // list of options which are selected by default
           />
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>

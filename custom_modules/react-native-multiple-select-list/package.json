@@ -1,0 +1,87 @@
+{
+  "_from": "react-native-multiple-select-list",
+  "_id": "react-native-multiple-select-list@1.0.4",
+  "_inBundle": false,
+  "_integrity": "sha1-Wc326ol7XuR8ftvzE+qES83kq74=",
+  "_location": "/react-native-multiple-select-list",
+  "_phantomChildren": {
+    "cliui": "3.2.0",
+    "code-point-at": "1.1.0",
+    "decamelize": "1.2.0",
+    "get-caller-file": "1.0.2",
+    "graceful-fs": "4.1.11",
+    "is-utf8": "0.2.1",
+    "lcid": "1.0.0",
+    "lodash": "4.17.5",
+    "normalize-package-data": "2.4.0",
+    "number-is-nan": "1.0.1",
+    "parse-json": "2.2.0",
+    "pify": "2.3.0",
+    "pinkie-promise": "2.0.1",
+    "require-directory": "2.1.1",
+    "require-main-filename": "1.0.1",
+    "set-blocking": "2.0.0",
+    "strip-ansi": "3.0.1",
+    "y18n": "3.2.1"
+  },
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-multiple-select-list",
+    "name": "react-native-multiple-select-list",
+    "escapedName": "react-native-multiple-select-list",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-multiple-select-list/-/react-native-multiple-select-list-1.0.4.tgz",
+  "_shasum": "59cdf6ea897b5ee47c7edbf313ea844bcde4abbe",
+  "_spec": "react-native-multiple-select-list",
+  "_where": "/Users/roryeagan/Desktop/commuteAlarm",
+  "author": {
+    "name": "Mirata Seddigh Mohammadi ataomega@gmail.com",
+    "url": "www.atasmohammadi.net"
+  },
+  "bugs": {
+    "url": "https://github.com/ataomega/react-native-multiple-select-list/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "react-native-vector-icons": "^3.0.0"
+  },
+  "deprecated": false,
+  "description": "react-native-multiple-select-list",
+  "homepage": "https://github.com/ataomega/react-native-multiple-select-list#readme",
+  "keywords": [
+    "react",
+    "react-native",
+    "react",
+    "native",
+    "multiple",
+    "select",
+    "multiple",
+    "select",
+    "list",
+    "multiple",
+    "select",
+    "with",
+    "search",
+    "radio",
+    "button"
+  ],
+  "license": "MIT",
+  "main": "multipleSelect.js",
+  "name": "react-native-multiple-select-list",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ataomega/react-native-multiple-select-list.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.4"
+}

@@ -171,7 +171,12 @@ export default class AddScreen extends React.Component {
   }
 
   makeAlarm() {
+    this.props.navigation.navigate('AddScreen', {
+      userId: this.props.navigation.state.params.userId,
+      settings: this.state.userSettings,
+      favPlaces: this.state.favPlaces,
 
+    });
   }
 
   calculateHeight(startTimeStr, endTimeStr) {
