@@ -16,9 +16,9 @@ firebaseMethods.storeCalendar = function (item) {
   }).key
 }
 
-firebaseMethods.storeToken = function (accessToken, refreshToken, id) {
+firebaseMethods.storeToken = function (accessToken, refreshToken, id, expireTime = 3600) {
   console.log("here", accessToken, refreshToken, id)
-  let expirationDate = Date.now() + 1000*60*60;
+  let expirationDate = Date.now() + (expireTime * 1000);
   firebase.database().ref(`users/${id}/token`).set({
     accessToken,
     refreshToken,
@@ -30,6 +30,18 @@ firebaseMethods.getToken = function(id) {
   return firebase.database().ref(`users/${id}/token`).once('value').then((snapshot) => {
     return snapshot.val();
   });
+}
+
+firebaseMethods.storeProfile = function(profile, id) {
+  console.log('id?', id);
+  let {displayName, name, photos, gender, _json} = profile;
+  firebase.database().ref(`users/${id}/profile`).set({
+    displayName,
+    name,
+    photos,
+    gender,
+    _json,
+  }).key
 }
 
 firebaseMethods.newUser = function (cb) {
