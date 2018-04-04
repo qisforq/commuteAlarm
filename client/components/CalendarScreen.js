@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import {Agenda} from 'react-native-calendars';
 import axios from 'axios';
+import store from 'react-native-simple-store';
 
 export default class AddScreen extends React.Component {
   constructor(props) {
@@ -9,7 +10,6 @@ export default class AddScreen extends React.Component {
     this.state = {
       items: {}
     };
-    console.log('this dot props dot nav-ih-gay-shun dot state dot puh-rams dot user eye dee!', this.props.navigation.state.params);
     this.loadItems = this.loadItems.bind(this);
     this.loadGoogleItems = this.loadGoogleItems.bind(this);
     this.renderItem = this.renderItem.bind(this);
@@ -23,12 +23,8 @@ export default class AddScreen extends React.Component {
     title: 'CalendarScreen',
   };
 
-  componentWillMount() {
-    axios.get("http://localhost:8082/auth/checktoken", {
-      params: {
-        userId: this.props.navigation.state.params.userId,
-      }
-    })
+  componentDidMount() {
+
   }
 
   render() {
@@ -127,7 +123,6 @@ export default class AddScreen extends React.Component {
     })
     .catch((err) => {
       console.log('Error retrieving calendar data. Returning to settings screen. Err:', err)
-      // this.props.navigation.goBack();
     })
     .then(({ data }) => {
       console.log('ORIGINAL DATA', data)
@@ -182,10 +177,14 @@ export default class AddScreen extends React.Component {
   }
 
   makeAlarm() {
-    this.props.navigation.navigate('AddScreen', {
-      userId: this.props.navigation.state.params.userId,
-      settings: this.state.userSettings,
-      favPlaces: this.state.favPlaces,
+    store.get('places').then((places) => {
+      let favPlaces = Object.entries(places).sort((a, b) => a[1].count < b[1].count);
+      favPlaces = favPlaces.map(p => ({ description: p[1].address, place_id: p[0] })).slice(0,2);
+      // this.props.navigation.navigate('AddScreen', {
+      //   userId: this.props.navigation.state.params.userId,
+      //   settings: this.state.userSettings,
+      //   favPlaces: this.state.favPlaces,
+      // });
     });
   }
 
