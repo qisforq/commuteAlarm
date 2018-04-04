@@ -138,7 +138,7 @@ firebaseMethods.saveSettings = function (settings, cb) {
     defaultPostTime: settings.postTime,
     defaultSnoozes: settings.snoozes,
     defaultSnoozeTime: settings.snoozeTime,
-    defaultAlarmSound: settings.alarmSound,
+    defaultAlarmSound: settings.alarmSound || 'annoying',
   }).key);
 };
 
