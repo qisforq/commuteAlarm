@@ -19,8 +19,8 @@ const updateAlarms = (id, onOff, goOffTime, modifyAlarms, edit) => {
           alarms[k].goOffTime = goOffTime;
           if (goOffTime < Date.now()) {
             alarms[k].onOff = false;
-            // alarms[k].goOffTime = '';
-            Alert.alert('This alarm has already passed =\'(');
+            alarms[k].goOffTime = '';
+            // Alert.alert('This alarm has already passed =\'(');
           }
         }
         alarms[k].id = k;
