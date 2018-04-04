@@ -75,7 +75,7 @@ firebaseMethods.newAlarm = function ({
     onOff: false,
     location: locationId,
     travelMethod,
-    alarmSound,
+    alarmSound: alarmSound || 'annoying',
   }).key);
 };
 

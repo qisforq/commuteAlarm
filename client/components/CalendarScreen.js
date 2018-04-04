@@ -9,7 +9,7 @@ export default class AddScreen extends React.Component {
     this.state = {
       items: {}
     };
-
+    console.log('this dot props dot nav-ih-gay-shun dot state dot puh-rams dot user eye dee!', this.props.navigation.state.params);
     this.loadItems = this.loadItems.bind(this);
     this.loadGoogleItems = this.loadGoogleItems.bind(this);
     this.renderItem = this.renderItem.bind(this);
@@ -23,6 +23,13 @@ export default class AddScreen extends React.Component {
     title: 'CalendarScreen',
   };
 
+  componentWillMount() {
+    axios.get("http://localhost:8082/auth/checktoken", {
+      params: {
+        userId: this.props.navigation.state.params.userId,
+      }
+    })
+  }
 
   render() {
     return (
@@ -111,14 +118,18 @@ export default class AddScreen extends React.Component {
     // const minTime = `${year}-${month}-01T00:00:00-01:00:00`
     const maxTime = `${endDate}T11:59:58-11:59:59`
     // const maxTime = `${year}-${month}-${this.findMaxDay(month)}T11:59:58-11:59:59`
-
     axios.get("http://localhost:8082/auth/calendar", {
       params: {
         userId: this.props.navigation.state.params.userId,
         minTime,
         maxTime,
       }
-    }).then(({ data }) => {
+    })
+    .catch((err) => {
+      console.log('Error retrieving calendar data. Returning to settings screen. Err:', err)
+      // this.props.navigation.goBack();
+    })
+    .then(({ data }) => {
       console.log('ORIGINAL DATA', data)
       const newItems = {};
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
@@ -175,7 +186,6 @@ export default class AddScreen extends React.Component {
       userId: this.props.navigation.state.params.userId,
       settings: this.state.userSettings,
       favPlaces: this.state.favPlaces,
-
     });
   }
 

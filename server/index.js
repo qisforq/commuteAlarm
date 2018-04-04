@@ -26,6 +26,7 @@ app.get('/user/new', (req, res) => {
 });
 
 app.post('/user/places', ({ body }, res) => {
+  console.log('data sent to user/places:', body);
   firebase.savePlaces(body)
 })
 
