@@ -5,19 +5,19 @@ const keys = require('./keys.js');
 const firebase = require('./database');
 var axios = require('axios');
 
-const checkToken = function checkIfAccessTokenIsExpiredAndRenew(accessToken, refreshToken, expirationDate, minTime, maxTime, cb) {
+const checkToken = function checkIfAccessTokenIsExpiredAndRenew(userId, accessToken, refreshToken, expirationDate, minTime, maxTime, cb) {
+  console.log("expiration date:", expirationDate, "is it in the past?", expirationDate < Date.now());
   if (expirationDate < Date.now()) {
-    axios.post('https://www.googleapis.com/oauth2/v4/token', {
-      refresh_token: refreshToken,
-      client_id: keys.google.clientID,
-      client_secret: keys.google.clientSecret,
-      grant_type: "refresh_token",
-    })
-    .then((data) => {
-      return mega(accessToken, minTime, maxTime, cb);
+    axios.post(`https://www.googleapis.com/oauth2/v4/token?refresh_token=${refreshToken}&client_id=${keys.google.clientID}&client_secret=${keys.google.clientSecret}&grant_type=refresh_token`)
+    .then(({ data }) => {
+      let { access_token, expires_in } = data;
+      firebase.storeToken(access_token, refreshToken, userId, expires_in)
+      console.log('Check this data for a token', typeof expires_in);
+      return mega(access_token, minTime, maxTime, cb);
     })
     .catch((err) => {
-      console.log('Error inside axios post to request new refresh token:', err.data)
+      console.log('Error inside axios post to request new refresh token:', err.response.data)
+        // return mega(accessToken, minTime, maxTime, cb);
     })
   } else {
     return mega(accessToken, minTime, maxTime, cb);
@@ -75,6 +75,7 @@ passport.use(
     //passport callback function
 
     firebase.storeToken(accessToken, refreshToken, reqThingy.query.state)
+    firebase.storeProfile(profile, reqThingy.query.state);
     // console.log('thingy:', accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
     return done(null, profile);
   })
@@ -95,7 +96,7 @@ router.get('/calendar', ({ query }, res) => {
   firebase.getToken(query.userId).then(async ({ accessToken, refreshToken, expirationDate }) => {
     let arr = []
 
-    await checkToken(accessToken, refreshToken, expirationDate, query.minTime, query.maxTime, (item, end) => {
+    await checkToken(query.userId, accessToken, refreshToken, expirationDate, query.minTime, query.maxTime, (item, end) => {
       arr.push(item);
       if (end) {
         res.status(200).send(arr);
