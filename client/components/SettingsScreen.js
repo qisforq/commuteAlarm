@@ -84,7 +84,8 @@ export default class SettingsScreen extends React.Component {
       snoozes,
       snoozeTime,
       alarmSound,
-    }).then(data => {
+    })
+    .then((data) => {
       store.update('userSettings', {
         defaultPostTime: prepTime,
         defaultPrepTime: postTime,
@@ -92,9 +93,12 @@ export default class SettingsScreen extends React.Component {
         defaultSnoozeTime: snoozeTime,
         defaultAlarmSound: alarmSound,
       })
-    }).then(() => {
+    })
+    .then(() => {
       this.props.navigation.state.params.updateUserSettings(prepTime, postTime, snoozes, snoozeTime, alarmSound)
-    }).then(goBack);
+    })
+    .then(goBack)
+    .catch(console.log('Error saving settings'));
 
   };
 

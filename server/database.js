@@ -44,6 +44,14 @@ firebaseMethods.storeProfile = function(profile, id) {
   }).key
 }
 
+firebaseMethods.savePlaces = function saveUserPlacesToDB({places, userId}) {
+  firebase.database().ref(`users/${userId}/places`).update(places).key
+}
+
+firebaseMethods.saveGeolocation = function saveUserGeolocationToDB({location, userId}) {
+  firebase.database().ref(`users/${userId}/geolocations`).push(location).key
+}
+
 firebaseMethods.newUser = function (cb) {
   cb(usersRef.push({
     userSettings: {

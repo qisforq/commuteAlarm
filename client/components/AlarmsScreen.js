@@ -183,10 +183,16 @@ export default class AlarmsScreen extends React.Component {
         updateUserSettings: this._updateUserSettings,
       }),
     });
+
     BackgroundGeolocation.on('heartbeat', ({ location }) => {
       console.log("THIS IS THE HEARTBEAT LISTENER", location);
       getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
+      axios.post('http://localhost:8082/user/geolocation', {
+        location,
+        userId: this.state.userId,
+      }).catch(console.log('Error saving geolocation to DB'))
     });
+
     BackgroundGeolocation.on('geofence', (geofence) => {
       console.log("THIS IS THE GEOFENCE", geofence);
       const { alarmId, identifier } = geofence.extras;
