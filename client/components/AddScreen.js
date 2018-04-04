@@ -14,34 +14,35 @@ export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
     console.log(this.props);
+    let { data, settings } = this.props.navigation.state.params
     if(this.props.navigation.state.params.data) {
       this.state = {
         showTime: false,
-        label: this.props.navigation.state.params.data.label,
-        time: this.props.navigation.state.params.data.time,
-        prepTime: this.props.navigation.state.params.data.prepTime,
-        postTime: this.props.navigation.state.params.data.postTime,
-        locationId: this.props.navigation.state.params.data.locationId,
-        address: this.props.navigation.state.params.data.address,
-        snoozes: this.props.navigation.state.params.data.snoozes,
-        snoozeTime: this.props.navigation.state.params.data.snoozeTime,
-        alarmSound: this.props.navigation.state.params.data.alarmSound,
-        onOff: this.props.navigation.state.params.data.onOff,
+        label: data.label,
+        time: data.time,
+        prepTime: data.prepTime,
+        postTime: data.postTime,
+        locationId: data.locationId,
+        address: data.address,
+        snoozes: data.snoozes,
+        snoozeTime: data.snoozeTime,
+        alarmSound: data.alarmSound,
+        onOff: data.onOff,
         edit: true,
-        travelMethod: this.props.navigation.state.params.data.travelMethod,
+        travelMethod: data.travelMethod,
       };
     } else {
       this.state = {
         showTime: false,
         label: 'Alarm',
         time: '',
-        prepTime: this.props.navigation.state.params.settings.defaultPrepTime,
-        postTime: this.props.navigation.state.params.settings.defaultPostTime,
+        prepTime: settings.defaultPrepTime,
+        postTime: settings.defaultPostTime,
         locationId: null,
         address: 'Search',
-        snoozes: this.props.navigation.state.params.settings.defaultSnoozes,
-        snoozeTime: this.props.navigation.state.params.settings.defaultSnoozeTime,
-        alarmSound: this.props.navigation.state.params.settings.defaulAlarmSound,
+        snoozes: settings.defaultSnoozes,
+        snoozeTime: settings.defaultSnoozeTime,
+        alarmSound: settings.defaulAlarmSound,
         onOff: false,
         edit: false,
         travelMethod: 'Driving',
@@ -69,7 +70,9 @@ export default class AddScreen extends React.Component {
     axios.post('http://localhost:8082/user/places', {
       places,
       userId,
-    }).catch(console.log('Error saving places to DB'))
+    }).catch((err) => {
+      console.log('Error saving places to DB:', err)
+    })
   }
 
   saveAlarm() {
@@ -87,7 +90,7 @@ export default class AddScreen extends React.Component {
 
       store.save('places', places)
     })
-    
+
     if(this.state.edit) {
       axios.post('http://localhost:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,

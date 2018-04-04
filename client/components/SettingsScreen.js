@@ -37,7 +37,7 @@ export default class SettingsScreen extends React.Component {
           <HeaderButton.Item
             title="Done/Save"
             onPress={() => {
-              params.saveSettings(params, navigation.goBack)
+              params.saveSettings(params.userId, navigation.goBack)
             }}
           />
         </HeaderButton>
@@ -79,7 +79,7 @@ export default class SettingsScreen extends React.Component {
     })
   }
 
-  _saveSettings = ({ userId }, goBack) => {
+  _saveSettings = (userId, goBack) => {
     let { prepTime, postTime, snoozes, snoozeTime, alarmSound } = this.state;
     axios.post('http://localhost:8082/settings/save', {
       userId,
@@ -112,13 +112,18 @@ export default class SettingsScreen extends React.Component {
   };
 
   toCalendarScreen() {
+    let { navigate, state } = this.props.navigation;
+    let { userId } = state.params;
      this.props.navigation.navigate('CalendarScreen', {
-       userId: userId,
+       userId,
      });
    }
 
 
   handleLogin() {
+    let { goBack, state } = this.props.navigation;
+    let { userId, saveSettings } = state.params;
+    saveSettings(userId, () => {});
     Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`)
     .catch(err => console.error('An error occurred', err));
   }

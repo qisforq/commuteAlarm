@@ -59,6 +59,8 @@ const mega = function(token, minTime, maxTime, cb) {
     })
   .catch((err) => {
     console.log("Error inside axios call to mega");
+    // console.log(">>>>", err.request.res,"<<<<<");
+    // console.log(">>>>", err.response.request,"<<<<<");
   })
   return finalArray
 }
@@ -103,7 +105,7 @@ router.get('/calendar', ({ query }, res) => {
       }
     });
   }).catch((err) => {
-    console.log(err);
+    console.log('yo bitch erra');
   })
 })
 
