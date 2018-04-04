@@ -1,11 +1,24 @@
 import React, { Component } from 'react';
 import {
-  Alert, Button, Switch, View, Text, TouchableHighlight, AsyncStorage,
+  Alert, Button,Switch,  View, Text, TouchableHighlight, AsyncStorage,
   Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
+import { Button as Booton } from 'react-native-paper';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { switchChange } from '../alarmsListFunctions';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+// import { Switch } from 'react-native-paper';
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'tomato',
+    accent: 'yellow',
+  },
+};
+
 
 
 function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, editScreen }) {
@@ -36,6 +49,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
                 <Text style={{ fontWeight: '300' }}>{item.address.slice(0, 32)}...</Text>
               </View>
               <Switch
+              color="red"
                 style={{ flex: 2 }}
                 tintColor="lightgrey"
                 value={item.onOff}
@@ -57,6 +71,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
         />
+
       </View>
     </View>
   );
