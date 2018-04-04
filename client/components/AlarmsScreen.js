@@ -31,6 +31,7 @@ PushNotification.configure({
     console.log( 'NOTIFICATION:', notification);
 
     if (notification.userInteraction) {
+      updateAlarms(notification.data.id, false, '', this.modAlarms, false);
       BackgroundGeolocation.getCurrentPosition((location) => {
         BackgroundGeolocation.addGeofence({
           identifier: 'Start',
@@ -90,8 +91,9 @@ PushNotification.configure({
 
             store.get('alarms').then((alarmsObj) => {
               let { alarmData, userId, userSettings, alarmTime } = notification.data
-              switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
-              whoosh.release()
+              // switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
+              updateAlarms(notification.data.id, false, '', this.modAlarms, false);
+              whoosh.release();
 
               alarmsObj[alarmData.id].turnedOff = true;
               store.save('alarms', alarmsObj);
