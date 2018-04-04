@@ -11,7 +11,7 @@ import { Linking } from 'react-native';
 export default class SettingsScreen extends React.Component {
   constructor(props){
     super(props);
-    const { userId, userSettings } = props.navigation.state.params
+    let { userSettings } = props.navigation.state.params
 
     this.state = {
       prepTime: userSettings.defaultPrepTime,
@@ -45,8 +45,32 @@ export default class SettingsScreen extends React.Component {
     }
   }
 
+
+  componentWillMount() {
+    // let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
+    this.props.navigation.setParams({ saveSettings: this._saveSettings });
+    store.get('token').then((token) => {
+      this.setState({token: token},() => console.log('this is the state after getting token:', this.state))
+    })
+  }
+
   componentDidMount() {
     Linking.addEventListener('url', this.handleOpenURL);
+    let { userId } = this.props.navigation.state.params
+    axios.post("http://localhost:8082/auth/checktoken", {
+      userId
+    })
+    .then(({ status }) => {
+      if (status === 202) {
+        store.save('token', false);
+        this.setState({
+          token: false,
+        });
+      }
+    })
+    .catch(() => {
+      console.log('error in check token');
+    })
   }
 
   componentWillUnmount() {
@@ -60,24 +84,21 @@ export default class SettingsScreen extends React.Component {
       console.log('SUCCESS!!!')
       store.save('token', true).then(() => {
         this.setState({
-          token: true
+          token: true,
         }, this.toCalendarScreen);
       });
     } else if (status === 'failure'){
       console.log('FAILURE!! The good kind! =D')
       store.save('token', false);
+      this.setState({
+        token: false,
+      })
     } else {
       console.log('Ok, something fishy is going on...');
     }
   }
 
-  componentWillMount() {
-    // let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
-    this.props.navigation.setParams({ saveSettings: this._saveSettings });
-    store.get('token').then((token) => {
-      this.setState({token: token},() => console.log('this is the state after getting token:', this.state))
-    })
-  }
+
 
   _saveSettings = (userId, goBack) => {
     let { prepTime, postTime, snoozes, snoozeTime, alarmSound } = this.state;

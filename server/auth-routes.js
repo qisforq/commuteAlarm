@@ -105,7 +105,30 @@ router.get('/calendar', ({ query }, res) => {
       }
     });
   }).catch((err) => {
-    console.log('yo bitch erra');
+    console.log('error');
+  })
+})
+
+router.post('/checktoken', ({ body }, res) => {
+  console.log('WHAT WHAT WQHATTTTT', body)
+  firebase.getToken(body.userId)
+  .then(({ accessToken, refreshToken }) => {
+    console.log('YOOOOO googuh', accessToken, refreshToken)
+    const headers = {
+      access_token: accessToken,
+    }
+    axios.get(`https://www.googleapis.com/calendar/v3/colors/?access_token=${accessToken}`, headers)
+    .then(() => {
+      console.log('yayy it worked');
+      res.status(200).send()
+    })
+    .catch(() => {
+      console.log('yayyy it didnt work!');
+      res.status(202).send()
+    })
+  })
+  .catch(() => {
+    console.log('oh shitttt')
   })
 })
 
