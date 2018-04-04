@@ -4,7 +4,7 @@ import {Button, View, Text, TextInput, Image, TouchableOpacity, TouchableWithout
 import { RadioButtons, SegmentedControls } from 'react-native-radio-buttons'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
-import CustomMultiPicker from "react-native-multiple-select-list";
+import CustomMultiPicker from "../../custom_modules/react-native-multiple-select-list";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import store from 'react-native-simple-store';
 import axios from 'axios';
@@ -309,7 +309,7 @@ export default class AddScreen extends React.Component {
             placeholder={"Search"}
             placeholderTextColor={'#757575'}
             returnValue={"value"}
-            callback={(res)=>{ console.log(Number(res)) }} // callback, array of selected items
+            callback={(res)=>{ console.log(Number('res')) }} // callback, array of selected items
             rowBackgroundColor={"#eee"}
             rowHeight={40}
             rowRadius={5}
