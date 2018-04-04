@@ -141,7 +141,6 @@ router.get('/login', (req, res) => {
 router.get('/token', (req, res) => {
   firebase.getToken(req.query.userId).then((token) => {
     res.send({token,})
-
   });
 })
 

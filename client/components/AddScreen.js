@@ -48,6 +48,7 @@ export default class AddScreen extends React.Component {
     }
 
     this.saveAlarm = this.saveAlarm.bind(this);
+    this.savePlacesToDB = this.savePlacesToDB.bind(this);
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -63,6 +64,12 @@ export default class AddScreen extends React.Component {
       time: time.getTime(),
     });
   }
+  savePlacesToDB(places, userId) {
+    axios.post('http://localhost:8082/user/places', {
+      places,
+      userId,
+    }).catch(console.log('Error saving places to DB'))
+  }
 
   saveAlarm() {
     let { label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, alarmSound, onOff, travelMethod } = this.state;
@@ -75,8 +82,11 @@ export default class AddScreen extends React.Component {
           address,
         };
       }
+      this.savePlacesToDB(places, this.props.navigation.state.params.userId)
+
       store.save('places', places)
-    });
+    })
+    
     if(this.state.edit) {
       axios.post('http://localhost:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,
@@ -92,7 +102,8 @@ export default class AddScreen extends React.Component {
         snoozeTime,
         travelMethod,
         alarmSound
-      }).then(data => {
+      })
+      .then(data => {
         store.get('alarms').then(alarms => {
           alarms[this.props.navigation.state.params.data.id] = {
             label,
@@ -117,7 +128,8 @@ export default class AddScreen extends React.Component {
             }
           });
         })
-      });
+      })
+      .catch(console.log('error updating the alarm'))
     } else {
       axios.post('http://localhost:8082/alarm/save', {
         userId: this.props.navigation.state.params.userId,
@@ -131,7 +143,8 @@ export default class AddScreen extends React.Component {
         snoozeTime,
         travelMethod,
         alarmSound,
-      }).then(data => {
+      })
+      .then(data => {
         console.log(data.data);
         store.get('alarms').then(alarms => {
           alarms[data.data] = {
@@ -152,7 +165,8 @@ export default class AddScreen extends React.Component {
             this.props.navigation.navigate('AlarmsScreen');
           });
         })
-      }).catch(err => console.log(err));
+      })
+      .catch(err => console.log('error saving alarm:', err));
     }
   }
 

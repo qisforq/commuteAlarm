@@ -25,9 +25,16 @@ app.get('/user/new', (req, res) => {
   });
 });
 
-app.post('/alarm/save', (req, res) => {
-  console.log(req.body);
-  firebase.newAlarm((req.body), (dat) => {
+app.post('/user/places', ({ body }, res) => {
+  firebase.savePlaces(body)
+})
+
+app.post('/user/geolocation', ({ body }, res) => {
+  firebase.saveGeolocation(body)
+})
+
+app.post('/alarm/save', ({ body }, res) => {
+  firebase.newAlarm((body), (dat) => {
     res.status(200).send(dat);
   });
 });

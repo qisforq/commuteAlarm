@@ -77,7 +77,8 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
       updateAlarms(id, false, undefined, modifyAlarms);
       PushNotification.cancelLocalNotifications({ id })
     }
-  });
+  })
+  .catch(console.log('error in switchChange'));
 };
 
 module.exports = { switchChange, alarmOn, updateAlarms };
