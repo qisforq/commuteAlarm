@@ -16,8 +16,7 @@ import { getCommuteData } from '../commuteWorkers';
 import { geoConfig, geoSuccess } from '../geoWorker';
 import { updateAlarms, switchChange } from '../alarmsListFunctions';
 import Sound from 'react-native-sound'
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import Navigation from 'BottomNavigation';
+
 // BackgroundTask.define(async () => {
 //   // getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
 //   BackgroundTask.finish();
@@ -359,7 +358,6 @@ export default class AlarmsScreen extends React.Component {
 
   render() {
     return (
-      <PaperProvider>
       <AlarmsList
         userId={this.state.userId}
         userSettings={this.state.userSettings}
@@ -368,8 +366,6 @@ export default class AlarmsScreen extends React.Component {
         deleteAlarm={this.deleteAlarm}
         editScreen={this.editScreen}
       />
-      <Navigation/>
-      </PaperProvider>
     );
   }
 }

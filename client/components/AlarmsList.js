@@ -4,20 +4,11 @@ import {
   Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
-import { Button as Booton } from 'react-native-paper';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { switchChange } from '../alarmsListFunctions';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-// import { Switch } from 'react-native-paper';
 
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: 'tomato',
-    accent: 'yellow',
-  },
-};
+
+
 
 
 

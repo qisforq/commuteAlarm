@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, View, Text, StyleSheet } from 'react-native';
-import { BottomNavigation } from 'react-native-paper';
+
 
 export default class Navigation extends React.Component {
   state = {
