@@ -11,12 +11,14 @@ import { Linking } from 'react-native';
 export default class SettingsScreen extends React.Component {
   constructor(props){
     super(props);
+    const { userId, userSettings } = props.navigation.state.params
+
     this.state = {
-      prepTime: props.navigation.state.params.userSettings.defaultPrepTime,
-      postTime: props.navigation.state.params.userSettings.defaultPostTime,
-      snoozes: props.navigation.state.params.userSettings.defaultSnoozes,
-      snoozeTime: props.navigation.state.params.userSettings.defaultSnoozeTime,
-      alarmSound: props.navigation.state.params.userSettings.defaultAlarmSound,
+      prepTime: userSettings.defaultPrepTime,
+      postTime: userSettings.defaultPostTime,
+      snoozes: userSettings.defaultSnoozes,
+      snoozeTime: userSettings.defaultSnoozeTime,
+      alarmSound: userSettings.defaultAlarmSound,
       token: false,
     }
     this.toCalendarScreen = this.toCalendarScreen.bind(this);
@@ -46,9 +48,11 @@ export default class SettingsScreen extends React.Component {
   componentDidMount() {
     Linking.addEventListener('url', this.handleOpenURL);
   }
+
   componentWillUnmount() {
     Linking.removeEventListener('url', this.handleOpenURL);
   }
+
   handleOpenURL(event) {
     console.log(event.url.slice(15, 22), "the fuck man");
     let status = event.url.slice(15, 22)
@@ -68,22 +72,25 @@ export default class SettingsScreen extends React.Component {
   }
 
   componentWillMount() {
-    let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
+    // let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
     this.props.navigation.setParams({ saveSettings: this._saveSettings });
     store.get('token').then((token) => {
       this.setState({token: token},() => console.log('this is the state after getting token:', this.state))
     })
   }
 
-  _saveSettings = ({userId}, goBack) => {
+  _saveSettings = ({ userId }, goBack) => {
     let { prepTime, postTime, snoozes, snoozeTime, alarmSound } = this.state;
     axios.post('http://localhost:8082/settings/save', {
-      userId: userId,
+      userId,
       prepTime,
       postTime,
       snoozes,
       snoozeTime,
       alarmSound,
+    })
+    .catch((err) => {
+      console.log('Error setting settings in database', err)
     })
     .then((data) => {
       store.update('userSettings', {
@@ -98,20 +105,20 @@ export default class SettingsScreen extends React.Component {
       this.props.navigation.state.params.updateUserSettings(prepTime, postTime, snoozes, snoozeTime, alarmSound)
     })
     .then(goBack)
-    .catch(console.log('Error saving settings'));
+    .catch((err) => {
+      console.log('Error saving settings', err)
+    });
 
   };
 
   toCalendarScreen() {
      this.props.navigation.navigate('CalendarScreen', {
-       userId: this.props.navigation.state.params.userId,
+       userId: userId,
      });
    }
 
 
   handleLogin() {
-    const userId = this.props.navigation.state.params.userId
-
     Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`)
     .catch(err => console.error('An error occurred', err));
   }

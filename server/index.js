@@ -54,7 +54,8 @@ app.post('/alarm/delete', (req, res) => {
 // ~~~~~Settings Screen Routes~~~~~~~
 app.post('/settings/save', ({ body }, res) => {
   firebase.saveSettings(body, (key) => {
-    res.status(200).send(key);
+    console.log('YO MONNNNN DIS WORKING?', body);
+    res.status(200).send();
   });
 });
 
