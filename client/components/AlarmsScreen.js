@@ -206,7 +206,7 @@ export default class AlarmsScreen extends React.Component {
           let start = alarms[alarmId].commuteStart;
           let end = alarms[alarmId].commuteEnd;
           store.get('travel').then((travel) => {
-            travel.push((end - start) - alarms[alarmId].commuteTime);
+            travel.push(((end - start) - alarms[alarmId].commuteTime) / alarms[alarmId].commuteTime);
             store.save('travel', travel);
           });
           alarms[alarmId].commuteStart = 0;

@@ -40,6 +40,7 @@
 		5436321D2072F50000747E7A /* annoying.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5436321C2072F50000747E7A /* annoying.mp3 */; };
 		545163232072BA0D002A0A65 /* alarmchi.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 545162F52072BA0D002A0A65 /* alarmchi.mp3 */; };
 		54A5EE982061A5C000AE4D1B /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54A5EE792061A56200AE4D1B /* libRCTPushNotification.a */; };
+		54DE97272076AA0F00D3AB4A /* eternity.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 54DE96F62076AA0F00D3AB4A /* eternity.mp3 */; };
 		5D6555D5C64B4ABE9644588E /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8D7C3642E2D4DEEB90E6C62 /* Feather.ttf */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		664DA67533974838A66B57E9 /* libRNBackgroundFetch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F1A4FA3E554BEA8993B79A /* libRNBackgroundFetch.a */; };
@@ -353,6 +354,13 @@
 			remoteGlobalIDString = BEC43C6A1C723089001221C6;
 			remoteInfo = RNCalendarEvents;
 		};
+		54DE97222076AA0F00D3AB4A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 462465ECD4114B749A2717CB /* RNBackgroundGeolocation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 83FF5F901AFD0D2B0016A13E;
+			remoteInfo = RNBackgroundGeolocationTests;
+		};
 		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
@@ -443,6 +451,7 @@
 		5436321C2072F50000747E7A /* annoying.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = annoying.mp3; path = ../annoying.mp3; sourceTree = "<group>"; };
 		545162F52072BA0D002A0A65 /* alarmchi.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = alarmchi.mp3; path = ../alarmchi.mp3; sourceTree = "<group>"; };
 		54A5EE672061A56200AE4D1B /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
+		54DE96F62076AA0F00D3AB4A /* eternity.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = eternity.mp3; path = ../eternity.mp3; sourceTree = "<group>"; };
 		59BEC50C4E164C2FB0B82F50 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		64F1A4FA3E554BEA8993B79A /* libRNBackgroundFetch.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBackgroundFetch.a; sourceTree = "<group>"; };
@@ -839,6 +848,7 @@
 			isa = PBXGroup;
 			children = (
 				A826838C2064415500E45334 /* libRNBackgroundGeolocation.a */,
+				54DE97232076AA0F00D3AB4A /* RNBackgroundGeolocationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -855,6 +865,7 @@
 		CE7C724C11E0467994643207 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				54DE96F62076AA0F00D3AB4A /* eternity.mp3 */,
 				5436321C2072F50000747E7A /* annoying.mp3 */,
 				545162F52072BA0D002A0A65 /* alarmchi.mp3 */,
 				BC4007D7F48E430B910DF183 /* Entypo.ttf */,
@@ -1351,6 +1362,13 @@
 			remoteRef = 54C18D46206064E70018C758 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		54DE97232076AA0F00D3AB4A /* RNBackgroundGeolocationTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNBackgroundGeolocationTests.xctest;
+			remoteRef = 54DE97222076AA0F00D3AB4A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1435,6 +1453,7 @@
 				4D858D8A2C75490D81C33442 /* Octicons.ttf in Resources */,
 				95F0B0BD2EEC425AB1F5E47A /* SimpleLineIcons.ttf in Resources */,
 				545163232072BA0D002A0A65 /* alarmchi.mp3 in Resources */,
+				54DE97272076AA0F00D3AB4A /* eternity.mp3 in Resources */,
 				C22BB28AD4804025BF44AF00 /* Zocial.ttf in Resources */,
 				7168C592AA0C4E32824E60A0 /* rubicon-icon-font.ttf in Resources */,
 				0F145304F5214C319E44AC62 /* Rubik-Black.ttf in Resources */,
