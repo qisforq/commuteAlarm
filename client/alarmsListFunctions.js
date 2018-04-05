@@ -40,7 +40,7 @@ const alarmOn = (item, userId, userSettings, modifyAlarms) => {
 
 const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
   let {
-    label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, onOff, id, travelMethod, alarmSound
+    label, time, prepTime, postTime, locationId, address, snoozes, snoozeTime, onOff, id, travelMethod, alarmSound,
   } = item;
 
   if (item.time < Date.now()) {
@@ -79,7 +79,7 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
       PushNotification.cancelLocalNotifications({ id })
     }
   })
-  .catch(console.log('error in switchChange'));
+    .catch(console.log('error in switchChange'));
 };
 
 module.exports = { switchChange, alarmOn, updateAlarms };
