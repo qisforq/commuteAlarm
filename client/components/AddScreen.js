@@ -4,7 +4,6 @@ import {Button, View, Text, TextInput, Image, TouchableOpacity, TouchableWithout
 import { RadioButtons, SegmentedControls } from 'react-native-radio-buttons'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
-import CustomMultiPicker from "../../custom_modules/react-native-multiple-select-list";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import store from 'react-native-simple-store';
 import axios from 'axios';
@@ -322,26 +321,6 @@ export default class AddScreen extends React.Component {
             onSelect={(idx, val) => {
               this.setState({ alarmSound: val })
             }}
-          />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
-          <Text style={{ fontWeight: '800' }}>Repeat Days: </Text>
-          <CustomMultiPicker
-            options={{0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}}
-            multiple={true}
-            placeholder={"Search"}
-            placeholderTextColor={'#757575'}
-            returnValue={"value"}
-            callback={(res)=>{ console.log(Number('res')) }} // callback, array of selected items
-            rowBackgroundColor={"#eee"}
-            rowHeight={40}
-            rowRadius={5}
-            iconColor={"#00a2dd"}
-            iconSize={30}
-            selectedIconName={"ios-checkmark-circle-outline"}
-            unselectedIconName={"ios-radio-button-off-outline"}
-            scrollViewHeight={130}
-            selected={[1,2]} // list of options which are selected by default
           />
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
