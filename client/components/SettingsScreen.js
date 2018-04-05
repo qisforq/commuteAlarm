@@ -1,12 +1,12 @@
 import React from 'react';
 import BottomNavigation from './BottomNavigation';
-import {Button, View, Text, TextInput, Picker, StyleSheet } from 'react-native';
+import { Button, View, Text, TextInput, Picker, StyleSheet, Linking } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import axios from 'axios';
 import store from 'react-native-simple-store';
-import { Linking } from 'react-native';
+import { DefaultTheme, ThemeProvider } from 'react-native-ios-kit';
 
 export default class SettingsScreen extends React.Component {
   constructor(props){

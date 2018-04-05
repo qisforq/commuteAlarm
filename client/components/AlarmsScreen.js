@@ -6,7 +6,7 @@ import PushNotification from 'react-native-push-notification';
 import HeaderButton from 'react-navigation-header-buttons';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import BackgroundGeolocation from "react-native-background-geolocation";
-import { PushNotificationIOS, Alert } from 'react-native';
+import { View, PushNotificationIOS, Alert, StatusBar } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 
 
@@ -122,11 +122,15 @@ export default class AlarmsScreen extends React.Component {
 
     return {
       title: 'Alarms',
+      headerStyle: {
+        backgroundColor: '#82d7da'
+      },
+      headerTintColor: '#e04b4d',
       headerLeft: (
         <HeaderButton
           IconComponent={Icon}
           iconSize={23}
-          color="black"
+          color="#e04b4d"
         >
           <HeaderButton.Item
             iconName={"md-settings"}
@@ -139,7 +143,7 @@ export default class AlarmsScreen extends React.Component {
         <HeaderButton
           IconComponent={Icon}
           iconSize={23}
-          color="black"
+          color="#e04b4d"
           >
           <HeaderButton.Item
             iconName={"md-add"}
@@ -349,14 +353,14 @@ export default class AlarmsScreen extends React.Component {
 
   render() {
     return (
-      <AlarmsList
-        userId={this.state.userId}
-        userSettings={this.state.userSettings}
-        alarms={this.state.alarms}
-        modifyAlarms={this.modifyAlarms}
-        deleteAlarm={this.deleteAlarm}
-        editScreen={this.editScreen}
-      />
+        <AlarmsList
+          userId={this.state.userId}
+          userSettings={this.state.userSettings}
+          alarms={this.state.alarms}
+          modifyAlarms={this.modifyAlarms}
+          deleteAlarm={this.deleteAlarm}
+          editScreen={this.editScreen}
+        />
     );
   }
 }
