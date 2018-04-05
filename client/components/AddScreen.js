@@ -11,7 +11,6 @@ import axios from 'axios';
 export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props.navigation.state.params, "from addscreen with love");
     let { params } = this.props.navigation.state
     if(this.props.navigation.state.params.data) {
       this.state = {
@@ -140,10 +139,8 @@ export default class AddScreen extends React.Component {
             travelMethod,
             alarmSound
           };
-          console.log(alarms);
           store.save('alarms', alarms).then(() => {
             if(onOff) {
-              console.log('its goioooing', onOff);
               this.props.navigation.state.params.commuteData('commutetime/single', this.props.navigation.state.params.data, true)
             } else {
               this.props.navigation.navigate('AlarmsScreen');
@@ -167,7 +164,6 @@ export default class AddScreen extends React.Component {
         alarmSound,
       })
       .then(data => {
-        console.log(data.data);
         store.get('alarms').then(alarms => {
           alarms[data.data] = {
             label,
@@ -182,7 +178,6 @@ export default class AddScreen extends React.Component {
             travelMethod,
             alarmSound,
           };
-          console.log(alarms);
           store.save('alarms', alarms).then(() => {
             this.props.navigation.navigate('AlarmsScreen');
           });
@@ -198,7 +193,6 @@ export default class AddScreen extends React.Component {
     timeString.splice(timeString.indexOf(':', 3), 3);
     timeString = timeString.join('');
     let favPlaces = this.props.navigation.state.params.favPlaces;
-    console.log(favPlaces);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
         <View style={{ flex: 0, position: 'absolute', width: '100%', top: '18%', backgroundColor: 'white', zIndex: 100 }}>
@@ -222,12 +216,10 @@ export default class AddScreen extends React.Component {
             placeholder={this.state.address}
             minLength={2} // minimum length of text to search
             onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-              console.log(details);
-              console.log(data);
               this.setState({
                 locationId: data.place_id,
                 address: data.description,
-              }, () => console.log(this.state));
+              });
             }}
             query={{
               key: 'AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw',

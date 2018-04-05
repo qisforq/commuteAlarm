@@ -45,7 +45,6 @@ PushNotification.configure({
             alarmId: notification.data.id,
           },
         }, () => {
-          console.log('Successfully added geofence');
         }, (error) => {
           console.warn('Failed to add geofence', error);
         });
@@ -53,7 +52,6 @@ PushNotification.configure({
       store.get('alarms').then((alarms) => {
         Geocoder.getFromLocation(alarms[notification.data.id].address).then((json) => {
           let { location } = json.results[0].geometry;
-          console.log(location);
           BackgroundGeolocation.addGeofence({
             identifier: 'End',
             radius: 150,
@@ -67,7 +65,6 @@ PushNotification.configure({
               alarmId: notification.data.id,
             },
           }, () => {
-            console.log('Successfully added geofence');
           }, (error) => {
             console.warn('Failed to add geofence', error);
           });
@@ -186,7 +183,6 @@ export default class AlarmsScreen extends React.Component {
     });
 
     BackgroundGeolocation.on('heartbeat', ({ location }) => {
-      console.log("THIS IS THE HEARTBEAT LISTENER", location);
       getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
       axios.post('http://localhost:8082/user/geolocation', {
         location,
@@ -195,7 +191,6 @@ export default class AlarmsScreen extends React.Component {
     });
 
     BackgroundGeolocation.on('geofence', (geofence) => {
-      console.log("THIS IS THE GEOFENCE", geofence);
       const { alarmId, identifier } = geofence.extras;
       store.get('alarms').then((alarms) => {
         if (identifier === 'Start') {
@@ -260,14 +255,12 @@ export default class AlarmsScreen extends React.Component {
         });
       } else {
         store.get('userSettings').then((settings) => {
-          console.log(settings);
           this.setState({
             userId: id,
             userSettings: settings,
           });
         }).then(() => {
           store.get('alarms').then((alarms) => {
-            console.log(alarms);
             this.setState({
               alarms: Object.keys(alarms).map((k) => {
                 alarms[k].id = k;
@@ -278,7 +271,6 @@ export default class AlarmsScreen extends React.Component {
         });
         store.get('places').then((places) => {
           let favPlaces = Object.entries(places).sort((a, b) => a[1].count < b[1].count);
-          console.log(favPlaces);
           favPlaces = favPlaces.map(p => ({ description: p[1].address, place_id: p[0] })).slice(0,2);
           this.setState({
             favPlaces,
@@ -320,7 +312,6 @@ export default class AlarmsScreen extends React.Component {
   }
 
   editScreen(item) {
-    console.log(item);
     this.props.navigation.navigate('AddScreen', {
       data: item,
       userId: this.state.userId,
@@ -346,7 +337,7 @@ export default class AlarmsScreen extends React.Component {
   }
 
   modifyAlarms(alarms, edit) {
-    console.log('modify: ', alarms);
+    console.log(alarms);
     this.setState({
       alarms,
     }, () => {

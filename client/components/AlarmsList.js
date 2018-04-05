@@ -6,10 +6,7 @@ import {
 import Swipeout from 'react-native-swipeout';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { switchChange } from '../alarmsListFunctions';
-
-
-
-
+import store from 'react-native-simple-store';
 
 
 function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, editScreen }) {
@@ -23,6 +20,8 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
       backgroundColor: 'red',
       onPress: () => { deleteAlarm(item); },
     }];
+    console.log(item);
+    let onOffSeperate = item.onOff;
     return (
       <Swipeout
         right={swipeBtns}
@@ -40,11 +39,30 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
                 <Text style={{ fontWeight: '300' }}>{item.address.slice(0, 32)}...</Text>
               </View>
               <Switch
-              color="red"
+                color="red"
                 style={{ flex: 2 }}
                 tintColor="lightgrey"
-                value={item.onOff}
-                onValueChange={() => switchChange(item, userId, userSettings, modifyAlarms)}
+                value={onOffSeperate}
+                onValueChange={() => {
+                  store.get('alarms').then((alarms) => {
+                    const newAlarms = Object.keys(alarms).map((k) => {
+                      if (k === item.id) {
+                        alarms[k].onOff = !item.onOff;
+                        alarms[k].goOffTime = item.goOffTime;
+                        if (item.goOffTime < Date.now()) {
+                          alarms[k].onOff = false;
+                          alarms[k].goOffTime = '';
+                        }
+                      }
+                      alarms[k].id = k;
+                      return alarms[k];
+                    });
+                    console.log('here');
+                    modifyAlarms(newAlarms, false);
+                    store.save('alarms', alarms);
+                  });
+                  switchChange(item, userId, userSettings, modifyAlarms)
+                }}
               />
               <View style={{ flex: 0.5 }} />
             </View>

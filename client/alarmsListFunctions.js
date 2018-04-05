@@ -9,10 +9,8 @@ import { getLocationParams, getLocationErr } from './geoWorker';
 let alarmsListFunctions = {};
 
 const updateAlarms = (id, onOff, goOffTime, modifyAlarms, edit) => {
-  console.log('herer we are', id, goOffTime, onOff);
   store.get('alarms')
     .then((alarms) => {
-      console.log('askdfbakjsdbfasbdfahsdf',alarms);
       const newAlarms = Object.keys(alarms).map((k) => {
         if (k === id) {
           alarms[k].onOff = onOff;
@@ -26,8 +24,8 @@ const updateAlarms = (id, onOff, goOffTime, modifyAlarms, edit) => {
         alarms[k].id = k;
         return alarms[k];
       });
+      console.log('here');
       modifyAlarms(newAlarms, edit);
-      console.log(alarms);
       store.save('alarms', alarms);
     });
 };
@@ -47,7 +45,6 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
     return setTimeout(() => Alert.alert('This alarm has already passed =\'('), 300);
   }
   store.get('alarms').then((alarmsObj) => {
-    console.log(alarmsObj[id]);
     if (alarmsObj[id].turnedOff) {
       return setTimeout(() => Alert.alert('This alarm has already passed =\'('), 300);
     }
@@ -75,11 +72,11 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
     if (onOff && !notif) {
       alarmOn(item, userId, userSettings, modifyAlarms);
     } else {
-      updateAlarms(id, false, undefined, modifyAlarms);
+      // updateAlarms(id, false, undefined, modifyAlarms);
       PushNotification.cancelLocalNotifications({ id })
     }
   })
-    .catch(console.log('error in switchChange'));
+    .catch(err => console.log('error in switchChange', err));
 };
 
 module.exports = { switchChange, alarmOn, updateAlarms };
