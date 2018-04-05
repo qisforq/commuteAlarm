@@ -6,6 +6,7 @@ import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import axios from 'axios';
 import store from 'react-native-simple-store';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default class SettingsScreen extends React.Component {
   constructor(props){
@@ -32,9 +33,13 @@ export default class SettingsScreen extends React.Component {
       title: 'Settings',
       headerLeft: null,
       headerRight: (
-        <HeaderButton IconComponent={Icon} iconSize={23} color="blue">
+        <HeaderButton IconComponent={Icon} iconSize={23} color="#f5f5f5">
           <HeaderButton.Item
-            title="Done/Save"
+            title="Done"
+            buttonStyle={{
+              fontWeight: 'bold',
+              fontSize: 18,
+            }}
             onPress={() => {
               params.saveSettings(params.userId, navigation.goBack)
             }}
@@ -151,7 +156,7 @@ export default class SettingsScreen extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
+      <LinearGradient colors={['#7ad8db', '#33b8bd']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
         <View></View>
         <View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
@@ -228,7 +233,7 @@ export default class SettingsScreen extends React.Component {
           this.state.token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
         }
         </View>
-      </View>
+      </LinearGradient>
     );
   }
 }

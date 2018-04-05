@@ -8,7 +8,6 @@ import Icon from 'react-native-vector-icons/Ionicons.js';
 import BackgroundGeolocation from "react-native-background-geolocation";
 import { View, PushNotificationIOS, Alert, StatusBar } from 'react-native';
 import Geocoder from 'react-native-geocoding';
-import LinearGradient from 'react-native-linear-gradient';
 import dummyData from '../../server/dummyData';
 import AlarmsList from './AlarmsList';
 import { getCommuteData } from '../commuteWorkers';
@@ -75,28 +74,31 @@ PushNotification.configure({
       PushNotificationIOS.removeAllDeliveredNotifications();
     } else if (Date.parse(notification.data.alarmTime) > (Date.now() - 100)) {
       Sound.setCategory('Playback');
-      let whoosh = new Sound('annoying.mp3', Sound.MAIN_BUNDLE, (err) => {
-        if (err) throw err;
-        whoosh.play()
-      })
-      Alert.alert(notification.alert, '', [
-        {
-          text: 'Turn Off',
-          onPress: () => {
 
-            store.get('alarms').then((alarmsObj) => {
-              let { alarmData, userId, userSettings, alarmTime } = notification.data
-              // switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
-              updateAlarms(notification.data.id, false, '', this.modAlarms, false);
-              whoosh.release();
+      store.get('userSettings').then((userSettings) => {
+        let whoosh = new Sound(`${userSettings.defaultAlarmSound}.mp3`, Sound.MAIN_BUNDLE, (err) => {
+          if (err) throw err;
+          whoosh.play();
+        });
+        Alert.alert(notification.alert, '', [
+          {
+            text: 'Turn Off',
+            onPress: () => {
 
-              alarmsObj[alarmData.id].turnedOff = true;
-              store.save('alarms', alarmsObj);
-            })
-          }
-        },
-        {text: 'Snooze', onPress: () => whoosh.release()},
-      ]);
+              store.get('alarms').then((alarmsObj) => {
+                let { alarmData, userId, userSettings, alarmTime } = notification.data
+                // switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
+                updateAlarms(notification.data.id, false, '', this.modAlarms, false);
+                whoosh.release();
+
+                alarmsObj[alarmData.id].turnedOff = true;
+                store.save('alarms', alarmsObj);
+              })
+            }
+          },
+          { text: 'Snooze', onPress: () => whoosh.release() },
+        ]);
+      });
     }
     PushNotification.cancelLocalNotifications({ id: notification.data.id });
     notification.finish(PushNotificationIOS.FetchResult.NoData);

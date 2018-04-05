@@ -30,7 +30,7 @@ const RootStack = StackNavigator(
       headerTintColor: '#f5f5f5',
       headerTitleStyle: {
         fontWeight: 'bold',
-        letterSpacing: 2,
+        letterSpacing: 1,
         fontFamily: 'Pacifico',
         fontSize: 22,
       },
