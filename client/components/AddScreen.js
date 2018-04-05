@@ -309,7 +309,7 @@ export default class AddScreen extends React.Component {
           <ModalDropdown
             dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
             defaultValue={this.state.alarmSound}
-            options={['annoying', 'alarmchi']}
+            options={['annoying', 'alarmchi', 'eternity']}
             onSelect={(idx, val) => {
               this.setState({ alarmSound: val })
             }}

@@ -215,7 +215,7 @@ export default class SettingsScreen extends React.Component {
                 dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
                 defaultIndex={this.state.postTime}
                 defaultValue={this.state.alarmSound}
-                options={['annoying', 'alarmchi']}
+                options={['annoying', 'alarmchi', 'eternity']}
                 onSelect={(idx, val) => {
                   this.setState({ alarmSound: val })
                 }}
