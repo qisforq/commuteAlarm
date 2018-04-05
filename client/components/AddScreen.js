@@ -55,7 +55,7 @@ export default class AddScreen extends React.Component {
         address: 'Search',
         snoozes: params.settings.defaultSnoozes,
         snoozeTime: params.settings.defaultSnoozeTime,
-        alarmSound: params.settings.defaulAlarmSound,
+        alarmSound: params.settings.defaultAlarmSound,
         onOff: false,
         edit: false,
         travelMethod: 'Driving',
@@ -188,6 +188,7 @@ export default class AddScreen extends React.Component {
   }
 
   render() {
+    console.log(this.state.alarmSound);
     let timeString = new Date(this.state.time).toLocaleTimeString()
     timeString = timeString.split('')
     timeString.splice(timeString.indexOf(':', 3), 3);

@@ -76,28 +76,31 @@ PushNotification.configure({
       PushNotificationIOS.removeAllDeliveredNotifications();
     } else if (Date.parse(notification.data.alarmTime) > (Date.now() - 100)) {
       Sound.setCategory('Playback');
-      let whoosh = new Sound('annoying.mp3', Sound.MAIN_BUNDLE, (err) => {
-        if (err) throw err;
-        whoosh.play()
-      })
-      Alert.alert(notification.alert, '', [
-        {
-          text: 'Turn Off',
-          onPress: () => {
-
-            store.get('alarms').then((alarmsObj) => {
-              let { alarmData, userId, userSettings, alarmTime } = notification.data
-              // switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
-              updateAlarms(notification.data.id, false, '', this.modAlarms, false);
-              whoosh.release();
-
-              alarmsObj[alarmData.id].turnedOff = true;
-              store.save('alarms', alarmsObj);
-            })
-          }
-        },
-        {text: 'Snooze', onPress: () => whoosh.release()},
-      ]);
+      
+      store.get('userSettings').then((userSettings) => {
+        let whoosh = new Sound(`${userSettings.defaultAlarmSound}.mp3`, Sound.MAIN_BUNDLE, (err) => {
+          if (err) throw err;
+          whoosh.play();
+        });
+        Alert.alert(notification.alert, '', [
+          {
+            text: 'Turn Off',
+            onPress: () => {
+  
+              store.get('alarms').then((alarmsObj) => {
+                let { alarmData, userId, userSettings, alarmTime } = notification.data
+                // switchChange(alarmData, userId, userSettings, this.modAlarms, alarmTime)
+                updateAlarms(notification.data.id, false, '', this.modAlarms, false);
+                whoosh.release();
+  
+                alarmsObj[alarmData.id].turnedOff = true;
+                store.save('alarms', alarmsObj);
+              })
+            }
+          },
+          {text: 'Snooze', onPress: () => whoosh.release()},
+        ]);
+      });
     }
     PushNotification.cancelLocalNotifications({ id: notification.data.id });
     notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -246,14 +249,22 @@ export default class AlarmsScreen extends React.Component {
             defaultSnoozes: 0,
             defaultSnoozeTime: 8,
             defaultAlarmSound: 'annoying',
-          });
-          this.setState({
-            userId: data.data,
-          }, () => {
-            this.props.navigation.navigate('SettingsScreen', {
-              userId: this.state.userId,
-              userSettings: this.state.userSettings,
-              updateUserSettings: this._updateUserSettings,
+          }).then(() => {
+            this.setState({
+              userId: data.data,
+              userSettings: {
+                defaultPrepTime: 0,
+                defaultPostTime: 0,
+                defaultSnoozes: 0,
+                defaultSnoozeTime: 8,
+                defaultAlarmSound: 'annoying',
+              },
+            }, () => {
+              this.props.navigation.navigate('SettingsScreen', {
+                userId: this.state.userId,
+                userSettings: this.state.userSettings,
+                updateUserSettings: this._updateUserSettings,
+              });
             });
           });
         });
@@ -296,6 +307,7 @@ export default class AlarmsScreen extends React.Component {
 
   _toAddScreen() {
     // getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms);
+    console.log(this.state.userSettings);
     this.props.navigation.navigate('AddScreen', {
       userId: this.state.userId,
       settings: this.state.userSettings,
