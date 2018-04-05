@@ -3,6 +3,9 @@ import { Button, View, Text, StyleSheet } from 'react-native';
 import {Agenda} from 'react-native-calendars';
 import axios from 'axios';
 import store from 'react-native-simple-store';
+import Geocoder from 'react-native-geocoding';
+
+Geocoder.setApiKey('AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw');
 
 export default class AddScreen extends React.Component {
   constructor(props) {
@@ -22,10 +25,6 @@ export default class AddScreen extends React.Component {
   static navigationOptions = {
     title: 'CalendarScreen',
   };
-
-  componentDidMount() {
-
-  }
 
   render() {
     return (
@@ -143,6 +142,7 @@ export default class AddScreen extends React.Component {
             time: startTimeStr,
             endTime: endTimeStr,
             height: this.calculateHeight(startTimeStr, endTimeStr),
+            timeData: new Date(time.dateTime)
           }
           // newItems[dateStr] ? newItems[dateStr].push(eventData) : newItems[dateStr] = [eventData];
           if (newItems[dateStr].length) {
@@ -176,16 +176,32 @@ export default class AddScreen extends React.Component {
     }).catch(() => console.log('Error in loadGoogleItems'))
   }
 
-  makeAlarm() {
+  makeAlarm(alarmName, alarmTime, alarmLocation) {
+    let { navigate, state } = this.props.navigation;
+    let { userId, settings } = state.params;
+
     store.get('places').then((places) => {
       let favPlaces = Object.entries(places).sort((a, b) => a[1].count < b[1].count);
-      favPlaces = favPlaces.map(p => ({ description: p[1].address, place_id: p[0] })).slice(0,2);
-      // this.props.navigation.navigate('AddScreen', {
-      //   userId: this.props.navigation.state.params.userId,
-      //   settings: this.state.userSettings,
-      //   favPlaces: this.state.favPlaces,
-      // });
-    });
+      return favPlaces.map(p => ({ description: p[1].address, place_id: p[0] })).slice(0,2);
+    })
+    .then((favPlaces) => {
+      Geocoder.getFromLocation(alarmLocation).then((locData) => {
+        let { formatted_address, place_id } = locData.results[0]
+        return { formatted_address, place_id, favPlaces }
+      })
+      .then(({formatted_address, place_id, favPlaces}) => {
+        navigate('AddScreen', {
+          userId,
+          settings,
+          favPlaces: [],
+          alarmName,
+          alarmTime,
+          formatted_address,
+          place_id,
+          fromCalendar: true,
+        });
+      })
+    })
   }
 
   calculateHeight(startTimeStr, endTimeStr) {
@@ -229,7 +245,10 @@ export default class AddScreen extends React.Component {
       <View style={[styles.item, {height: item.height*1.5}]}>
         <Text>{item.name}</Text>
         <Text>{convertHours(time)}-{convertHours(endTime)}</Text>
-        <Button title="add to alarms" onPress={() => console.log('You pressed me! =D')}></Button>
+        <Text>{item.location}</Text>
+        <Button title="add to alarms" onPress={() => {
+          this.makeAlarm(item.name, item.timeData, item.location)
+        }}></Button>
       </View>
     );
   }
