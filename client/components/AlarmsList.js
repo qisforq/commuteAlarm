@@ -7,6 +7,7 @@ import Swipeout from 'react-native-swipeout';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { switchChange } from '../alarmsListFunctions';
 import store from 'react-native-simple-store';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, editScreen }) {
@@ -73,16 +74,15 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
-      <View style={{ height: '100%', width: '100%' }}>
-        <FlatList
-          data={alarms}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
-
-      </View>
-    </View>
+      <LinearGradient colors={['#bdeaeb', '#82d7da']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+        <View style={{ height: '100%', width: '100%' }}>
+          <FlatList
+            data={alarms}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+      </LinearGradient>
   );
 }
 
