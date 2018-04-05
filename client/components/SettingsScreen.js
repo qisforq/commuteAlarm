@@ -6,7 +6,6 @@ import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import axios from 'axios';
 import store from 'react-native-simple-store';
-import { DefaultTheme, ThemeProvider } from 'react-native-ios-kit';
 
 export default class SettingsScreen extends React.Component {
   constructor(props){
