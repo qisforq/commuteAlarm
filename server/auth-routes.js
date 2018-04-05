@@ -128,7 +128,7 @@ router.post('/checktoken', ({ body }, res) => {
     })
   })
   .catch(() => {
-    console.log('oh shitttt')
+    console.log('error in checktoken')
   })
 })
 
