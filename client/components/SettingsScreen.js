@@ -137,6 +137,7 @@ export default class SettingsScreen extends React.Component {
     let { userId } = state.params;
      this.props.navigation.navigate('CalendarScreen', {
        userId,
+       settings: this.state
      });
    }
 
