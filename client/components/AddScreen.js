@@ -9,44 +9,59 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import store from 'react-native-simple-store';
 import axios from 'axios';
 
-
 export default class AddScreen extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
-    let { data, settings } = this.props.navigation.state.params
+    console.log(this.props.navigation.state.params, "from addscreen with love");
+    let { params } = this.props.navigation.state
     if(this.props.navigation.state.params.data) {
       this.state = {
         showTime: false,
-        label: data.label,
-        time: data.time,
-        prepTime: data.prepTime,
-        postTime: data.postTime,
-        locationId: data.locationId,
-        address: data.address,
-        snoozes: data.snoozes,
-        snoozeTime: data.snoozeTime,
-        alarmSound: data.alarmSound,
-        onOff: data.onOff,
+        label: params.data.label,
+        time: params.data.time,
+        prepTime: params.data.prepTime,
+        postTime: params.data.postTime,
+        locationId: params.data.locationId,
+        address: params.data.address,
+        snoozes: params.data.snoozes,
+        snoozeTime: params.data.snoozeTime,
+        alarmSound: params.data.alarmSound,
+        onOff: params.data.onOff,
         edit: true,
-        travelMethod: data.travelMethod,
+        travelMethod: params.data.travelMethod,
       };
+    } else if (params.fromCalendar) {
+      this.state = {
+        showTime: false,
+        label: params.alarmName,
+        time: params.alarmTime.getTime(),
+        prepTime: params.settings.prepTime,
+        postTime: params.settings.postTime,
+        locationId: params.place_id,
+        address: params.formatted_address,
+        snoozes: params.settings.snoozes,
+        snoozeTime: params.settings.snoozeTime,
+        alarmSound: params.settings.alarmSound,
+        onOff: false,
+        edit: false,
+        travelMethod: 'Transit',
+      }
     } else {
       this.state = {
         showTime: false,
         label: 'Alarm',
         time: '',
-        prepTime: settings.defaultPrepTime,
-        postTime: settings.defaultPostTime,
+        prepTime: params.settings.defaultPrepTime,
+        postTime: params.settings.defaultPostTime,
         locationId: null,
         address: 'Search',
-        snoozes: settings.defaultSnoozes,
-        snoozeTime: settings.defaultSnoozeTime,
-        alarmSound: settings.defaulAlarmSound,
+        snoozes: params.settings.defaultSnoozes,
+        snoozeTime: params.settings.defaultSnoozeTime,
+        alarmSound: params.settings.defaulAlarmSound,
         onOff: false,
         edit: false,
         travelMethod: 'Driving',
-      };
+      }
     }
 
     this.saveAlarm = this.saveAlarm.bind(this);
@@ -59,6 +74,10 @@ export default class AddScreen extends React.Component {
       title: navigation.state.params.data ? 'Edit Alarm' : 'Add Alarm',
     }
   };
+
+  componentWillMount() {
+
+  }
 
   handleTimePicked = (time) => {
     this.setState({
@@ -217,6 +236,7 @@ export default class AddScreen extends React.Component {
             }}
             debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
             predefinedPlaces={favPlaces}
+            GooglePlacesSearchQuery={{rankby: 'distance'}}
           />
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%' }}>
@@ -230,7 +250,7 @@ export default class AddScreen extends React.Component {
           <Text style={{ fontWeight: '800' }}>Address: </Text>
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
-          <Text style={{ fontWeight: '800' }}>DateTime: </Text>
+          <Text style={{ fontWeight: '800' }}>Arrival Time: </Text>
           <TouchableOpacity
             onPress={() => this.setState({ showTime: true })}
           >
