@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Alert, Button,Switch,  View, Text, TouchableHighlight, AsyncStorage,
+  StatusBar, Alert, Button,Switch,  View, Text, TouchableHighlight, AsyncStorage,
   Slider, FlatList, StyleSheet, ListItem, RefreshControl, PushNotificationIOS,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
@@ -74,7 +74,11 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
   };
 
   return (
-      <LinearGradient colors={['#bdeaeb', '#82d7da']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+      <LinearGradient colors={['#7ad8db', '#33b8bd', '#7ad8db']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+        />
         <View style={{ height: '100%', width: '100%' }}>
           <FlatList
             data={alarms}

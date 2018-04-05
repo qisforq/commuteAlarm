@@ -23,6 +23,18 @@ const RootStack = StackNavigator(
   },
   {
     initialRouteName: 'AlarmsScreen',
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#33b8bd',
+      },
+      headerTintColor: '#f5f5f5',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        letterSpacing: 2,
+        fontFamily: 'Pacifico',
+        fontSize: 22,
+      },
+    }
   }
 );
 

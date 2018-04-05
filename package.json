@@ -7,6 +7,11 @@
     "start": "react-native run-ios",
     "test": "jest"
   },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
+  },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.41",
     "@shoutem/ui": "^0.23.4",
