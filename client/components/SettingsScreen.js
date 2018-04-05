@@ -36,6 +36,7 @@ export default class SettingsScreen extends React.Component {
           <HeaderButton.Item
             title="Done/Save"
             onPress={() => {
+              console.log('hehrehreh');
               params.saveSettings(params.userId, navigation.goBack)
             }}
           />
@@ -101,6 +102,7 @@ export default class SettingsScreen extends React.Component {
 
   _saveSettings = (userId, goBack) => {
     let { prepTime, postTime, snoozes, snoozeTime, alarmSound } = this.state;
+    console.log(goBack);
     axios.post('http://localhost:8082/settings/save', {
       userId,
       prepTime,
@@ -124,11 +126,11 @@ export default class SettingsScreen extends React.Component {
     .then(() => {
       this.props.navigation.state.params.updateUserSettings(prepTime, postTime, snoozes, snoozeTime, alarmSound)
     })
-    .then(goBack)
+    // .then(goBack)
     .catch((err) => {
       console.log('Error saving settings', err)
     });
-
+    goBack();
   };
 
   toCalendarScreen() {
@@ -150,6 +152,7 @@ export default class SettingsScreen extends React.Component {
   }
 
   render() {
+    console.log(this.state.alarmSound);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
         <View></View>
