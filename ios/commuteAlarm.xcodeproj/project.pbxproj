@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -65,6 +64,19 @@
 		DB76E6A3BA7A444889C6BBC8 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B377499C4B294F0F821BE728 /* Foundation.ttf */; };
 		DC3907FB252146F789CE099F /* libRNBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A58FC8CAC78342DCB025D492 /* libRNBackgroundGeolocation.a */; };
 		E359D0E412DF47E994E5F5B7 /* RNBackgroundGeolocationTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = A313F37A31A8470098CE15DF /* RNBackgroundGeolocationTests.xctest */; };
+		AD8C112742084CD29BD8327B /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF93114C1A0F426A9CF4B50B /* libBVLinearGradient.a */; };
+		4880C30BCB1E46FB991F1F10 /* libRNPhotoView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67A135AB107C47479BFA9957 /* libRNPhotoView.a */; };
+		7168C592AA0C4E32824E60A0 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C603C6825BDB41E4AF9974E6 /* rubicon-icon-font.ttf */; };
+		0F145304F5214C319E44AC62 /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E398378CE9094CE582326832 /* Rubik-Black.ttf */; };
+		DE5320C9B5BF401BAA208530 /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3ED376FD940D4B62AAED1C87 /* Rubik-BlackItalic.ttf */; };
+		38F5AF9347AD44D8BF3FB4BF /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2E64ABE75DE453B90A61356 /* Rubik-Bold.ttf */; };
+		66CDF937323942D98DE57384 /* Rubik-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 492D45363E714FBB96AF54A0 /* Rubik-BoldItalic.ttf */; };
+		E21A2FE3765045F0A070B499 /* Rubik-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 235748342E9545A78BCC778B /* Rubik-Italic.ttf */; };
+		09BD6E090BE447DAA37936C7 /* Rubik-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B288BF53CB14DBAB7928B79 /* Rubik-Light.ttf */; };
+		4A538C99AE49418982A38965 /* Rubik-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8D39F6189684455A899A6A8 /* Rubik-LightItalic.ttf */; };
+		9672BD2CED9043EAB630C120 /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17D3719B430D4FD993EB0827 /* Rubik-Medium.ttf */; };
+		78454BF7DFCA4D1A82C8B1CB /* Rubik-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8DF54EA93B1E4A25B6710049 /* Rubik-MediumItalic.ttf */; };
+		4208C1153E4C4CEC811A07B0 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05D231778AC04B9A83E15DD6 /* Rubik-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -460,6 +472,21 @@
 		E4427ACFB44941CEA070D805 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		ED9914E771964400BC1856B1 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		F47766BB9BBC4397A3DB5BBA /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
+		835345E827D448D2AACDC00F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; name = "BVLinearGradient.xcodeproj"; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		EF93114C1A0F426A9CF4B50B /* libBVLinearGradient.a */ = {isa = PBXFileReference; name = "libBVLinearGradient.a"; path = "libBVLinearGradient.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		A5E6BCD6DA604B57B42674BF /* RNPhotoView.xcodeproj */ = {isa = PBXFileReference; name = "RNPhotoView.xcodeproj"; path = "../node_modules/react-native-photo-view/ios/RNPhotoView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		67A135AB107C47479BFA9957 /* libRNPhotoView.a */ = {isa = PBXFileReference; name = "libRNPhotoView.a"; path = "libRNPhotoView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		C603C6825BDB41E4AF9974E6 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../node_modules/@shoutem/ui/fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E398378CE9094CE582326832 /* Rubik-Black.ttf */ = {isa = PBXFileReference; name = "Rubik-Black.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3ED376FD940D4B62AAED1C87 /* Rubik-BlackItalic.ttf */ = {isa = PBXFileReference; name = "Rubik-BlackItalic.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E2E64ABE75DE453B90A61356 /* Rubik-Bold.ttf */ = {isa = PBXFileReference; name = "Rubik-Bold.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		492D45363E714FBB96AF54A0 /* Rubik-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Rubik-BoldItalic.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		235748342E9545A78BCC778B /* Rubik-Italic.ttf */ = {isa = PBXFileReference; name = "Rubik-Italic.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4B288BF53CB14DBAB7928B79 /* Rubik-Light.ttf */ = {isa = PBXFileReference; name = "Rubik-Light.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C8D39F6189684455A899A6A8 /* Rubik-LightItalic.ttf */ = {isa = PBXFileReference; name = "Rubik-LightItalic.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		17D3719B430D4FD993EB0827 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; name = "Rubik-Medium.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8DF54EA93B1E4A25B6710049 /* Rubik-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Rubik-MediumItalic.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		05D231778AC04B9A83E15DD6 /* Rubik-Regular.ttf */ = {isa = PBXFileReference; name = "Rubik-Regular.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -502,6 +529,8 @@
 				68F996C0E13E4C1087BA6C64 /* TSLocationManager.framework in Frameworks */,
 				7630D10D802F4AE3B8542D89 /* libCocoaLumberjack.a in Frameworks */,
 				7A27BE78C4C74AF1845C83A1 /* libRNSound.a in Frameworks */,
+				AD8C112742084CD29BD8327B /* libBVLinearGradient.a in Frameworks */,
+				4880C30BCB1E46FB991F1F10 /* libRNPhotoView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,6 +777,8 @@
 				462465ECD4114B749A2717CB /* RNBackgroundGeolocation.xcodeproj */,
 				9AFE5D86FDE44AFA9A3C886C /* Lumberjack.xcodeproj */,
 				674A9C6338F44C9181259C40 /* RNSound.xcodeproj */,
+				835345E827D448D2AACDC00F /* BVLinearGradient.xcodeproj */,
+				A5E6BCD6DA604B57B42674BF /* RNPhotoView.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -837,6 +868,17 @@
 				D4B5681611944A8B8B0C4BF3 /* Octicons.ttf */,
 				2BBF6994DB734078BE9EE600 /* SimpleLineIcons.ttf */,
 				B53E895AF3184883A1B01DAE /* Zocial.ttf */,
+				C603C6825BDB41E4AF9974E6 /* rubicon-icon-font.ttf */,
+				E398378CE9094CE582326832 /* Rubik-Black.ttf */,
+				3ED376FD940D4B62AAED1C87 /* Rubik-BlackItalic.ttf */,
+				E2E64ABE75DE453B90A61356 /* Rubik-Bold.ttf */,
+				492D45363E714FBB96AF54A0 /* Rubik-BoldItalic.ttf */,
+				235748342E9545A78BCC778B /* Rubik-Italic.ttf */,
+				4B288BF53CB14DBAB7928B79 /* Rubik-Light.ttf */,
+				C8D39F6189684455A899A6A8 /* Rubik-LightItalic.ttf */,
+				17D3719B430D4FD993EB0827 /* Rubik-Medium.ttf */,
+				8DF54EA93B1E4A25B6710049 /* Rubik-MediumItalic.ttf */,
+				05D231778AC04B9A83E15DD6 /* Rubik-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1394,6 +1436,17 @@
 				95F0B0BD2EEC425AB1F5E47A /* SimpleLineIcons.ttf in Resources */,
 				545163232072BA0D002A0A65 /* alarmchi.mp3 in Resources */,
 				C22BB28AD4804025BF44AF00 /* Zocial.ttf in Resources */,
+				7168C592AA0C4E32824E60A0 /* rubicon-icon-font.ttf in Resources */,
+				0F145304F5214C319E44AC62 /* Rubik-Black.ttf in Resources */,
+				DE5320C9B5BF401BAA208530 /* Rubik-BlackItalic.ttf in Resources */,
+				38F5AF9347AD44D8BF3FB4BF /* Rubik-Bold.ttf in Resources */,
+				66CDF937323942D98DE57384 /* Rubik-BoldItalic.ttf in Resources */,
+				E21A2FE3765045F0A070B499 /* Rubik-Italic.ttf in Resources */,
+				09BD6E090BE447DAA37936C7 /* Rubik-Light.ttf in Resources */,
+				4A538C99AE49418982A38965 /* Rubik-LightItalic.ttf in Resources */,
+				9672BD2CED9043EAB630C120 /* Rubik-Medium.ttf in Resources */,
+				78454BF7DFCA4D1A82C8B1CB /* Rubik-MediumItalic.ttf in Resources */,
+				4208C1153E4C4CEC811A07B0 /* Rubik-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1530,19 +1583,14 @@
 					"$(SRCROOT)/../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation/**",
 					"$(SRCROOT)/../node_modules/cocoa-lumberjack/CocoaLumberjack/**",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-photo-view/ios/**",
 				);
 				INFOPLIST_FILE = commuteAlarmTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1571,19 +1619,14 @@
 					"$(SRCROOT)/../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation/**",
 					"$(SRCROOT)/../node_modules/cocoa-lumberjack/CocoaLumberjack/**",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-photo-view/ios/**",
 				);
 				INFOPLIST_FILE = commuteAlarmTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1617,6 +1660,8 @@
 					"$(SRCROOT)/../node_modules/cocoa-lumberjack/CocoaLumberjack/**",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-photo-view/ios/**",
 				);
 				INFOPLIST_FILE = commuteAlarm/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1653,6 +1698,8 @@
 					"$(SRCROOT)/../node_modules/cocoa-lumberjack/CocoaLumberjack/**",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-photo-view/ios/**",
 				);
 				INFOPLIST_FILE = commuteAlarm/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1691,18 +1738,13 @@
 					"$(SRCROOT)/../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation/**",
 					"$(SRCROOT)/../node_modules/cocoa-lumberjack/CocoaLumberjack/**",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-photo-view/ios/**",
 				);
 				INFOPLIST_FILE = "commuteAlarm-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1740,18 +1782,13 @@
 					"$(SRCROOT)/../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation/**",
 					"$(SRCROOT)/../node_modules/cocoa-lumberjack/CocoaLumberjack/**",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-photo-view/ios/**",
 				);
 				INFOPLIST_FILE = "commuteAlarm-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1780,13 +1817,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.commuteAlarm-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1811,13 +1841,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.commuteAlarm-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
