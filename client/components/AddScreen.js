@@ -7,6 +7,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import store from 'react-native-simple-store';
 import axios from 'axios';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default class AddScreen extends React.Component {
   constructor(props) {
@@ -195,7 +196,7 @@ export default class AddScreen extends React.Component {
     timeString = timeString.join('');
     let favPlaces = this.props.navigation.state.params.favPlaces;
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+      <LinearGradient colors={['#7ad8db', '#33b8bd']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
         <View style={{ flex: 0, position: 'absolute', width: '100%', top: '18%', backgroundColor: 'white', zIndex: 100 }}>
           <GooglePlacesAutocomplete
             listUnderlayColor="white"
@@ -323,7 +324,7 @@ export default class AddScreen extends React.Component {
           />
         </View>
         <View style={{ flex: 1 }}></View>
-      </View>
+      </LinearGradient>
     );
   }
 }
