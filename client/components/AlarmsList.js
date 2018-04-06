@@ -74,7 +74,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
   };
 
   return (
-      <LinearGradient colors={['#7ad8db', '#33b8bd', '#7ad8db']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+      <LinearGradient colors={['#7ad8db', '#a2e6e2']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
         <StatusBar
           barStyle="light-content"
           backgroundColor="transparent"
