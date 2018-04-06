@@ -10,6 +10,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import BottomToolbar from 'react-native-bottom-toolbar';
 import Hr from 'react-native-hr-plus';
 import logo from './image.png';
+import FontAwesome, { Icons } from 'react-native-fontawesome';
 
 export default class SettingsScreen extends React.Component {
   constructor(props){
@@ -228,7 +229,7 @@ export default class SettingsScreen extends React.Component {
               }}
             />
           </View>
-          
+
           <Hr style = {{  height: 1, width: 350, opacity: 0.25,}}/>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, alignItems: "center", maxHeight: 40, width: 300, flexWrap: 'nowrap' }}>
             <View>

@@ -32,15 +32,15 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
           <TouchableHighlight underlayColor="lightblue" onPress={() => editScreen(item)}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ flex: 0.5 }} />
-              <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35 }}>{Icons.clockO}</FontAwesome>
-              <View style={{ flex: 10 }}>
-                <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.label}<Text style={{ fontWeight: '400', fontSize: 12 }}> - {new Date(item.time).toDateString()}</Text></Text>
-                <Text style={{}}>Arrival Time: {item.time > Date.now() ? new Date(item.time).toLocaleTimeString() : 'Already Passed'}</Text>
-                <Text style={{}}>Alarm Time: {item.goOffTime ? new Date(item.goOffTime).toLocaleTimeString() : 'Not Set'}</Text>
-                <Text style={{ fontWeight: '300' }}>{item.address.slice(0, 32)}...</Text>
+              <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35, color:'#195558'}}>{Icons.clockO}</FontAwesome>
+              <View style={{ flex: 10}}>
+                <Text style={{ fontWeight: '800', fontSize: 16, color:'#134244' }}>{item.label}<Text style={{ fontWeight: '400', fontSize: 12, color:'#134244' }}> - {new Date(item.time).toDateString()}</Text></Text>
+                <Text style={{color:'#0d2f30'}}>Arrival Time: {item.time > Date.now() ? new Date(item.time).toLocaleTimeString() : 'Already Passed'}</Text>
+                <Text style={{color:'#0d2f30'}}>Alarm Time: {item.goOffTime ? new Date(item.goOffTime).toLocaleTimeString() : 'Not Set'}</Text>
+                <Text style={{ fontWeight: '300', color:'#134244' }}>{item.address.slice(0, 32)}...</Text>
               </View>
               <Switch
-                onTintColor='#164f51'
+                onTintColor='#db7d7a'
                 style={{ flex: 2 }}
                 tintColor="lightgrey"
                 value={onOffSeperate}
