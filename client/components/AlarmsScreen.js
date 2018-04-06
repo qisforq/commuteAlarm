@@ -185,7 +185,7 @@ export default class AlarmsScreen extends React.Component {
 
     BackgroundGeolocation.on('heartbeat', ({ location }) => {
       getCommuteData(this.state, 'commutetime', null, this.modifyAlarms, updateAlarms, location);
-      axios.post('http://localhost:8082/user/geolocation', {
+      axios.post('http://roryeagan.com:8082/user/geolocation', {
         location,
         userId: this.state.userId,
       }).catch(console.log('Error saving geolocation to DB'))
@@ -232,7 +232,7 @@ export default class AlarmsScreen extends React.Component {
     // BackgroundTask.schedule();
     store.get('userId').then((id) => {
       if (id === null) {
-        axios.get('http://localhost:8082/user/new').then((data) => {
+        axios.get('http://roryeagan.com:8082/user/new').then((data) => {
           store.save('userId', data.data);
           store.save('alarms', {});
           store.save('travel', []);
