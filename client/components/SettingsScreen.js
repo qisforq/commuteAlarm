@@ -166,9 +166,9 @@ export default class SettingsScreen extends React.Component {
         <View></View>
         <View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10,  alignItems: "center", maxHeight: 40, width: 300,  }}>
-              <Text style = {{fontSize:16}}>Number of Snoozes: </Text>
+              <Text style = {{fontSize:16, color: '#164f51'}}>Number of Snoozes: </Text>
               <ModalDropdown
-              textStyle={{fontSize:15}}
+              textStyle={{fontSize:15, color: '#164f51'}}
                 dropdownStyle={{ borderWidth: 1, borderColor: 'black', }}
                 dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.snoozes}
@@ -181,9 +181,9 @@ export default class SettingsScreen extends React.Component {
           </View>
           <Hr style = {{  height: 2, width: 350, opacity: 0.4,}}/>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, alignItems: "center", maxHeight: 40, width: 300 }}>
-              <Text style = {{fontSize:16}}>Snooze Time: </Text>
+              <Text style = {{fontSize:16, color: '#164f51'}}>Snooze Time: </Text>
               <ModalDropdown
-              textStyle={{fontSize:15, textAlignVertical: "auto", }}
+              textStyle={{fontSize:15, color: '#164f51', textAlignVertical: "auto", }}
                 dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
                 dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.snoozeTime}
@@ -196,9 +196,9 @@ export default class SettingsScreen extends React.Component {
           </View>
           <Hr style = {{  height: 1, width: 350, opacity: 0.25,}}/>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between',margin: 10, alignItems: "center", maxHeight: 40, width: 300 }}>
-            <Text style = {{fontSize:16}}>Prep Time: </Text>
+            <Text style = {{fontSize:16, color: '#164f51'}}>Prep Time: </Text>
             <ModalDropdown
-            textStyle={{fontSize:15}}
+            textStyle={{fontSize:15, color: '#164f51'}}
               dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
               dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
               defaultIndex={this.state.prepTime}
@@ -213,11 +213,11 @@ export default class SettingsScreen extends React.Component {
           <Hr style = {{  height: 1, width: 350, opacity: 0.25,}}/>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, alignItems: "center", maxHeight: 40, width: 300, flexWrap: 'nowrap' }}>
             <View>
-              <Text style = {{fontSize:16}}>Post-Travel Prep Time: </Text>
+              <Text style = {{fontSize:16, color: '#164f51'}}>Post-Travel Prep Time: </Text>
             </View>
             <View>
               <ModalDropdown
-                textStyle={{fontSize:15}}
+                textStyle={{fontSize:15, color: '#164f51'}}
                 dropdownStyle={{ borderWidth: 1, borderColor: 'black',  }}
                 dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.postTime}
@@ -232,11 +232,11 @@ export default class SettingsScreen extends React.Component {
           <Hr style = {{  height: 1, width: 350, opacity: 0.3,}}/>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, alignItems: "center", maxHeight: 40, width: 295, flexWrap: 'nowrap' }}>
             <View>
-              <Text style = {{fontSize:16}}>Default Alarm Sound: </Text>
+              <Text style = {{fontSize:16, color: '#164f51'}}>Default Alarm Sound: </Text>
             </View>
             <View>
               <ModalDropdown
-              textStyle={{fontSize:15}}
+              textStyle={{fontSize:15, color: '#164f51'}}
                 dropdownStyle={{ borderWidth: 1, borderColor: 'black', height: 100 }}
                 dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.postTime}
