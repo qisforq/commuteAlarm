@@ -1,13 +1,15 @@
 import React from 'react';
 import BottomNavigation from './BottomNavigation';
-import { Button, View, Text, TextInput, Picker, StyleSheet, Linking } from 'react-native';
+import { Image, Button, View, Text, TextInput, Picker, StyleSheet, Linking } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import HeaderButton from 'react-navigation-header-buttons'
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import axios from 'axios';
 import store from 'react-native-simple-store';
 import LinearGradient from 'react-native-linear-gradient';
-import BottomToolbar from 'react-native-bottom-toolbar'
+import BottomToolbar from 'react-native-bottom-toolbar';
+import Hr from 'react-native-hr-plus';
+import logo from './image.png';
 
 export default class SettingsScreen extends React.Component {
   constructor(props){
@@ -163,10 +165,12 @@ export default class SettingsScreen extends React.Component {
       <LinearGradient colors={['#8edee0', '#3ec6cb', '#7ad8db']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
         <View></View>
         <View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
-              <Text>Number of Snoozes: </Text>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10,  alignItems: "center", maxHeight: 40, width: 300,  }}>
+              <Text style = {{fontSize:16, color: '#164f51'}}>Number of Snoozes: </Text>
               <ModalDropdown
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              textStyle={{fontSize:15, color: '#164f51'}}
+                dropdownStyle={{ borderWidth: 1, borderColor: 'black', }}
+                dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.snoozes}
                 defaultValue={(this.state.snoozes) + " snoozes" || "Please select..."}
                 options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'} `)}
@@ -175,10 +179,13 @@ export default class SettingsScreen extends React.Component {
                 }}
               />
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
-              <Text>Snooze Time: </Text>
+          <Hr style = {{  height: 2, width: 350, opacity: 0.4,}}/>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, alignItems: "center", maxHeight: 40, width: 300 }}>
+              <Text style = {{fontSize:16, color: '#164f51'}}>Snooze Time: </Text>
               <ModalDropdown
+              textStyle={{fontSize:15, color: '#164f51', textAlignVertical: "auto", }}
                 dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+                dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.snoozeTime}
                 defaultValue={(this.state.snoozeTime) + " minutes" || "Please select..."}
                 options={[...Array(16)].map((x,i) => (i || 0.5) + ` minute${i===1 ? '' : 's'}`)}
@@ -187,10 +194,13 @@ export default class SettingsScreen extends React.Component {
                 }}
               />
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
-            <Text>Prep Time: </Text>
+          <Hr style = {{  height: 1, width: 350, opacity: 0.25,}}/>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between',margin: 10, alignItems: "center", maxHeight: 40, width: 300 }}>
+            <Text style = {{fontSize:16, color: '#164f51'}}>Prep Time: </Text>
             <ModalDropdown
+            textStyle={{fontSize:15, color: '#164f51'}}
               dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
               defaultIndex={this.state.prepTime}
               defaultValue={(this.state.prepTime*5) + " minutes" || "Please select..."}
               options={[...Array(13)].map((x,i) => (i) * 5 + ' minutes ')}
@@ -199,13 +209,17 @@ export default class SettingsScreen extends React.Component {
               }}
             />
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230, flexWrap: 'nowrap' }}>
+          
+          <Hr style = {{  height: 1, width: 350, opacity: 0.25,}}/>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, alignItems: "center", maxHeight: 40, width: 300, flexWrap: 'nowrap' }}>
             <View>
-              <Text>Post-Travel Prep Time: </Text>
+              <Text style = {{fontSize:16, color: '#164f51'}}>Post-Travel Prep Time: </Text>
             </View>
             <View>
               <ModalDropdown
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+                textStyle={{fontSize:15, color: '#164f51'}}
+                dropdownStyle={{ borderWidth: 1, borderColor: 'black',  }}
+                dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.postTime}
                 defaultValue={(this.state.postTime*5) + " minutes" || "Please select..."}
                 options={[...Array(13)].map((x,i) => (i)*5 + ' minutes ')}
@@ -215,13 +229,16 @@ export default class SettingsScreen extends React.Component {
               />
             </View>
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230, flexWrap: 'nowrap' }}>
+          <Hr style = {{  height: 1, width: 350, opacity: 0.3,}}/>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, alignItems: "center", maxHeight: 40, width: 295, flexWrap: 'nowrap' }}>
             <View>
-              <Text>Default Alarm Sound: </Text>
+              <Text style = {{fontSize:16, color: '#164f51'}}>Default Alarm Sound: </Text>
             </View>
             <View>
               <ModalDropdown
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              textStyle={{fontSize:15, color: '#164f51'}}
+                dropdownStyle={{ borderWidth: 1, borderColor: 'black', height: 100 }}
+                dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.postTime}
                 defaultValue={this.state.alarmSound}
                 options={['annoying', 'alarmchi', 'eternity']}
@@ -233,6 +250,12 @@ export default class SettingsScreen extends React.Component {
           </View>
         </View>
         <View />
+        <View>
+        <Image
+        style={{width: 150, height: 150, opacity: 0.7, marginBottom: 50}}
+          source={require('./image.png')}
+        />
+        </View>
         <BottomToolbar
           wrapperStyle={{backgroundColor: '#33b8bd'}}
           textStyle={{fontWeight: '700'}}

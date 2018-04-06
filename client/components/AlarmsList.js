@@ -40,7 +40,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
                 <Text style={{ fontWeight: '300' }}>{item.address.slice(0, 32)}...</Text>
               </View>
               <Switch
-                color="red"
+                onTintColor='#164f51'
                 style={{ flex: 2 }}
                 tintColor="lightgrey"
                 value={onOffSeperate}
