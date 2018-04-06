@@ -27,22 +27,23 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
       <Swipeout
         right={swipeBtns}
         backgroundColor="transparent"
+        // style={{backgroundColor: "#97e0e3", opacity: 0.3,}}
       >
-        <View style={{ height: 75, borderWidth: 0.3, borderColor: 'black' }}>
+        <LinearGradient colors={['#97e0e3', '#7ad8db']} style={{ height: 75, borderWidth: 0.3, borderColor: '#038388' }}>
           <TouchableHighlight underlayColor="lightblue" onPress={() => editScreen(item)}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ flex: 0.5 }} />
-              <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35, color:'#195558'}}>{Icons.clockO}</FontAwesome>
+              <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35, color:'#038388'}}>{Icons.clockO}</FontAwesome>
               <View style={{ flex: 10}}>
-                <Text style={{ fontWeight: '800', fontSize: 16, color:'#134244' }}>{item.label}<Text style={{ fontWeight: '400', fontSize: 12, color:'#134244' }}> - {new Date(item.time).toDateString()}</Text></Text>
-                <Text style={{color:'#0d2f30'}}>Arrival Time: {item.time > Date.now() ? new Date(item.time).toLocaleTimeString() : 'Already Passed'}</Text>
-                <Text style={{color:'#0d2f30'}}>Alarm Time: {item.goOffTime ? new Date(item.goOffTime).toLocaleTimeString() : 'Not Set'}</Text>
-                <Text style={{ fontWeight: '300', color:'#134244' }}>{item.address.slice(0, 32)}...</Text>
+                <Text style={{ fontWeight: '800', fontSize: 16, color:'#02585c' }}>{item.label}<Text style={{ fontWeight: '400', fontSize: 12, color:'#02585c' }}> - {new Date(item.time).toDateString()}</Text></Text>
+                <Text style={{color:'#02585c'}}>Arrival Time: {item.time > Date.now() ? new Date(item.time).toLocaleTimeString() : 'Already Passed'}</Text>
+                <Text style={{color:'#02585c'}}>Alarm Time: {item.goOffTime ? new Date(item.goOffTime).toLocaleTimeString() : 'Not Set'}</Text>
+                <Text style={{ fontWeight: '300', color:'#02585c' }}>{item.address.slice(0, 32)}...</Text>
               </View>
               <Switch
                 onTintColor='#db7d7a'
                 style={{ flex: 2 }}
-                tintColor="lightgrey"
+                tintColor="#52b4b8"
                 value={onOffSeperate}
                 onValueChange={() => {
                   store.get('alarms').then((alarms) => {
@@ -68,13 +69,13 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
               <View style={{ flex: 0.5 }} />
             </View>
           </TouchableHighlight>
-        </View>
+        </LinearGradient>
       </Swipeout>
     );
   };
 
   return (
-      <LinearGradient colors={['#7ad8db', '#a2e6e2']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+      <LinearGradient colors={['#7ad8db', '#b6eaeb']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
         <StatusBar
           barStyle="light-content"
           backgroundColor="transparent"

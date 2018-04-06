@@ -31,7 +31,7 @@ const RootStack = StackNavigator(
       headerTitleStyle: {
         fontWeight: 'bold',
         letterSpacing: 1,
-        //fontFamily: 'Pacifico',
+        fontFamily: 'Pacifico',
         fontSize: 22,
       },
     }
