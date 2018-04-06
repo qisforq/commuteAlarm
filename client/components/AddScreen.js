@@ -204,11 +204,11 @@ export default class AddScreen extends React.Component {
     timeString = timeString.join('');
     let favPlaces = this.props.navigation.state.params.favPlaces;
     return (
-      <LinearGradient colors={['#7ad8db', '#33b8bd']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+      <LinearGradient colors={[ '#b6eaeb', '#7ad8db']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
           {!this.state.showPlaces ?
             <View style={{ flex: 0, position: 'absolute', width: '100%', top: '20%', zIndex: 100 }}>
               <Button
-                color="white"
+                color='#164f51'
                 title="Search Places"
                 onPress={() => this.setState({ showPlaces: true })}
               />
@@ -218,7 +218,7 @@ export default class AddScreen extends React.Component {
                 listUnderlayColor="gray"
                 autoFocus={false}
                 listViewDisplayed='false'
-                onSelect={() => this.setState({ backgroundColor: 'white' })}
+                onSelect={() => this.setState({ backgroundColor: 'white'})}
                 styles={{
                   textInputContainer: {
                     backgroundColor: 'transparent',
@@ -265,23 +265,23 @@ export default class AddScreen extends React.Component {
           }
         <View style={{ flex: 1.5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', width: '70%' }}>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontWeight: '800', color: 'white' }}>Alarm Label: </Text>
+            <Text style={{ fontWeight: '800', fontSize:16, color: '#164f51'}}>Alarm Label: </Text>
             <TextInput
-              style={{ color: 'white' }}
+              style={{fontSize:15, color: '#164f51'}}
               onChangeText={(text) => this.setState({ label: text })}
               value={this.state.label}
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontWeight: '800', color: 'white' }}>Arrival Time: </Text>
+            <Text style={{  fontWeight: '800', fontSize:16, color: '#164f51' }}>Arrival Time: </Text>
             <TouchableOpacity
               onPress={() => this.setState({ showTime: true })}
             >
-              <Text style={{ color: 'white' }}>{this.state.time ? timeString + ' ' + new Date(this.state.time).toDateString(): 'Select Date and Time'}</Text>
+              <Text style={{fontSize:15, color: '#164f51'}}>{this.state.time ? timeString + ' ' + new Date(this.state.time).toDateString(): 'Select Date and Time'}</Text>
             </TouchableOpacity>
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontWeight: '800', color: 'white' }}>Address: </Text>
+            <Text style={{  fontWeight: '800', fontSize:16, color: '#164f51' }}>Address: </Text>
           </View>
         </View>
         <DateTimePicker
@@ -292,8 +292,11 @@ export default class AddScreen extends React.Component {
         />
         <View style={{ flex: 1 }} />
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start', width: '70%' }}>
-          <Text style={{ fontWeight: '800', color: 'white' }}>Travel Method: {"\n"}</Text>
+          <Text style={{  fontWeight: '800', fontSize:16, color: '#164f51'}}>Travel Method: {"\n"}</Text>
           <SegmentedControls
+          selectedBackgroundColor=  "#124042"
+          containerBorderTint="#124042"
+          tint= '#164f51'
             optionContainerStyle={{ width: 50 }}
             options={ ['Transit', 'Driving'] }
             onSelection={(opt) => { this.setState({ travelMethod: opt })}}
@@ -303,10 +306,10 @@ export default class AddScreen extends React.Component {
         <View style={{ flex: 0.5 }} />
         <View style={{ flex: 2, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', width: '70%'}}>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontWeight: '800', color: 'white' }}>Prep Time Needed: </Text>
+            <Text style={{  fontWeight: '800', fontSize:16, color: '#164f51'}}>Prep Time Needed: </Text>
             <ModalDropdown
               dropdownStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}
-              textStyle={{ color: 'white' }}
+              textStyle={{fontSize:15, color: '#164f51'}}
               defaultIndex={Number(this.state.prepTime)}
               defaultValue={this.state.prepTime*5 + ' minutes'}
               options={[...Array(13)].map((x,i) => (i)*5 + ' minutes ')}
@@ -314,10 +317,10 @@ export default class AddScreen extends React.Component {
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontWeight: '800', color: 'white' }}>Post Time Needed: </Text>
+            <Text style={{  fontWeight: '800', fontSize:16, color: '#164f51' }}>Post Time Needed: </Text>
             <ModalDropdown
               dropdownStyle={{}}
-              textStyle={{ color: 'white' }}
+              textStyle={{fontSize:15, color: '#164f51'}}
               defaultIndex={this.state.postTime}
               defaultValue={this.state.postTime*5 + ' minutes'}
               options={[...Array(13)].map((x,i) => (i)*5 + ' minutes  ')}
@@ -325,10 +328,10 @@ export default class AddScreen extends React.Component {
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontWeight: '800', color: 'white' }}>Snoozes: </Text>
+            <Text style={{  fontWeight: '800', fontSize:16, color: '#164f51' }}>Snoozes: </Text>
             <ModalDropdown
               dropdownStyle={{}}
-              textStyle={{ color: 'white' }}
+              textStyle={{fontSize:15, color: '#164f51'}}
               defaultIndex={Number(this.state.snoozes)}
               defaultValue={this.state.snoozes + ` snooze${this.state.snoozes === 1 ? '' : 's'}`}
               options={[...Array(12)].map((x,i) => (i) + ` snooze${i===1 ? '' : 's'} `)}
@@ -336,10 +339,10 @@ export default class AddScreen extends React.Component {
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontWeight: '800', color: 'white' }}>Snooze Time: </Text>
+            <Text style={{ fontWeight: '800', fontSize:16, color: '#164f51' }}>Snooze Time: </Text>
             <ModalDropdown
               dropdownStyle={{ }}
-              textStyle={{ color: 'white' }}
+              textStyle={{fontSize:15, color: '#164f51'}}
               defaultIndex={Number(this.state.snoozeTime)}
               defaultValue={this.state.snoozeTime + ' snoozes'}
               options={[...Array(13)].map((x,i) => i + ' minutes  ')}
@@ -347,10 +350,10 @@ export default class AddScreen extends React.Component {
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontWeight: '800', color: 'white' }}>Alarm Sound: </Text>
+            <Text style={{ fontWeight: '800', fontSize:16, color: '#164f51' }}>Alarm Sound: </Text>
             <ModalDropdown
               dropdownStyle={{ height: 100 }}
-              textStyle={{ color: 'white' }}
+              textStyle={{fontSize:15, color: '#164f51'}}
               defaultValue={this.state.alarmSound}
               options={['annoying', 'alarmchi', 'eternity']}
               onSelect={(idx, val) => {
@@ -361,7 +364,7 @@ export default class AddScreen extends React.Component {
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           <Button
-            color="white"
+            color='#164f51'
             title="Save"
             onPress={this.saveAlarm}
           />
