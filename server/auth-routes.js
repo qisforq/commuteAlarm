@@ -101,6 +101,7 @@ router.get('/calendar', ({ query }, res) => {
     await checkToken(query.userId, accessToken, refreshToken, expirationDate, query.minTime, query.maxTime, (item, end) => {
       arr.push(item);
       if (end) {
+        console.log('HERE WE GO!', arr)
         res.status(200).send(arr);
       }
     });
