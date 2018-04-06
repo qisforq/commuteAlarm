@@ -45,7 +45,6 @@ export default class SettingsScreen extends React.Component {
               fontSize: 18,
             }}
             onPress={() => {
-              console.log('hehrehreh');
               params.saveSettings(params.userId, navigation.goBack)
             }}
           />
@@ -56,10 +55,9 @@ export default class SettingsScreen extends React.Component {
 
 
   componentWillMount() {
-    // let {defaultPrepTime, defaultPostTime, defaultSnoozes} = this.props.navigation.state.params.userSettings;
     this.props.navigation.setParams({ saveSettings: this._saveSettings });
     store.get('token').then((token) => {
-      this.setState({token: token},() => console.log('this is the state after getting token:', this.state))
+      this.setState({token: token})
     })
   }
 
@@ -67,7 +65,7 @@ export default class SettingsScreen extends React.Component {
     Linking.addEventListener('url', this.handleOpenURL);
     let { userId } = this.props.navigation.state.params
     if (this.state.token) {
-      axios.post("http://localhost:8082/auth/checktoken", {
+      axios.post("http://roryeagan.com:8082/auth/checktoken", {
         userId
       })
       .then(({ status }) => {
@@ -78,9 +76,7 @@ export default class SettingsScreen extends React.Component {
           });
         }
       })
-      .catch(() => {
-        console.log('error in check token');
-      })
+      .catch(console.error('error in check token'))
     }
   }
 
@@ -89,16 +85,14 @@ export default class SettingsScreen extends React.Component {
   }
 
   handleOpenURL(event) {
-    console.log(event.url.slice(15, 22), "the fuck man");
     let status = event.url.slice(15, 22)
     if (status === 'success') {
-      console.log('SUCCESS!!!')
       store.save('token', true)
       .then(this.setState({token: true,}))
       .then(this.toCalendarScreen)
       let maxTime = `${new Date(Date.now() + 31536000000).toISOString().slice(0,10)}T00:00:00-01:00:00`
       let minTime = `${new Date(Date.now() - 5100000000).toISOString().slice(0,10)}T00:00:00-01:00:00`
-      axios.get("http://localhost:8082/auth/calendar", {
+      axios.get("http://roryeagan.com:8082/auth/calendar", {
         params: {
           userId: this.props.navigation.state.params.userId,
           minTime,
@@ -106,23 +100,18 @@ export default class SettingsScreen extends React.Component {
         }
       })
       .then(({ data }) => {
-        console.log("data", data);
         let eventsObj = {};
         data.forEach((evt) => {
           eventsObj[evt.id] = evt;
         })
-        console.log('eventsobj:', eventsObj);
         store.save('events', eventsObj)
       })
-      .catch(console.log('Error in handleOpenURL'))
+      .catch(console.error('Error in handleOpenURL'))
     } else if (status === 'failure'){
-      console.log('FAILURE!! The good kind! =D')
       store.save('token', false);
       this.setState({
         token: false,
       })
-    } else {
-      console.log('Ok, something fishy is going on...');
     }
   }
 
@@ -130,8 +119,7 @@ export default class SettingsScreen extends React.Component {
 
   _saveSettings = (userId, goBack) => {
     let { prepTime, postTime, snoozes, snoozeTime, alarmSound } = this.state;
-    console.log(goBack);
-    axios.post('http://localhost:8082/settings/save', {
+    axios.post('http://roryeagan.com:8082/settings/save', {
       userId,
       prepTime,
       postTime,
@@ -140,7 +128,7 @@ export default class SettingsScreen extends React.Component {
       alarmSound,
     })
     .catch((err) => {
-      console.log('Error setting settings in database', err)
+      console.error('Error setting settings in database', err)
     })
     .then((data) => {
       store.update('userSettings', {
@@ -175,7 +163,7 @@ export default class SettingsScreen extends React.Component {
     let { goBack, state } = this.props.navigation;
     let { userId, saveSettings } = state.params;
     saveSettings(userId, () => {});
-    Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`)
+    Linking.openURL(`http://roryeagan.com:8082/auth/google?userId=${userId}`)
     .catch(err => console.error('An error occurred', err));
   }
 

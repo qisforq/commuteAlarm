@@ -5,6 +5,7 @@ import axios from 'axios';
 import store from 'react-native-simple-store';
 import Geocoder from 'react-native-geocoding';
 import LinearGradient from 'react-native-linear-gradient';
+import { Alert } from 'react-native';
 
 Geocoder.setApiKey('AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw');
 
@@ -46,11 +47,11 @@ export default class AddScreen extends React.Component {
         rowHasChanged={this.rowHasChanged.bind(this)}
 
          // callback that fires when the calendar is opened or closed
-         onCalendarToggled={(calendarOpened) => {console.log("calendar opened data:", calendarOpened)}}
+         // onCalendarToggled={(calendarOpened) => {console.log("calendar opened data:", calendarOpened)}}
          // callback that gets called on day press
-         onDayPress={(day)=>{console.log('day pressed')}}
+         // onDayPress={(day)=>{console.log('day pressed')}}
          // callback that gets called when day changes while scrolling agenda list
-         onDayChange={(day)=>{console.log('day changed')}}
+         // onDayChange={(day)=>{console.log('day changed')}}
          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
          minDate={new Date(new Date().setFullYear(new Date().getUTCFullYear() - 1)).toISOString().slice(0,10)}
          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
@@ -61,7 +62,7 @@ export default class AddScreen extends React.Component {
          futureScrollRange={18}
          // specify how each date should be rendered. day can be undefined if the item is not first in that day.
          // renderDay={(day, item) => {
-         //   if (!day) day = {dateString: 'fuck off'}
+         //   if (!day) day = {dateString: 'empty'}
          //   return <View><Text>{day.dateString}</Text></View>}}
          // // specify how agenda knob should look like
          // renderKnob={() => <View><Text>this was rendered by...renderKnob!</Text></View>}
@@ -69,7 +70,6 @@ export default class AddScreen extends React.Component {
          // renderEmptyData = {() => <View><Text>this was rendered by...renderEmptyData!</Text></View>}
          // // specify your item comparison function for increased performance
          rowHasChanged={(r1, r2) => {return r1.text !== r2.text}}
-         // Hide knob button. Default = false
          hideKnob={false}
          theme={{
           backgroundColor: '#fafefd',
@@ -132,7 +132,7 @@ export default class AddScreen extends React.Component {
     // const minTime = `${year}-${month}-01T00:00:00-01:00:00`
     const maxTime = `${endDate}T11:59:58-11:59:59`
     // const maxTime = `${year}-${month}-${this.findMaxDay(month)}T11:59:58-11:59:59`
-    axios.get("http://localhost:8082/auth/calendar", {
+    axios.get("http://roryeagan.com:8082/auth/calendar", {
       params: {
         userId: this.props.navigation.state.params.userId,
         minTime,
@@ -156,12 +156,9 @@ export default class AddScreen extends React.Component {
       })
     })
     .then((eventsObj) => {
-      console.log('ORIGINAL DATA after merge with stored data:', eventsObj)
       const newItems = {};
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-      console.log('new items yo:', newItems)
       Object.values(eventsObj).forEach((event) => {
-        console.log('event:', event)
         let { id, name, time, endTime, location } = event
         if (!time.date) {
           let dateStr = time.dateTime.slice(0,10)
@@ -177,11 +174,8 @@ export default class AddScreen extends React.Component {
             height: this.calculateHeight(startTimeStr, endTimeStr),
             timeData: new Date(time.dateTime)
           }
-          console.log('eventData:', eventData);
-          console.log('what is Date string?', dateStr);
           // newItems[dateStr] ? newItems[dateStr].push(eventData) : newItems[dateStr] = [evenßtData];
           if (newItems[dateStr] && newItems[dateStr].length) {
-            console.log('YAY!');
             newItems[dateStr].forEach((ev) => {
               if (!(ev.time && ev.name === eventData.name && ev.time === eventData.time)) {
                 newItems[dateStr].push(eventData);
@@ -192,7 +186,6 @@ export default class AddScreen extends React.Component {
           }
         }
       })
-      console.log('newItems:',newItems)
 
       Object.keys(newItems).forEach((date) => {
         if (newItems[date] && newItems[date].length) {
@@ -201,8 +194,6 @@ export default class AddScreen extends React.Component {
             if (!(uniqArr.find(el => el.name === evt.name && el.time === evt.time))) {
               // console.log('push event!:', evt);
               uniqArr.push(evt)
-            } else {
-              console.log('this event already exists!', evt);
             }
           })
           newItems[date] = uniqArr;
@@ -210,7 +201,7 @@ export default class AddScreen extends React.Component {
       })
       this.setState({
         items: newItems,
-      }, () => console.log("this.state.items after newItems are set:", this.state.items));
+      });
     }).catch(() => console.log('Error in loadGoogleItems'))
   }
 
@@ -285,14 +276,13 @@ export default class AddScreen extends React.Component {
           <Text style={{fontWeight: '500', color:"#691712"}}>{convertHours(time)} - {convertHours(endTime)}</Text>
           {item.location && <Text style={{fontWeight: '500', color:"#691712"}}>{item.location}</Text>}
           <Button title="add to alarms" color="#691712" onPress={() => {
-            this.makeAlarm(item.name, item.timeData, item.location)
+            (item.location) ? this.makeAlarm(item.name, item.timeData, item.location) : setTimeout(() => Alert.alert(`Sorry, this event doesn't have a location =(`), 150)
           }}></Button>
       </LinearGradient>
     );
   }
 
   renderEmptyDate() {
-    // console.log('THIS IS THE renderEmptyDate FUNCTION.')
     return (
       <View style={styles.emptyDate}></View>
     );

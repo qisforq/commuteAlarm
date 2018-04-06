@@ -16,8 +16,7 @@ const checkToken = function checkIfAccessTokenIsExpiredAndRenew(userId, accessTo
       return mega(access_token, minTime, maxTime, cb);
     })
     .catch((err) => {
-      console.log('Error inside axios post to request new refresh token:', err.response.data)
-        // return mega(accessToken, minTime, maxTime, cb);
+      console.error('Error inside axios post to request new refresh token:', err.response.data)
     })
   } else {
     return mega(accessToken, minTime, maxTime, cb);
@@ -48,19 +47,15 @@ const mega = function(token, minTime, maxTime, cb) {
         .then((res) => {
           item.time = res.data.start;
           item.endTime = res.data.end;
-          // console.log(item);
           cb(item, newArray.length-1 === i);
           // firebase.storeCalendar(item);
         }).catch((err) => {
           console.log("err");
         })
     })
-    //console.log('final arr', finalArray);
     })
   .catch((err) => {
-    console.log("Error inside axios call to mega");
-    // console.log(">>>>", err.request.res,"<<<<<");
-    // console.log(">>>>", err.response.request,"<<<<<");
+    console.error("Error inside axios call to mega");
   })
   return finalArray
 }
@@ -75,10 +70,8 @@ passport.use(
     passReqToCallback: true,
   }, (reqThingy, accessToken, refreshToken, profile, done) => {
     //passport callback function
-
     firebase.storeToken(accessToken, refreshToken, reqThingy.query.state)
     firebase.storeProfile(profile, reqThingy.query.state);
-    // console.log('thingy:', accessToken, refreshToken,  reqThingy.query.state); // THIS HAS PARAMS, QUERY, BODY and all that other good stuff
     return done(null, profile);
   })
 )
@@ -128,9 +121,7 @@ router.post('/checktoken', ({ body }, res) => {
       res.status(202).send()
     })
   })
-  .catch(() => {
-    console.log('error in checktoken')
-  })
+  .catch(console.error('error in checktoken'))
 })
 
 
