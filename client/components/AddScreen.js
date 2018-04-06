@@ -28,6 +28,8 @@ export default class AddScreen extends React.Component {
         onOff: params.data.onOff,
         edit: true,
         travelMethod: params.data.travelMethod,
+        showPlaces: true,
+        backgroundColor: 'white'
       };
     } else if (params.fromCalendar) {
       this.state = {
@@ -44,6 +46,8 @@ export default class AddScreen extends React.Component {
         onOff: false,
         edit: false,
         travelMethod: 'Transit',
+        showPlaces: true,
+        backgroundColor: 'white'
       }
     } else {
       this.state = {
@@ -60,6 +64,8 @@ export default class AddScreen extends React.Component {
         onOff: false,
         edit: false,
         travelMethod: 'Driving',
+        showPlaces: false,
+        backgroundColor: 'white'
       }
     }
 
@@ -197,58 +203,83 @@ export default class AddScreen extends React.Component {
     let favPlaces = this.props.navigation.state.params.favPlaces;
     return (
       <LinearGradient colors={['#7ad8db', '#33b8bd']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
-        <View style={{ flex: 0, position: 'absolute', width: '100%', top: '18%', backgroundColor: 'white', zIndex: 100 }}>
-          <GooglePlacesAutocomplete
-            listUnderlayColor="white"
-            styles={{
-              textInputContainer: {
-                backgroundColor: 'rgba(0,0,0,0)',
-                borderWidth: 1,
-                borderRightWidth: 0.3,
-                borderLeftWidth: 0.3,
-                borderColor: "black",
-                borderRightColor: "grey",
-                borderLeftColor: "grey",
-                width: '100%',
-              },
-              textInput: {
-                textAlign: 'center',
-              },
-            }}
-            placeholder={this.state.address}
-            minLength={2} // minimum length of text to search
-            onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-              this.setState({
-                locationId: data.place_id,
-                address: data.description,
-              });
-            }}
-            query={{
-              key: 'AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw',
-              language: 'en', // language of the results
-            }}
-            debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-            predefinedPlaces={favPlaces}
-            GooglePlacesSearchQuery={{rankby: 'distance'}}
-          />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%' }}>
-          <Text style={{ fontWeight: '800' }}>Alarm Label: </Text>
-          <TextInput
-            onChangeText={(text) => this.setState({ label: text })}
-            value={this.state.label}
-          />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-          <Text style={{ fontWeight: '800' }}>Address: </Text>
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
-          <Text style={{ fontWeight: '800' }}>Arrival Time: </Text>
-          <TouchableOpacity
-            onPress={() => this.setState({ showTime: true })}
-          >
-            <Text>{this.state.time ? timeString + ' ' + new Date(this.state.time).toDateString(): 'Select Date and Time'}</Text>
-          </TouchableOpacity>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+          {!this.state.showPlaces ?
+            <View style={{ flex: 0, position: 'absolute', width: '100%', top: '20%', zIndex: 100 }}>
+              <Button
+                title="Search Places"
+                onPress={() => this.setState({ showPlaces: true })}
+              />
+            </View> :
+            <View style={{ flex: 0, position: 'absolute', width: '100%', top: '20%', backgroundColor: this.state.backgroundColor, zIndex: 100 }}>
+              <GooglePlacesAutocomplete
+                listUnderlayColor="gray"
+                autoFocus={false}
+                listViewDisplayed='false'
+                onSelect={() => this.setState({ backgroundColor: 'white' })}
+                styles={{
+                  textInputContainer: {
+                    backgroundColor: 'transparent',
+                    borderWidth: 0,
+                    borderRightWidth: 0,
+                    borderLeftWidth: 0,
+                    borderColor: "transparent",
+                    borderRightColor: "grey",
+                    borderLeftColor: "grey",
+                    width: '100%',
+                    backgroundColor: 'transparent',
+                    //color: 'white',
+                  },
+                  textInput: {
+                    textAlign: 'center',
+                  },
+                  predefinedPlacesDescription: {
+                    color: 'black',
+                    textAlign: 'center',
+                    backgroundColor: 'transparent',
+                  },
+                  listView: {
+                    backgroundColor: 'transparent',
+                  }
+                }}
+                placeholder={this.state.address}
+                minLength={2} // minimum length of text to search
+                onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+                  this.setState({
+                    locationId: data.place_id,
+                    address: data.description,
+                    backgroundColor: 'transparent',
+                  });
+                }}
+                query={{
+                  key: 'AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw',
+                  language: 'en', // language of the results
+                }}
+                debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+                GooglePlacesSearchQuery={{rankby: 'distance'}}
+                predefinedPlaces={favPlaces}
+              />
+            </View>
+          }
+        <View style={{ flex: 1.5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', width: '70%' }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <Text style={{ fontWeight: '800' }}>Alarm Label: </Text>
+            <TextInput
+              onChangeText={(text) => this.setState({ label: text })}
+              value={this.state.label}
+            />
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <Text style={{ fontWeight: '800' }}>Arrival Time: </Text>
+            <TouchableOpacity
+              onPress={() => this.setState({ showTime: true })}
+            >
+              <Text>{this.state.time ? timeString + ' ' + new Date(this.state.time).toDateString(): 'Select Date and Time'}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
+            <Text style={{ fontWeight: '800' }}>Address: </Text>
+          </View>
         </View>
         <DateTimePicker
           isVisible={this.state.showTime}
@@ -256,8 +287,18 @@ export default class AddScreen extends React.Component {
           onConfirm={this.handleTimePicked}
           onCancel={() => this.setState({ showTime: false })}
         />
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+        <View style={{ flex: 1 }} />
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '60%' }}>
+          <Text style={{ fontWeight: '800' }}>Travel Method: {"\n"}</Text>
+          <SegmentedControls
+            options={ ['Transit', 'Driving'] }
+            onSelection={(opt) => { this.setState({ travelMethod: opt })}}
+            selectedOption={ this.state.travelMethod }
+          />
+        </View>
+        <View style={{ flex: 0.5 }} />
+        <View style={{ flex: 2, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', width: '70%'}}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <Text style={{ fontWeight: '800' }}>Prep Time Needed: </Text>
             <ModalDropdown
               dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
@@ -267,7 +308,7 @@ export default class AddScreen extends React.Component {
               onSelect={(idx, val) => this.setState({ prepTime: idx })}
             />
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <Text style={{ fontWeight: '800' }}>Post Time Needed: </Text>
             <ModalDropdown
               dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
@@ -277,7 +318,7 @@ export default class AddScreen extends React.Component {
               onSelect={(idx, val) => this.setState({ postTime: idx })}
             />
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <Text style={{ fontWeight: '800' }}>Snoozes: </Text>
             <ModalDropdown
               dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
@@ -287,7 +328,7 @@ export default class AddScreen extends React.Component {
               onSelect={(idx, val) => this.setState({ snoozes: Number(idx) })}
             />
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <Text style={{ fontWeight: '800' }}>Snooze Time: </Text>
             <ModalDropdown
               dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
@@ -297,25 +338,17 @@ export default class AddScreen extends React.Component {
               onSelect={(idx, val) => this.setState({ snoozeTime: Number(idx) })}
             />
           </View>
-        </View>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '60%' }}>
-          <Text style={{ fontWeight: '800' }}>Travel Method: {"\n"}</Text>
-          <SegmentedControls
-            options={ ['Transit', 'Driving'] }
-            onSelection={(opt) => { this.setState({ travelMethod: opt })}}
-            selectedOption={ this.state.travelMethod }
-          />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '60%'  }}>
-          <Text style={{ fontWeight: '800' }}>Alarm Sound: </Text>
-          <ModalDropdown
-            dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
-            defaultValue={this.state.alarmSound}
-            options={['annoying', 'alarmchi', 'eternity']}
-            onSelect={(idx, val) => {
-              this.setState({ alarmSound: val })
-            }}
-          />
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <Text style={{ fontWeight: '800' }}>Alarm Sound: </Text>
+            <ModalDropdown
+              dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              defaultValue={this.state.alarmSound}
+              options={['annoying', 'alarmchi', 'eternity']}
+              onSelect={(idx, val) => {
+                this.setState({ alarmSound: val })
+              }}
+            />
+          </View>
         </View>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           <Button
@@ -324,6 +357,7 @@ export default class AddScreen extends React.Component {
           />
         </View>
         <View style={{ flex: 1 }}></View>
+        </View>
       </LinearGradient>
     );
   }
