@@ -8,6 +8,8 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import store from 'react-native-simple-store';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons.js';
+import BottomToolbar from 'react-native-bottom-toolbar'
 
 export default class AddScreen extends React.Component {
   constructor(props) {
@@ -15,7 +17,6 @@ export default class AddScreen extends React.Component {
     let { params } = this.props.navigation.state
     if(this.props.navigation.state.params.data) {
       this.state = {
-        showTime: false,
         label: params.data.label,
         time: params.data.time,
         prepTime: params.data.prepTime,
@@ -33,7 +34,6 @@ export default class AddScreen extends React.Component {
       };
     } else if (params.fromCalendar) {
       this.state = {
-        showTime: false,
         label: params.alarmName,
         time: params.alarmTime.getTime(),
         prepTime: params.settings.prepTime,
@@ -51,7 +51,6 @@ export default class AddScreen extends React.Component {
       }
     } else {
       this.state = {
-        showTime: false,
         label: 'Alarm',
         time: '',
         prepTime: params.settings.defaultPrepTime,
@@ -67,6 +66,9 @@ export default class AddScreen extends React.Component {
         showPlaces: false,
         backgroundColor: 'white'
       }
+
+      this.state.token = false;
+      this.state.showTime = false;
     }
 
     this.saveAlarm = this.saveAlarm.bind(this);
@@ -81,7 +83,7 @@ export default class AddScreen extends React.Component {
   };
 
   componentWillMount() {
-
+    store.get('token').then((token) => this.setState({token: token}))
   }
 
   handleTimePicked = (time) => {
@@ -202,7 +204,7 @@ export default class AddScreen extends React.Component {
     timeString = timeString.join('');
     let favPlaces = this.props.navigation.state.params.favPlaces;
     return (
-      <LinearGradient colors={['#7ad8db', '#33b8bd']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+      <LinearGradient colors={['#7ad8db', '#a2e6e2']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
           {!this.state.showPlaces ?
             <View style={{ flex: 0, position: 'absolute', width: '100%', top: '20%', zIndex: 100 }}>
@@ -358,6 +360,31 @@ export default class AddScreen extends React.Component {
         </View>
         <View style={{ flex: 1 }}></View>
         </View>
+        <BottomToolbar
+          wrapperStyle={{backgroundColor: '#33b8bd'}}
+          textStyle={{fontWeight: '700'}}
+          color="#f5f5f5"
+          showIf={this.state.token}
+        >
+          <BottomToolbar.Action title=''/>
+          <BottomToolbar.Action title=''/>
+          <BottomToolbar.Action
+            title="Add alarm from calendar"
+            onPress={() => {
+              this.props.navigation.navigate('CalendarScreen', {
+                 userId: this.props.navigation.state.params.userId,
+                 settings: this.state,
+               });
+            }}
+          />
+          <BottomToolbar.Action
+            IconComponent={Icon}
+            iconName={"md-calendar"}
+            title="Go to CalendarScreen"
+            onPress={this.toCalendarScreen}
+          />
+          <BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/>
+        </BottomToolbar>
       </LinearGradient>
     );
   }

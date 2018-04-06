@@ -70,12 +70,30 @@ export default class AddScreen extends React.Component {
          rowHasChanged={(r1, r2) => {return r1.text !== r2.text}}
          // Hide knob button. Default = false
          hideKnob={false}
-         // By default, agenda dates are marked if they have at least one item, but you can override this if needed
-         // markedDates={{
-         //   '2018-06-16': {selected: true, marked: true},
-         //   '2018-06-17': {marked: true},
-         //   '2018-06-18': {disabled: true},
-         // }}
+         theme={{
+          backgroundColor: '#fafefd',
+          calendarBackground: '#dbf6f4',
+          textSectionTitleColor: '#3ec6cb',
+          selectedDayBackgroundColor: '#3ec6cb',
+          selectedDayTextColor: '#e0554b',
+          todayTextColor: '#3ec6cb',
+          dayTextColor: '#33b8bd',
+          textDisabledColor: 'pink',
+          dotColor: '#fb867e',
+          selectedDotColor: '#effbfa',
+          arrowColor: 'brown',
+          monthTextColor: '#3ec6cb',
+          // textDayFontFamily: 'Pacifico',
+          // textMonthFontFamily: 'Pacifico',
+          // textDayHeaderFontFamily: 'Pacifico',
+          textDayFontSize: 16,
+          textMonthFontSize: 16,
+          textDayHeaderFontSize: 16,
+          agendaDayTextColor: '#e0554b',
+          agendaDayNumColor: '#e46a61',
+          agendaTodayColor: '#33b8bd',
+          agendaKnobColor: '#eafbfb'
+        }}
       />
     );
   }
@@ -273,7 +291,7 @@ export default class AddScreen extends React.Component {
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: 'pink',
+    backgroundColor: '#eb938d',
     flex: 1,
     borderRadius: 5,
     padding: 10,

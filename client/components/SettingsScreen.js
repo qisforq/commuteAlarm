@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons.js';
 import axios from 'axios';
 import store from 'react-native-simple-store';
 import LinearGradient from 'react-native-linear-gradient';
+import BottomToolbar from 'react-native-bottom-toolbar'
 
 export default class SettingsScreen extends React.Component {
   constructor(props){
@@ -141,7 +142,7 @@ export default class SettingsScreen extends React.Component {
   toCalendarScreen() {
     let { navigate, state } = this.props.navigation;
     let { userId } = state.params;
-     this.props.navigation.navigate('CalendarScreen', {
+    navigate('CalendarScreen', {
        userId,
        settings: this.state
      });
@@ -159,7 +160,7 @@ export default class SettingsScreen extends React.Component {
   render() {
     console.log(this.state.alarmSound);
     return (
-      <LinearGradient colors={['#7ad8db', '#33b8bd']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+      <LinearGradient colors={['#8edee0', '#3ec6cb', '#7ad8db']} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
         <View></View>
         <View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', maxHeight: 40, width: 230 }}>
@@ -232,10 +233,45 @@ export default class SettingsScreen extends React.Component {
           </View>
         </View>
         <View />
-        <View> {
-          this.state.token ? <Button title="Go to CalendarScreen" onPress={this.toCalendarScreen}></Button> : <Button title="Login" onPress={this.handleLogin}></Button>
-        }
-        </View>
+        <BottomToolbar
+          wrapperStyle={{backgroundColor: '#33b8bd'}}
+          textStyle={{fontWeight: '700'}}
+          color="#f5f5f5"
+          showIf={this.state.token}
+        >
+          <BottomToolbar.Action title=''/>
+          <BottomToolbar.Action title=''/>
+          <BottomToolbar.Action
+            title="View your calendar"
+            onPress={this.toCalendarScreen}
+          />
+          <BottomToolbar.Action
+            IconComponent={Icon}
+            iconName={"md-calendar"}
+            title="Go to CalendarScreen"
+            onPress={this.toCalendarScreen}
+          />
+          <BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/>
+        </BottomToolbar>
+        <BottomToolbar
+          wrapperStyle={{backgroundColor: '#33b8bd'}}
+          textStyle={{fontWeight: '700'}}
+          color="#f5f5f5"
+          showIf={!this.state.token}
+        >
+          <BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/>
+          <BottomToolbar.Action
+            title="Login to Google"
+            onPress={this.handleLogin}
+          />
+          <BottomToolbar.Action
+            IconComponent={Icon}
+            iconName={"logo-google"}
+            title="Login to Google"
+            onPress={this.handleLogin}
+          />
+          <BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/><BottomToolbar.Action title=''/>
+        </BottomToolbar>
       </LinearGradient>
     );
   }
