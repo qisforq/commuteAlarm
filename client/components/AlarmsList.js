@@ -18,7 +18,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
     }
     let swipeBtns = [{
       text: 'Delete',
-      backgroundColor: 'red',
+      backgroundColor: '#e04b4d',
       onPress: () => { deleteAlarm(item); },
     }];
     console.log(item);
@@ -30,7 +30,7 @@ function AlarmsList({ userId, userSettings, alarms, modifyAlarms, deleteAlarm, e
         // style={{backgroundColor: "#97e0e3", opacity: 0.3,}}
       >
         <LinearGradient colors={['#97e0e3', '#7ad8db']} style={{ height: 75, borderWidth: 0.3, borderColor: '#038388' }}>
-          <TouchableHighlight underlayColor="lightblue" onPress={() => editScreen(item)}>
+          <TouchableHighlight underlayColor="#e39a97" onPress={() => editScreen(item)}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ flex: 0.5 }} />
               <FontAwesome style={{ flex: 2, marginTop: 10, fontSize: 35, color:'#038388'}}>{Icons.clockO}</FontAwesome>

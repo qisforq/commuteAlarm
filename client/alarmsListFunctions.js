@@ -24,7 +24,6 @@ const updateAlarms = (id, onOff, goOffTime, modifyAlarms, edit) => {
         alarms[k].id = k;
         return alarms[k];
       });
-      console.log('here');
       modifyAlarms(newAlarms, edit);
       store.save('alarms', alarms);
     });
@@ -51,7 +50,7 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
 
     onOff = !onOff;
     updateAlarms(id, onOff, undefined, modifyAlarms);
-    axios.post('http://localhost:8082/alarm/edit', {
+    axios.post('http://roryeagan.com:8082/alarm/edit', {
       userId,
       alarmId: id,
       label,
