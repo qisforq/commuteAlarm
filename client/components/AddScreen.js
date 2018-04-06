@@ -93,7 +93,7 @@ export default class AddScreen extends React.Component {
     });
   }
   savePlacesToDB(places, userId) {
-    axios.post('http://localhost:8082/user/places', {
+    axios.post('http://roryeagan.com:8082/user/places', {
       places,
       userId,
     }).catch((err) => {
@@ -118,7 +118,7 @@ export default class AddScreen extends React.Component {
     })
 
     if(this.state.edit) {
-      axios.post('http://localhost:8082/alarm/edit', {
+      axios.post('http://roryeagan.com:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,
         alarmId: this.props.navigation.state.params.data.id,
         label,
@@ -159,7 +159,7 @@ export default class AddScreen extends React.Component {
       })
       .catch(console.log('error updating the alarm'))
     } else {
-      axios.post('http://localhost:8082/alarm/save', {
+      axios.post('http://roryeagan.com:8082/alarm/save', {
         userId: this.props.navigation.state.params.userId,
         label,
         time,

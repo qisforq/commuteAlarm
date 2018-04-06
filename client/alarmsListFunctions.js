@@ -51,7 +51,7 @@ const switchChange = (item, userId, userSettings, modifyAlarms, notif) => {
 
     onOff = !onOff;
     updateAlarms(id, onOff, undefined, modifyAlarms);
-    axios.post('http://localhost:8082/alarm/edit', {
+    axios.post('http://roryeagan.com:8082/alarm/edit', {
       userId,
       alarmId: id,
       label,
