@@ -4,6 +4,7 @@ import {Agenda} from 'react-native-calendars';
 import axios from 'axios';
 import store from 'react-native-simple-store';
 import Geocoder from 'react-native-geocoding';
+import LinearGradient from 'react-native-linear-gradient';
 
 Geocoder.setApiKey('AIzaSyAZkNBg_R40VwsvNRmqdGe7WdhkLVyuOaw');
 
@@ -23,7 +24,7 @@ export default class AddScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'CalendarScreen',
+    title: 'Google Calendar',
   };
 
   render() {
@@ -74,8 +75,8 @@ export default class AddScreen extends React.Component {
           backgroundColor: '#fafefd',
           calendarBackground: '#dbf6f4',
           textSectionTitleColor: '#3ec6cb',
-          selectedDayBackgroundColor: '#3ec6cb',
-          selectedDayTextColor: '#e0554b',
+          selectedDayBackgroundColor: '#e46a61',
+          selectedDayTextColor: '#eafbfb',
           todayTextColor: '#3ec6cb',
           dayTextColor: '#33b8bd',
           textDisabledColor: 'pink',
@@ -142,11 +143,25 @@ export default class AddScreen extends React.Component {
       console.log('Error retrieving calendar data. Returning to settings screen. Err:', err)
     })
     .then(({ data }) => {
-      console.log('ORIGINAL DATA', data)
+      console.log('data before eventsObj:', data);
+      let eventsObj = {};
+      data.forEach((evt) => {
+        eventsObj[evt.id] = evt;
+      })
+
+      return store.get('events').then((events) => {
+        eventsObj = Object.assign(events, eventsObj);
+        store.save('events', eventsObj)
+        return eventsObj;
+      })
+    })
+    .then((eventsObj) => {
+      console.log('ORIGINAL DATA after merge with stored data:', eventsObj)
       const newItems = {};
       Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-
-      data.forEach((event, i) => {
+      console.log('new items yo:', newItems)
+      Object.values(eventsObj).forEach((event) => {
+        console.log('event:', event)
         let { id, name, time, endTime, location } = event
         if (!time.date) {
           let dateStr = time.dateTime.slice(0,10)
@@ -162,8 +177,11 @@ export default class AddScreen extends React.Component {
             height: this.calculateHeight(startTimeStr, endTimeStr),
             timeData: new Date(time.dateTime)
           }
-          // newItems[dateStr] ? newItems[dateStr].push(eventData) : newItems[dateStr] = [eventData];
-          if (newItems[dateStr].length) {
+          console.log('eventData:', eventData);
+          console.log('what is Date string?', dateStr);
+          // newItems[dateStr] ? newItems[dateStr].push(eventData) : newItems[dateStr] = [evenßtData];
+          if (newItems[dateStr] && newItems[dateStr].length) {
+            console.log('YAY!');
             newItems[dateStr].forEach((ev) => {
               if (!(ev.time && ev.name === eventData.name && ev.time === eventData.time)) {
                 newItems[dateStr].push(eventData);
@@ -173,7 +191,9 @@ export default class AddScreen extends React.Component {
             newItems[dateStr] = [eventData];
           }
         }
-      });
+      })
+      console.log('newItems:',newItems)
+
       Object.keys(newItems).forEach((date) => {
         if (newItems[date] && newItems[date].length) {
           let uniqArr = [];
@@ -225,7 +245,7 @@ export default class AddScreen extends React.Component {
   calculateHeight(startTimeStr, endTimeStr) {
     let startInSeconds = startTimeStr.split(':').reduce((acc, el, i) => acc + (parseInt(el) * 60 ** (2 - i)), 0);
     let endInSeconds = endTimeStr.split(':').reduce((acc, el, i) => acc + (parseInt(el) * 60 ** (2 - i)), 0);
-    return ((endInSeconds - startInSeconds) / 250 + 50);
+    return ((endInSeconds - startInSeconds) / 250 + 65);
   }
 
   findMaxDay(month) {
@@ -246,13 +266,13 @@ export default class AddScreen extends React.Component {
       let resultTime = '';
 
       if (hours === 0) {
-        resultTime = `12${restOfTimeStr}AM`;
+        resultTime = `12${restOfTimeStr}am`;
       } else if (hours < 12) {
-        resultTime = `${hours}${restOfTimeStr}AM`;
+        resultTime = `${hours}${restOfTimeStr}am`;
       } else if (hours === 12) {
-        resultTime = `12${restOfTimeStr}PM`;
+        resultTime = `12${restOfTimeStr}pm`;
       } else if (hours > 12) {
-        resultTime = `${hours-12}${restOfTimeStr}PM`;
+        resultTime = `${hours-12}${restOfTimeStr}pm`;
       } else {
         resultTime = time
       }
@@ -260,14 +280,14 @@ export default class AddScreen extends React.Component {
     }
 
     return (
-      <View style={[styles.item, {height: item.height*1.5}]}>
-        <Text>{item.name}</Text>
-        <Text>{convertHours(time)}-{convertHours(endTime)}</Text>
-        <Text>{item.location}</Text>
-        <Button title="add to alarms" onPress={() => {
-          this.makeAlarm(item.name, item.timeData, item.location)
-        }}></Button>
-      </View>
+      <LinearGradient colors={['#f3bcb8', '#efa8a3']} style={[styles.item, {height: item.height*1.5}]}>
+          <Text style={{fontWeight: 'bold', color:"#691712"}}>{item.name || '(No title)'}</Text>
+          <Text style={{fontWeight: '500', color:"#691712"}}>{convertHours(time)} - {convertHours(endTime)}</Text>
+          {item.location && <Text style={{fontWeight: '500', color:"#691712"}}>{item.location}</Text>}
+          <Button title="add to alarms" color="#691712" onPress={() => {
+            this.makeAlarm(item.name, item.timeData, item.location)
+          }}></Button>
+      </LinearGradient>
     );
   }
 
@@ -293,7 +313,7 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: '#eb938d',
     flex: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     marginRight: 10,
     marginTop: 17

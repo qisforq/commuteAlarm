@@ -10,6 +10,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import BottomToolbar from 'react-native-bottom-toolbar';
 import Hr from 'react-native-hr-plus';
 import logo from './image.png';
+import FontAwesome, { Icons } from 'react-native-fontawesome';
 
 export default class SettingsScreen extends React.Component {
   constructor(props){
@@ -65,20 +66,22 @@ export default class SettingsScreen extends React.Component {
   componentDidMount() {
     Linking.addEventListener('url', this.handleOpenURL);
     let { userId } = this.props.navigation.state.params
-    axios.post("http://localhost:8082/auth/checktoken", {
-      userId
-    })
-    .then(({ status }) => {
-      if (status === 202) {
-        store.save('token', false);
-        this.setState({
-          token: false,
-        });
-      }
-    })
-    .catch(() => {
-      console.log('error in check token');
-    })
+    if (this.state.token) {
+      axios.post("http://localhost:8082/auth/checktoken", {
+        userId
+      })
+      .then(({ status }) => {
+        if (status === 202) {
+          store.save('token', false);
+          this.setState({
+            token: false,
+          });
+        }
+      })
+      .catch(() => {
+        console.log('error in check token');
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -90,11 +93,28 @@ export default class SettingsScreen extends React.Component {
     let status = event.url.slice(15, 22)
     if (status === 'success') {
       console.log('SUCCESS!!!')
-      store.save('token', true).then(() => {
-        this.setState({
-          token: true,
-        }, this.toCalendarScreen);
-      });
+      store.save('token', true)
+      .then(this.setState({token: true,}))
+      .then(this.toCalendarScreen)
+      let maxTime = `${new Date(Date.now() + 31536000000).toISOString().slice(0,10)}T00:00:00-01:00:00`
+      let minTime = `${new Date(Date.now() - 5100000000).toISOString().slice(0,10)}T00:00:00-01:00:00`
+      axios.get("http://localhost:8082/auth/calendar", {
+        params: {
+          userId: this.props.navigation.state.params.userId,
+          minTime,
+          maxTime,
+        }
+      })
+      .then(({ data }) => {
+        console.log("data", data);
+        let eventsObj = {};
+        data.forEach((evt) => {
+          eventsObj[evt.id] = evt;
+        })
+        console.log('eventsobj:', eventsObj);
+        store.save('events', eventsObj)
+      })
+      .catch(console.log('Error in handleOpenURL'))
     } else if (status === 'failure'){
       console.log('FAILURE!! The good kind! =D')
       store.save('token', false);
@@ -209,7 +229,7 @@ export default class SettingsScreen extends React.Component {
               }}
             />
           </View>
-          
+
           <Hr style = {{  height: 1, width: 350, opacity: 0.25,}}/>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10, alignItems: "center", maxHeight: 40, width: 300, flexWrap: 'nowrap' }}>
             <View>
