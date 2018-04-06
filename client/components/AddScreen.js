@@ -62,7 +62,7 @@ export default class AddScreen extends React.Component {
         alarmSound: params.settings.defaultAlarmSound,
         onOff: false,
         edit: false,
-        travelMethod: 'Driving',
+        travelMethod: 'Transit',
         showPlaces: false,
         backgroundColor: 'white'
       }
@@ -93,7 +93,7 @@ export default class AddScreen extends React.Component {
     });
   }
   savePlacesToDB(places, userId) {
-    axios.post('http://roryeagan.com:8082/user/places', {
+    axios.post('http://localhost:8082/user/places', {
       places,
       userId,
     }).catch((err) => {
@@ -118,7 +118,7 @@ export default class AddScreen extends React.Component {
     })
 
     if(this.state.edit) {
-      axios.post('http://roryeagan.com:8082/alarm/edit', {
+      axios.post('http://localhost:8082/alarm/edit', {
         userId: this.props.navigation.state.params.userId,
         alarmId: this.props.navigation.state.params.data.id,
         label,
@@ -159,7 +159,7 @@ export default class AddScreen extends React.Component {
       })
       .catch(console.log('error updating the alarm'))
     } else {
-      axios.post('http://roryeagan.com:8082/alarm/save', {
+      axios.post('http://localhost:8082/alarm/save', {
         userId: this.props.navigation.state.params.userId,
         label,
         time,
@@ -344,7 +344,7 @@ export default class AddScreen extends React.Component {
               dropdownStyle={{ }}
               textStyle={{fontSize:15, color: '#164f51'}}
               defaultIndex={Number(this.state.snoozeTime)}
-              defaultValue={this.state.snoozeTime + ' snoozes'}
+              defaultValue={this.state.snoozeTime + ' minutes'}
               options={[...Array(13)].map((x,i) => i + ' minutes  ')}
               onSelect={(idx, val) => this.setState({ snoozeTime: Number(idx) })}
             />

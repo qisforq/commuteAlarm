@@ -67,7 +67,7 @@ export default class SettingsScreen extends React.Component {
     Linking.addEventListener('url', this.handleOpenURL);
     let { userId } = this.props.navigation.state.params
     if (this.state.token) {
-      axios.post("http://roryeagan.com:8082/auth/checktoken", {
+      axios.post("http://localhost:8082/auth/checktoken", {
         userId
       })
       .then(({ status }) => {
@@ -98,7 +98,7 @@ export default class SettingsScreen extends React.Component {
       .then(this.toCalendarScreen)
       let maxTime = `${new Date(Date.now() + 31536000000).toISOString().slice(0,10)}T00:00:00-01:00:00`
       let minTime = `${new Date(Date.now() - 5100000000).toISOString().slice(0,10)}T00:00:00-01:00:00`
-      axios.get("http://roryeagan.com:8082/auth/calendar", {
+      axios.get("http://localhost:8082/auth/calendar", {
         params: {
           userId: this.props.navigation.state.params.userId,
           minTime,
@@ -131,7 +131,7 @@ export default class SettingsScreen extends React.Component {
   _saveSettings = (userId, goBack) => {
     let { prepTime, postTime, snoozes, snoozeTime, alarmSound } = this.state;
     console.log(goBack);
-    axios.post('http://roryeagan.com:8082/settings/save', {
+    axios.post('http://localhost:8082/settings/save', {
       userId,
       prepTime,
       postTime,
@@ -175,7 +175,7 @@ export default class SettingsScreen extends React.Component {
     let { goBack, state } = this.props.navigation;
     let { userId, saveSettings } = state.params;
     saveSettings(userId, () => {});
-    Linking.openURL(`http://roryeagan.com:8082/auth/google?userId=${userId}`)
+    Linking.openURL(`http://localhost:8082/auth/google?userId=${userId}`)
     .catch(err => console.error('An error occurred', err));
   }
 

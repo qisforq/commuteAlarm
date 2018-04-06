@@ -8,7 +8,7 @@ import { switchChange, alarmOn, updateAlarms } from './alarmsListFunctions';
 
 const getCommuteData = ({ userId, userSettings }, url, item, modifyAlarms, updateAlarms, location, edit) => {
   let { latitude, longitude } = location.coords;
-  axios.get(`http://roryeagan.com:8082/${url}`, {
+  axios.get(`http://localhost:8082/${url}`, {
     params: {
       userId,
       alarmId: item ? item.id : null,

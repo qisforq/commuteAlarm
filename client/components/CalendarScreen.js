@@ -132,7 +132,7 @@ export default class AddScreen extends React.Component {
     // const minTime = `${year}-${month}-01T00:00:00-01:00:00`
     const maxTime = `${endDate}T11:59:58-11:59:59`
     // const maxTime = `${year}-${month}-${this.findMaxDay(month)}T11:59:58-11:59:59`
-    axios.get("http://roryeagan.com:8082/auth/calendar", {
+    axios.get("http://localhost:8082/auth/calendar", {
       params: {
         userId: this.props.navigation.state.params.userId,
         minTime,

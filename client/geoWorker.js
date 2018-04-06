@@ -55,9 +55,11 @@ const setSchedule = () => {
     BackgroundGeolocation.stop(() => {
       store.get('alarms').then((alarms) => {
         schedule = Object.entries(alarms).filter(alarm => alarm[1].onOff).map(alarm => alarm[1].scheduleStr).concat(Object.entries(alarms).filter(alarm => alarm[1].onOff).map(alarm => alarm[1].scheduleStrArrive));
-        // console.warn(schedule);
-        // schedule = schedule.filter((el)=> el)
-        // console.warn('schedule after', schedule);
+        console.warn(schedule);
+        schedule = schedule.filter((el)=> el)
+        if (!schedule.length) {
+          schedule = ['1-7 1:00-23:00']
+        }
         
         BackgroundGeolocation.setConfig({
           schedule,
