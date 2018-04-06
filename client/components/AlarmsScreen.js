@@ -237,6 +237,7 @@ export default class AlarmsScreen extends React.Component {
           store.save('alarms', {});
           store.save('travel', []);
           store.save('places', {});
+          store.save('events', {});
           store.save('userSettings', {
             defaultPrepTime: 0,
             defaultPostTime: 0,
