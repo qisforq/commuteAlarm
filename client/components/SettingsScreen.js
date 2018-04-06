@@ -204,7 +204,7 @@ export default class SettingsScreen extends React.Component {
               <Text style = {{fontSize:16, color: '#164f51'}}>Snooze Time: </Text>
               <ModalDropdown
               textStyle={{fontSize:15, color: '#164f51', textAlignVertical: "auto", }}
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+                dropdownStyle={{ borderWidth: 1, borderColor: '#164f51' }}
                 dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.snoozeTime}
                 defaultValue={(this.state.snoozeTime) + " minutes" || "Please select..."}
@@ -219,7 +219,7 @@ export default class SettingsScreen extends React.Component {
             <Text style = {{fontSize:16, color: '#164f51'}}>Prep Time: </Text>
             <ModalDropdown
             textStyle={{fontSize:15, color: '#164f51'}}
-              dropdownStyle={{ borderWidth: 1, borderColor: 'black' }}
+              dropdownStyle={{ borderWidth: 1, borderColor: '#164f51' }}
               dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
               defaultIndex={this.state.prepTime}
               defaultValue={(this.state.prepTime*5) + " minutes" || "Please select..."}
@@ -238,7 +238,7 @@ export default class SettingsScreen extends React.Component {
             <View>
               <ModalDropdown
                 textStyle={{fontSize:15, color: '#164f51'}}
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black',  }}
+                dropdownStyle={{ borderWidth: 1, borderColor: '#164f51',  }}
                 dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.postTime}
                 defaultValue={(this.state.postTime*5) + " minutes" || "Please select..."}
@@ -257,7 +257,7 @@ export default class SettingsScreen extends React.Component {
             <View>
               <ModalDropdown
               textStyle={{fontSize:15, color: '#164f51'}}
-                dropdownStyle={{ borderWidth: 1, borderColor: 'black', height: 100 }}
+                dropdownStyle={{ borderWidth: 1, borderColor: '#164f51', height: 100 }}
                 dropdownTextStyle = {{backgroundColor: '#33b8bd',}}
                 defaultIndex={this.state.postTime}
                 defaultValue={this.state.alarmSound}
