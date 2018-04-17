@@ -26,8 +26,8 @@ Alarmoquy is a smart alarm that takes commute data from google maps and dynamica
 > Settings:
 User inputs default preferences, and can log into google calendar.
 <p align="left">
-<img src="https://i.imgur.com/TeNCIxU.png?1" width="500">
-<img src="https://i.imgur.com/3RBzUqc.png?1" width="500">
+<img src="https://i.imgur.com/TeNCIxU.png?1" width="400">
+<img src="https://i.imgur.com/3RBzUqc.png?1" width="400">
 </p>
 
 
