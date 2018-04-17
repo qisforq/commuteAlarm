@@ -51,7 +51,7 @@ Alarm is set and alarm time is dynamically set based on user preferences, google
 
 > Google Login:
 User can log in with google oath to authenticate the use of adding alarms from their respective calandars.
-<img src="https://i.imgur.com/DkfMNev.gif" width="400">
+<img src="https://i.imgur.com/DkfMNev.gifv" width="400">
 
 
 > Calendar Screen:
