@@ -1,6 +1,6 @@
 # Alarmoquy
 
-<img src="https://i.imgur.com/qAMhv6v.png" width="500">
+<img src="https://i.imgur.com/qAMhv6v.png" width="350">
 
 
 Alarmoquy is a smart alarm that takes commute data from google maps and dynamically updates the alarm based on a desired arrival time. We run the data through our advanced algorithm by taking into account your actual daily commute length against google's estimated time. Add google calendar implementation, several custom user settings, and you have a highly accurate smart alarm that ensures you won't be late again!
@@ -25,13 +25,19 @@ Alarmoquy is a smart alarm that takes commute data from google maps and dynamica
 
 > Settings:
 User inputs default preferences, and can log into google calendar.
+<p align="left">
 <img src="https://i.imgur.com/TeNCIxU.png" width="500">
 <img src="https://i.imgur.com/3RBzUqc.png" width="500">
+</p>
+
 
 > Alarms Screen:
 Add alarms and instantiate them when needed.
+<p align="left">
 <img src="https://i.imgur.com/t8UEK0J.png" width="400">
 <img src="https://i.imgur.com/rzPuRDg.png" width="400">
+</p>
+
 
 > Alarm Detail Screen:
 User Labels alarm, sets location and desired arrival time along with alarm specific preferences.
@@ -49,8 +55,11 @@ User can log in with google oath to authenticate the use of adding alarms from t
 
 > Calendar Screen:
 Calendar event data appears from the user's google calendar information, to add an alarm for an event the user simply clicks on the "add alarm" button on event they wish to create an alarm for.
+<p align="left">
 <img src="https://i.imgur.com/5xoqX7o.png" width="500">
 <img src="https://i.imgur.com/gi1fLYF.png" width="500">
+</p>
+
 
 > Push Notification:
 Alarm goes on just in time! 
