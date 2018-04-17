@@ -34,8 +34,8 @@ User inputs default preferences, and can log into google calendar.
 > Alarms Screen:
 Add alarms and instantiate them when needed.
 <p align="left">
-<img src="https://i.imgur.com/t8UEK0J.png" width="400">
-<img src="https://i.imgur.com/rzPuRDg.png" width="400">
+<img src="https://i.imgur.com/t8UEK0J.png?1" width="400">
+<img src="https://i.imgur.com/rzPuRDg.png?1" width="400">
 </p>
 
 
@@ -43,8 +43,8 @@ Add alarms and instantiate them when needed.
 User Labels alarm, sets location and desired arrival time along with alarm specific preferences.
 Alarm is set and alarm time is dynamically set based on user preferences, google maps commute data, and real life user location data. 
 <p align="left">
-<img src="https://i.imgur.com/JHdkjlt.png" width="400">
-<img src="https://i.imgur.com/p4akdpC.png" width="400">
+<img src="https://i.imgur.com/JHdkjlt.png?1" width="400">
+<img src="https://i.imgur.com/p4akdpC.png?1" width="400">
 </p>
 
 
@@ -56,14 +56,14 @@ User can log in with google oath to authenticate the use of adding alarms from t
 > Calendar Screen:
 Calendar event data appears from the user's google calendar information, to add an alarm for an event the user simply clicks on the "add alarm" button on event they wish to create an alarm for.
 <p align="left">
-<img src="https://i.imgur.com/5xoqX7o.png" width="500">
-<img src="https://i.imgur.com/gi1fLYF.png" width="500">
+<img src="https://i.imgur.com/5xoqX7o.png?1" width="400">
+<img src="https://i.imgur.com/gi1fLYF.png?1" width="400">
 </p>
 
 
 > Push Notification:
 Alarm goes on just in time! 
-<img src="https://i.imgur.com/GXslLoQ.png" width="500">
+<img src="https://i.imgur.com/GXslLoQ.png" width="400">
 
 
 ## Development
