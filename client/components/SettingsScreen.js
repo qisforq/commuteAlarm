@@ -106,7 +106,7 @@ export default class SettingsScreen extends React.Component {
         })
         store.save('events', eventsObj)
       })
-      .catch(console.error('Error in handleOpenURL'))
+      .catch(console.log('Error in handleOpenURL'))
     } else if (status === 'failure'){
       store.save('token', false);
       this.setState({
