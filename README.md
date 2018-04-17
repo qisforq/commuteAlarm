@@ -63,7 +63,7 @@ Calendar event data appears from the user's google calendar information, to add 
 
 > Push Notification:
 Alarm goes on just in time! 
-<img src="https://i.imgur.com/GXslLoQ.png" width="400">
+<img src="https://i.imgur.com/GXslLoQ.png?1" width="400">
 
 
 ## Development
