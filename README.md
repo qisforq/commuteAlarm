@@ -36,8 +36,11 @@ Add alarms and instantiate them when needed.
 > Alarm Detail Screen:
 User Labels alarm, sets location and desired arrival time along with alarm specific preferences.
 Alarm is set and alarm time is dynamically set based on user preferences, google maps commute data, and real life user location data. 
+<p align="center">
 <img src="https://i.imgur.com/JHdkjlt.png" width="300">
 <img src="https://i.imgur.com/p4akdpC.png" width="300">
+</p>
+
 
 
 > Google Login:
