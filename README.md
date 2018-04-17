@@ -27,7 +27,11 @@ Add alarms and instantiate them when needed.
 > Alarm Detail Screen:
 User Labels alarm, sets location and desired arrival time along with alarm specific preferences.
 Alarm is set and alarm time is dynamically set based on user preferences, google maps commute data, and real life user location data. 
-> Push Notification.
+> Google Login:
+User can log in with google oath to authenticate the use of adding alarms from their respective calandars.
+> Calendar Screen:
+Calendar event data appears from the user's google calendar information, to add an alarm for an event the user simply clicks on the "add alarm" button on event they wish to create an alarm for.
+> Push Notification:
 Alarm goes on just in time! 
 
 ## Development
