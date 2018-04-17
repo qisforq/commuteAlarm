@@ -1,12 +1,15 @@
 # Alarmoquy
 
+
+[![](https://imgur.com/k00kY8l)]
+
 Alarmoquy is a smart alarm that takes commute data from google maps and dynamically updates the alarm based on a desired arrival time. We run the data through our advanced algorithm by taking into account your actual daily commute length against google's estimated time. Add google calendar implementation, several custom user settings, and you have a highly accurate smart alarm that ensures you won't be late again!
 
 ## Team
 
   - __Product Owner__: Danny Schrader
   - __Scrum Master__: Rory Eagan
-  - __Development __: Quentin Vidal
+  - __Development__: Quentin Vidal
 
 ## Table of Contents
 
@@ -22,6 +25,7 @@ Alarmoquy is a smart alarm that takes commute data from google maps and dynamica
 
 > Settings:
 User inputs default preferences.
+
 > Alarms Screen:
 Add alarms and instantiate them when needed.
 > Alarm Detail Screen:
