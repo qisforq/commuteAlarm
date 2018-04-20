@@ -10,7 +10,7 @@ Alarmoquy is a smart alarm that takes commute data from google maps and dynamica
 
 1. [Team](#team)
 1. [Development](#development)
-1. [How to install](#install)
+    1. [How to install](#install)
 1. [Usage](#usage)
 
 ## Team
