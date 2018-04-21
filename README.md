@@ -9,9 +9,11 @@ Alarmoquy is a smart alarm that takes commute data from google maps and dynamica
 
 
 1. [Team](#team)
-1. [Development](#development)
+2. [Development](#development)
     1. [How to install](#install)
-1. [Usage](#usage)
+3. [Usage](#usage)
+4. [Built With](#built)
+5. [Running the tests](#tests)
 
 ## Team
 
@@ -23,14 +25,14 @@ Alarmoquy is a smart alarm that takes commute data from google maps and dynamica
 
 ### How to install
 
-Fork and clone:
+1. Fork and clone:
 `git clone https://github.com/HouseMartell/commuteAlarm.git`
 
-From within the root directory:
+2. From within the root directory:
 ```npm install```
 ```npm start```
 
-local server (optional)
+3. local server (optional)
 ```npm run server-dev```
 
 
@@ -81,8 +83,21 @@ Alarm goes on just in time!
 <img src="https://i.imgur.com/GXslLoQ.png?1" width="400">
 
 
+## Built With
+
+* [React Native](https://facebook.github.io/react-native/)
+* [Firebase](https://firebase.google.com/docs/reference/js/)
+* [Passport](http://www.passportjs.org/docs/)
+* [Express](https://expressjs.com/en/4x/api.html)
+* [Jest](https://facebook.github.io/jest/docs/en/api.html)
+* [Enzyme](http://airbnb.io/enzyme/)
 
 
+
+## Running the tests
+
+
+`yarn test`
 
 
 
