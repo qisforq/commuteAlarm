@@ -26,7 +26,9 @@ Alarmoquy is a smart alarm that takes commute data from google maps and dynamica
 ### How to install
 
 1. Fork and clone:
-`git clone https://github.com/HouseMartell/commuteAlarm.git`
+```
+git clone https://github.com/HouseMartell/commuteAlarm.git
+```
 
 2. From within the root directory:
 ```
@@ -35,7 +37,9 @@ npm start
 ```
 
 3. local server (optional)
-```npm run server-dev```
+```
+npm run server-dev
+```
 
 
 ## Usage
